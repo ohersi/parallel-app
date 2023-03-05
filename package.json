@@ -23,5 +23,10 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.21"
+  },
+  "moduleAliases": {
+    "@/resources": "dist/resources",
+    "@/utils": "dist/utils",
+    "@/middleware": "dist/middleware"
   }
 }
