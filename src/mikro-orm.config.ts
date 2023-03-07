@@ -1,14 +1,16 @@
 import { Options } from "@mikro-orm/core";
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
+import './utils/env';
 
 
-const config: Options = {
+const config: Options<PostgreSqlDriver> = {
     type: 'postgresql',
-    host: "localhost",
-    dbName: "test",
-    port: 5432,
-    user: "postgres",
-    password: "bioman30",
+    host: process.env.DB_HOST,
+    dbName: process.env.DB_NAME,
+    port: parseInt(process.env.PG_PORT || '5432'),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     entities: ['dist/**/*.entity.js'],
     entitiesTs: ['src/**/*.entity.ts'],
     debug: true,
