@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import config from './mikro-orm.config';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+import { Users } from './models/user.entity';
 
 export default class App {
 
@@ -11,6 +12,7 @@ export default class App {
         this.express = express();
         this.port = port;
         this.initalizeMiddleware();
+        this.init();
     };
 
 
@@ -20,7 +22,21 @@ export default class App {
 
     public async init() : Promise<void> {
         const orm = await MikroORM.init(config);
+        const fork = orm.em.fork();
+        const users =  fork.find(Users, 1);
+
+        this.express.get("/user", async (req: Request, res: Response) => {
+
+            const text = [];
+            for (const user of await users) {
+               text.push(user);
+            }
+            res.send(text);
+        });
+
     }
+
+
 
     public listen() : void {
         this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));

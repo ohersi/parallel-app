@@ -11,6 +11,7 @@ const config: Options = {
     password: "bioman30",
     entities: ['dist/**/*.entity.js'],
     entitiesTs: ['src/**/*.entity.ts'],
+    debug: true,
     metadataProvider: TsMorphMetadataProvider,
 };
 
