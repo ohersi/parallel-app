@@ -5,7 +5,7 @@ import IRepository from "./interfaces/repository.interface";
 // pool.query(insert SQL query);
 // use Knex for SQL query builder
 
-abstract class Repository<T> implements IRepository<T> {
+export default class Repository<T> implements IRepository<T> {
 
     create(entity: T): Promise<T> {
         throw new Error("Method not implemented.");
@@ -29,5 +29,3 @@ abstract class Repository<T> implements IRepository<T> {
     };
 
 }
-
-export default Repository;

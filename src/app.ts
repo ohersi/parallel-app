@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 
-class App {
+export default class App {
 
     public express: Application;
     public port: number;
@@ -27,7 +27,6 @@ class App {
             res.send("Hello World");
         });
     }
+    
 
 };
-
-export default App;

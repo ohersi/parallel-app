@@ -1,4 +1,5 @@
-interface IRepository<T> {
+
+export default interface IRepository<T> {
 
     create(entity: T): Promise<T>; // CREATE
     updateByID(id: number, entity: T) : Promise<T>; // UPDATE
@@ -8,5 +9,3 @@ interface IRepository<T> {
     findAll(entity: T): Promise<T[]>; // READ
 
 }
-
-export default IRepository;
