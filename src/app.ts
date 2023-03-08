@@ -25,20 +25,22 @@ export default class App {
     public async init() : Promise<void> {
         const orm = await MikroORM.init<PostgreSqlDriver>(config);
         const fork = orm.em.fork();
-        const users =  fork.find(Users, 1);
+        //TODO: get collection of repo's
+        // Create user repo 
+        const repo = fork.getRepository(Users);
+        const user = repo.findByID(1);
 
         this.express.get("/user", async (req: Request, res: Response) => {
 
-            const text = [];
-            for (const user of await users) {
-               text.push(user);
-            }
+            // const text = [];
+            // for (const user of await user) {
+            //    text.push(user);
+            // }
+            const text = await user;
             res.send(text);
         });
 
     }
-
-
 
     public listen() : void {
         this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));

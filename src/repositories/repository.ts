@@ -1,30 +1,28 @@
 import IRepository from "./interfaces/repository.interface";
+import { EntityRepository } from '@mikro-orm/postgresql';
+import BaseEntity from "src/models/base.entity";
 
-// import database Pool
-// pool = require(database);
-// pool.query(insert SQL query);
-// use Knex for SQL query builder
+export default class Repository<T extends BaseEntity> extends EntityRepository<T> implements IRepository<T> {
 
-export default class Repository<T> implements IRepository<T> {
-
-    create(entity: T): Promise<T> {
+    async save(entity: T): Promise<T> {
         throw new Error("Method not implemented.");
-        // pool.query(knex(table).insert(names[]).values(values[]))
     };
 
-    updateByID(id: number, entity: T): Promise<T> {
+    updateByID(entity: T, id: number): Promise<T> {
         throw new Error("Method not implemented.");
     }
 
-    deleteByID(id: number): Promise<T> {
+    deleteByID(entity: T, id: number): Promise<T> {
         throw new Error("Method not implmented.");
     };
 
-    findByID(id: number): Promise<T> {
-        throw new Error("Method not implmented.");
+    async findByID(id: number): Promise<T> {
+        // TODO: find return type of res
+        const res: any = await this.find( { id } as any);
+        return res;
     };
 
-    findAll(entity: T): Promise<T[]> {
+    search(entity: T, id: number): Promise<T[]> {
         throw new Error("Method not implmented.");
     };
 
