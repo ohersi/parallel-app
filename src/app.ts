@@ -1,34 +1,70 @@
 import express, { Application, Request, Response } from 'express';
-import config from './mikro-orm.config';
-import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+import { MikroORM } from '@mikro-orm/core';
 import { Users } from './models/user.entity';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql/PostgreSqlDriver';
+import init from './mikro-orm';
+import IController from './controllers/interfaces/controller.interface';
 
 export default class App {
 
     public express: Application;
     public port: number;
-    public orm!: MikroORM<IDatabaseDriver<Connection>>
+    // What type?
+    public db;
 
-    constructor(port: number) {
+    constructor(port: number, controllers?: IController[]) {
         this.express = express();
         this.port = port;
         this.initalizeMiddleware();
-        this.init();
+        // this.initalizeControllers(controllers);s
+        this.db = this.initalizeDatabase();
     };
 
+    // Initalize Database //
+    // What return type for MikroORM<PostgreSqlDriver> ?
+    public async initalizeDatabase(): Promise<MikroORM<PostgreSqlDriver>> {
+        const orm = await init();
+        return orm;
+    }
 
-    private initalizeMiddleware() : void {
+    // Initialize Repositories //
+
+
+    // Initalize of Controllers //
+
+    private initalizeControllers(controllers: IController[]): void {
+        controllers.forEach((controller: IController) => {
+            this.express.use('/api', controller.router);
+        });
+    };
+
+    // Initalize Routes //
+    
+
+    // Initalize Middleware
+    private initalizeMiddleware(): void {
         this.express.use(express.json());
     };
 
-    public async init() : Promise<void> {
-        const orm = await MikroORM.init<PostgreSqlDriver>(config);
-        const fork = orm.em.fork();
+    //////////////////////////////////////////////////
+
+    public listen(): void {
+        this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));
+    }
+
+    public default(): void {
+        this.express.get("/", (req: Request, res: Response) => {
+            res.send("Hello World");
+        });
+    }
+
+    public async testMikroConnection(): Promise<void> {
+        const database = await this.db;
+        const fork = database.em.fork();
         //TODO: get collection of repo's
         // Create user repo 
         const repo = fork.getRepository(Users);
-        const user = repo.findByID(1);
+        const user = repo.findByID(3);
 
         this.express.get("/user", async (req: Request, res: Response) => {
 
@@ -39,18 +75,6 @@ export default class App {
             const text = await user;
             res.send(text);
         });
-
     }
-
-    public listen() : void {
-        this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));
-    }
-
-    public default(): void {
-        this.express.get("/", (req: Request, res: Response) => {
-            res.send("Hello World");
-        });
-    }
-    
 
 };
