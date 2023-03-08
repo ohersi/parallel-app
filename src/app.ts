@@ -4,6 +4,7 @@ import { Users } from './models/user.entity';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql/PostgreSqlDriver';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
+import ErrorMiddleware from '@src/middleware/error.middleware';
 
 export default class App {
 
@@ -22,9 +23,15 @@ export default class App {
 
     // Initalize Database //
     // What return type for MikroORM<PostgreSqlDriver> ?
-    public async initalizeDatabase(): Promise<MikroORM<PostgreSqlDriver>> {
+    private async initalizeDatabase(): Promise<MikroORM<PostgreSqlDriver>> {
         const orm = await init();
         return orm;
+    }
+
+    // Initalize Error Handling
+
+    private initalizeErrorHandling(): void {
+        this.express.use(ErrorMiddleware);
     }
 
     // Initialize Repositories //
@@ -39,7 +46,7 @@ export default class App {
     };
 
     // Initalize Routes //
-    
+
 
     // Initalize Middleware
     private initalizeMiddleware(): void {
