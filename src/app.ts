@@ -1,12 +1,14 @@
 import express, { Application, Request, Response } from 'express';
-import { MikroORM } from '@mikro-orm/core';
-import { Users } from './models/user.entity';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql/PostgreSqlDriver';
+import { AbstractSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
 
-export default class App {
+export const DI = {} as {
+   database: SqlEntityManager<AbstractSqlDriver>;
+}
+
+export class App {
 
     public express: Application;
     public port: number;
@@ -18,14 +20,17 @@ export default class App {
         this.port = port;
         this.initalizeMiddleware();
         this.initalizeControllers(controllers);
+        this.initalizeErrorHandling();
         this.db = this.initalizeDatabase();
     };
 
     // Initalize Database //
-    // What return type for MikroORM<PostgreSqlDriver> ?
-    private async initalizeDatabase(): Promise<MikroORM<PostgreSqlDriver>> {
+    private async initalizeDatabase(): Promise<SqlEntityManager<AbstractSqlDriver>> {
         const orm = await init();
-        return orm;
+        // May cause issues, fallback return just orm (type: Promise<MikroORM<PostgreSqlDriver>>);
+        const fork = orm.em.fork();
+        DI.database = fork;
+        return fork;
     }
 
     // Initalize Error Handling
@@ -60,25 +65,6 @@ export default class App {
     public testExpress(): void {
         this.express.get("/", (req: Request, res: Response) => {
             res.send("Hello World");
-        });
-    }
-
-    public async testMikroConnection(): Promise<void> {
-        const database = await this.db;
-        const fork = database.em.fork();
-        //TODO: get collection of repo's
-        // Create user repo 
-        const repo = fork.getRepository(Users);
-        const user = repo.findByID(3);
-
-        this.express.get("/user", async (req: Request, res: Response) => {
-
-            // const text = [];
-            // for (const user of await user) {
-            //    text.push(user);
-            // }
-            const text = await user;
-            res.send(text);
         });
     }
 
