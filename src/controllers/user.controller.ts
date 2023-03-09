@@ -1,32 +1,44 @@
-import { Request, Response, NextFunction, Router} from 'express';
+import { Request, Response, NextFunction, Router } from 'express';
 import IController from './interfaces/controller.interface';
 import HttpException from '../utils/exceptions/http.exception';
-import { Users } from '../models/user.entity';
-import { DI } from '../app';
+import UserService from '../services/user.service';
 
 
 export default class UserController implements IController {
-    
-    public path = '/testing';
-    public router = Router();
 
+    public path = '/users';
+    public router = Router();
+    private usersService = new UserService();
+    
     constructor() {
         this.initalizeRoutes();
     }
 
     private initalizeRoutes(): void {
-        this.router.get(`${this.path}`, this.look);
+        this.router.get(`${this.path}`, this.getAllUsers);
+        this.router.get(`${this.path}/:id`, this.getUserByID);
     }
 
-    private async look(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    private getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
         try {
-            const repo = DI.database.getRepository(Users);
-            const findUser = repo.findByID(3);
-            const user = await findUser;
-            res.send(user);
-        } 
+            const results = await this.usersService.getAllUsers();
+            res.send(results);
+        }
         catch (error) {
             next(new HttpException(400, 'Doesnt work!'));
         }
     }
+
+    private getUserByID = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+        try {
+            const id = parseInt(req.params.id);
+            const results = await this.usersService.getUserByID(id);
+            res.send(results);
+        }
+        catch (error) {
+            next(new HttpException(400, 'Doesnt work!'));
+        }
+    }
+
+
 }

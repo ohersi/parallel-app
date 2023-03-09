@@ -3,9 +3,11 @@ import { AbstractSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
+import { MikroORM } from '@mikro-orm/core';
 
 export const DI = {} as {
-   database: SqlEntityManager<AbstractSqlDriver>;
+    orm: MikroORM;
+    db: SqlEntityManager<AbstractSqlDriver>;
 }
 
 export class App {
@@ -13,7 +15,7 @@ export class App {
     public express: Application;
     public port: number;
     // What type?
-    public db;
+    public database: Promise<SqlEntityManager<AbstractSqlDriver>>;
 
     constructor(port: number, controllers: IController[]) {
         this.express = express();
@@ -21,15 +23,16 @@ export class App {
         this.initalizeMiddleware();
         this.initalizeControllers(controllers);
         this.initalizeErrorHandling();
-        this.db = this.initalizeDatabase();
+        this.database = this.initalizeDatabase();
     };
 
     // Initalize Database //
     private async initalizeDatabase(): Promise<SqlEntityManager<AbstractSqlDriver>> {
-        const orm = await init();
-        // May cause issues, fallback return just orm (type: Promise<MikroORM<PostgreSqlDriver>>);
-        const fork = orm.em.fork();
-        DI.database = fork;
+        const mikrOrm = await init();
+        DI.orm = mikrOrm;
+        // May cause issues, fallback return just DI.orm (type: Promise<MikroORM<PostgreSqlDriver>>);
+        const fork = mikrOrm.em.fork();
+        DI.db = fork;
         return fork;
     }
 
