@@ -4,7 +4,7 @@ import { Users } from './models/user.entity';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql/PostgreSqlDriver';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
-import ErrorMiddleware from '@src/middleware/error.middleware';
+import ErrorMiddleware from './middleware/error.middleware';
 
 export default class App {
 
@@ -13,11 +13,11 @@ export default class App {
     // What type?
     public db;
 
-    constructor(port: number, controllers?: IController[]) {
+    constructor(port: number, controllers: IController[]) {
         this.express = express();
         this.port = port;
         this.initalizeMiddleware();
-        // this.initalizeControllers(controllers);s
+        this.initalizeControllers(controllers);
         this.db = this.initalizeDatabase();
     };
 
@@ -29,7 +29,6 @@ export default class App {
     }
 
     // Initalize Error Handling
-
     private initalizeErrorHandling(): void {
         this.express.use(ErrorMiddleware);
     }
@@ -38,7 +37,6 @@ export default class App {
 
 
     // Initalize of Controllers //
-
     private initalizeControllers(controllers: IController[]): void {
         controllers.forEach((controller: IController) => {
             this.express.use('/api', controller.router);
@@ -59,7 +57,7 @@ export default class App {
         this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));
     }
 
-    public default(): void {
+    public testExpress(): void {
         this.express.get("/", (req: Request, res: Response) => {
             res.send("Hello World");
         });

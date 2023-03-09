@@ -30,11 +30,6 @@
     "nodemon": "^2.0.21",
     "ts-morph": "^17.0.1"
   },
-  "moduleAliases": {
-    "@src/resources": "dist/resources",
-    "@src/utils": "dist/utils",
-    "@src/middleware": "dist/middleware"
-  },
   "mikro-orm": {
     "useTsNode": true,
     "configPaths": [
