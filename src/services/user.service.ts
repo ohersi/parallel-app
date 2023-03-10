@@ -8,6 +8,8 @@ export default class UserService extends IService {
         super();
     }
 
+    //TODO: Find return type for each function instead of Promise<any>
+
     public getAllUsers = async (): Promise<any> => {
         try {
             const repo = DI.db.getRepository<Users>(Users);
@@ -24,6 +26,19 @@ export default class UserService extends IService {
             const repo = DI.db.getRepository<Users>(Users);
             const user = repo.findByID(id);
             return user;
+        }
+        catch (error) {
+            return error;
+        }
+    }
+
+    // TODO: Create userDTO 
+    // TODO: Create UserExpection
+    public newUser = async (body: any) => {
+        try {
+            const repo = DI.db.getRepository<Users>(Users);
+            const createUser = repo.create(body);
+            await repo.persistAndFlush(createUser);
         }
         catch (error) {
             return error;
