@@ -1,9 +1,12 @@
-import express, { Application } from 'express';
+import express from 'express';
+import 'reflect-metadata';
+import { InversifyExpressServer } from 'inversify-express-utils';
 import { AbstractSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
 import { MikroORM } from '@mikro-orm/core';
+import { container } from './di-container';
 
 export const DI = {} as {
     orm: MikroORM;
@@ -12,22 +15,26 @@ export const DI = {} as {
 
 export class App {
 
-    public express: Application;
+    public server: InversifyExpressServer;
     public port: number;
     // What type?
     public database: Promise<SqlEntityManager<AbstractSqlDriver>>;
 
-    constructor(port: number, controllers: IController[]) {
-        this.express = express();
+    constructor(port: number) {
+        this.server = new InversifyExpressServer(container);
         this.port = port;
+        this.setup();
         this.initalizeMiddleware();
-        this.initalizeControllers(controllers);
+        // this.initalizeControllers(controllers);
         this.initalizeErrorHandling();
         this.database = this.initalizeDatabase();
+
     };
 
     // Initalize Inversify Container //
-    
+    private setup() {
+        this.server.build();
+    }
 
     // Initalize Database //
     private async initalizeDatabase(): Promise<SqlEntityManager<AbstractSqlDriver>> {
@@ -41,7 +48,9 @@ export class App {
 
     // Initalize Error Handling
     private initalizeErrorHandling(): void {
-        this.express.use(ErrorMiddleware);
+        this.server.setConfig((app) => {
+            app.use(ErrorMiddleware);
+        });
     }
 
     // Initialize Repositories //
@@ -50,7 +59,9 @@ export class App {
     // Initalize of Controllers //
     private initalizeControllers(controllers: IController[]): void {
         controllers.forEach((controller: IController) => {
-            this.express.use('/api', controller.router);
+            this.server.setConfig((app) => {
+                app.use('/api', controller.router);
+            });
         });
     };
 
@@ -59,13 +70,17 @@ export class App {
 
     // Initalize Middleware
     private initalizeMiddleware(): void {
-        this.express.use(express.json());
+        this.server.setConfig((app) => {
+            app.use(express.json());
+        });
     };
 
     //////////////////////////////////////////////////
 
     public listen(): void {
-        this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));
+        this.server.setConfig((app) => {
+            app.listen(this.port, () => console.log(`app listening on port ${this.port}`));
+        });
     }
 
 };
