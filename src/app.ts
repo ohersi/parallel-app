@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import { AbstractSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
 import init from './mikro-orm';
 import IController from './controllers/interfaces/controller.interface';
@@ -25,6 +25,9 @@ export class App {
         this.initalizeErrorHandling();
         this.database = this.initalizeDatabase();
     };
+
+    // Initalize Inversify Container //
+    
 
     // Initalize Database //
     private async initalizeDatabase(): Promise<SqlEntityManager<AbstractSqlDriver>> {
@@ -63,12 +66,6 @@ export class App {
 
     public listen(): void {
         this.express.listen(this.port, () => console.log(`app listening on port ${this.port}`));
-    }
-
-    public testExpress(): void {
-        this.express.get("/", (req: Request, res: Response) => {
-            res.send("Hello World");
-        });
     }
 
 };
