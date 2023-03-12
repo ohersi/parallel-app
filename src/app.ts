@@ -1,19 +1,14 @@
-// Runtime Decorator Metadata Insertion
+// Runtime Decorator Metadata Insertion - Needs to be at top of file
 import 'reflect-metadata';
 // Packages
 import express, { Application, NextFunction } from 'express';
 import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
-import { Connection, EntityManager, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
+import { Connection, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
 // Imports
 import ErrorMiddleware from './middleware/error.middleware';
-import initContainer from './di-container';
-import { TYPES } from './types';
-
-export const DI = {} as {
-    orm: MikroORM;
-    db: EntityManager<IDatabaseDriver<Connection>>;
-}
+import initContainer from './utils/ioc/di-container';
+import { TYPES } from './utils/types';
 
 export class App {
 

@@ -2,10 +2,10 @@
 import { inject } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 // Imports
-import { Users } from '../models/user.entity';
+import { Users } from '../entities/user.entity';
 import IService from './service.interface';
 import UserRepository from '../repositories/user.repository';
-import { TYPES } from '../types';
+import { TYPES } from '../utils/types';
 
 
 @provide(TYPES.USER_SERVICE)

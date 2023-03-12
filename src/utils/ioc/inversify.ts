@@ -1,12 +1,12 @@
 // declare metadata by @controller annotation
-import './controllers/user.controller'
+import '../../controllers/user.controller'
 // Packages
 import { AsyncContainerModule, interfaces } from 'inversify';
-import { DatabaseClient } from "./mikro-orm";
+import { DatabaseClient } from "../orm/mikro-orm";
 import { Connection, GetRepository, IDatabaseDriver, MikroORM, EntityRepository } from '@mikro-orm/core';
 // Imports
-import { TYPES } from './types'
-import { Users } from './models/user.entity';
+import { TYPES } from '../types'
+import { Users } from '../../entities/user.entity';
 
 
 // Initalize Database & bindings

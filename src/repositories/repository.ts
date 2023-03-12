@@ -1,6 +1,6 @@
 import IRepository from "./interfaces/repository.interface";
 import { EntityRepository } from '@mikro-orm/postgresql';
-import BaseEntity from "src/models/base.entity";
+import BaseEntity from "src/entities/base.entity";
 
 export default class Repository<T extends BaseEntity> extends EntityRepository<T> implements IRepository<T> {
 

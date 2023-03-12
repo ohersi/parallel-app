@@ -6,7 +6,7 @@ import { inject } from 'inversify'
 import IController from './interfaces/controller.interface';
 import HttpException from '../utils/exceptions/http.exception';
 import UserService from '../services/user.service';
-import { TYPES } from '../types';
+import { TYPES } from '../utils/types';
 
 
 @controller(`/api/v1/users`)
@@ -49,7 +49,7 @@ export default class UserController implements IController {
         }
     }
 
-    @httpPost('/create')
+    @httpPost('/')
     private async createUser(
         @request() req: Request,
         @response() res: Response,
@@ -64,5 +64,4 @@ export default class UserController implements IController {
         }
     }
 
-
-}
+};

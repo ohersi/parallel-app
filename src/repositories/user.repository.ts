@@ -1,4 +1,4 @@
-import { Users } from '../models/user.entity';
+import { Users } from '../entities/user.entity';
 import Repository from './repository';
 import { injectable } from 'inversify'
 import  { Entity } from '@mikro-orm/core'

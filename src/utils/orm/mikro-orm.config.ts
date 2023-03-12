@@ -1,7 +1,7 @@
 import { Options } from "@mikro-orm/core";
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
-import './utils/env';
+import '../env';
 
 
 const config: Options<PostgreSqlDriver> = {
