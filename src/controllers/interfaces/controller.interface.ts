@@ -1,6 +1,4 @@
-import { Router } from "express";
 
 export default interface IController {
-  path: string;
-  router: Router;
+  // TODO: Research base controller interface
 };

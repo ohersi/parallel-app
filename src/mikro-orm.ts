@@ -1,9 +1,10 @@
-import { MikroORM } from "@mikro-orm/core";
-import { PostgreSqlDriver } from "@mikro-orm/postgresql";
+// Packages
+import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
+// Imports
 import config from "./mikro-orm.config";
 
-
-export default async function init() : Promise<MikroORM<PostgreSqlDriver>> {
-    const orm = await MikroORM.init<PostgreSqlDriver>(config);
-    return orm;
+export class DatabaseClient {
+    public init = async (): Promise<MikroORM<IDatabaseDriver<Connection>>> => {
+        return MikroORM.init(config);
+    }
 }

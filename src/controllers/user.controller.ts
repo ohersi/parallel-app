@@ -1,30 +1,31 @@
+// Packages
 import { Request, Response, NextFunction, Router } from 'express';
+import { controller, httpGet, httpPost, request, response, next } from 'inversify-express-utils'
+import { inject } from 'inversify'
+// Imports
 import IController from './interfaces/controller.interface';
 import HttpException from '../utils/exceptions/http.exception';
 import UserService from '../services/user.service';
+import { TYPES } from '../types';
 
 
+@controller(`/api/v1/users`)
 export default class UserController implements IController {
 
-    public path = '/users';
-    public router = Router();
-    private usersService = new UserService();
+    private readonly service: UserService;
 
-    constructor() {
-        this.initalizeRoutes();
+    constructor(@inject(TYPES.USER_SERVICE) userService: UserService) {
+        this.service = userService;
     }
 
-    // TODO: Create seperate routes file
-    private initalizeRoutes(): void {
-        this.router.get(`${this.path}`, this.getAllUsers);
-        this.router.get(`${this.path}/:id`, this.getUserByID);
-        this.router.post(`${this.path}/adduser`, this.createUser)
-    }
-
-    // arrow function allow for this.userService, otherwise is lost and be undefined
-    private getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    @httpGet('/')
+    private async getAllUsers(
+        @request() req: Request,
+        @response() res: Response,
+        @next() next: NextFunction)
+        : Promise<Response | void> {
         try {
-            const results = await this.usersService.getAllUsers();
+            const results = await this.service.getAllUsers();
             res.send(results);
         }
         catch (error) {
@@ -32,10 +33,15 @@ export default class UserController implements IController {
         }
     }
 
-    private getUserByID = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    @httpGet('/:id')
+    private async getUserByID(
+        @request() req: Request,
+        @response() res: Response,
+        @next() next: NextFunction)
+        : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.usersService.getUserByID(id);
+            const results = await this.service.getUserByID(id);
             res.send(results);
         }
         catch (error) {
@@ -43,9 +49,14 @@ export default class UserController implements IController {
         }
     }
 
-    private createUser = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    @httpPost('/create')
+    private async createUser(
+        @request() req: Request,
+        @response() res: Response,
+        @next() next: NextFunction)
+        : Promise<Response | void> {
         try {
-            const results = await this.usersService.newUser(req.body);
+            const results = await this.service.newUser(req.body);
             res.status(201).send("User created.");
         }
         catch (error) {

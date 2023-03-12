@@ -1,85 +1,57 @@
-import express from 'express';
+// Runtime Decorator Metadata Insertion
 import 'reflect-metadata';
+// Packages
+import express, { Application, NextFunction } from 'express';
+import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
-import { AbstractSqlDriver, SqlEntityManager } from '@mikro-orm/postgresql';
-import init from './mikro-orm';
-import IController from './controllers/interfaces/controller.interface';
+import { Connection, EntityManager, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
+// Imports
 import ErrorMiddleware from './middleware/error.middleware';
-import { MikroORM } from '@mikro-orm/core';
-import { container } from './di-container';
+import initContainer from './di-container';
+import { TYPES } from './types';
 
 export const DI = {} as {
     orm: MikroORM;
-    db: SqlEntityManager<AbstractSqlDriver>;
+    db: EntityManager<IDatabaseDriver<Connection>>;
 }
 
 export class App {
 
-    public server: InversifyExpressServer;
     public port: number;
-    // What type?
-    public database: Promise<SqlEntityManager<AbstractSqlDriver>>;
+    public container: Promise<Container>;
 
     constructor(port: number) {
-        this.server = new InversifyExpressServer(container);
         this.port = port;
-        this.setup();
-        this.initalizeMiddleware();
-        // this.initalizeControllers(controllers);
-        this.initalizeErrorHandling();
-        this.database = this.initalizeDatabase();
-
+        this.container = initContainer();
+        this.start();
     };
 
-    // Initalize Inversify Container //
-    private setup() {
-        this.server.build();
-    }
+    private start() {
 
-    // Initalize Database //
-    private async initalizeDatabase(): Promise<SqlEntityManager<AbstractSqlDriver>> {
-        const mikrOrm = await init();
-        DI.orm = mikrOrm;
-        // May cause issues, fallback return just DI.orm (type: Promise<MikroORM<PostgreSqlDriver>>);
-        const fork = mikrOrm.em.fork();
-        DI.db = fork;
-        return fork;
-    }
+        this.container.then((container: Container) => {
 
-    // Initalize Error Handling
-    private initalizeErrorHandling(): void {
-        this.server.setConfig((app) => {
-            app.use(ErrorMiddleware);
-        });
-    }
+            const server = new InversifyExpressServer(container);
 
-    // Initialize Repositories //
+            server.setConfig((app: Application) => {
+                // Initalize Error Handling
+                app.use(ErrorMiddleware);
 
+                // Initalize JSON Parser
+                app.use(express.json());
 
-    // Initalize of Controllers //
-    private initalizeControllers(controllers: IController[]): void {
-        controllers.forEach((controller: IController) => {
-            this.server.setConfig((app) => {
-                app.use('/api', controller.router);
+                // Create Different Instances For Each Request
+                app.use((_req, _res, next: NextFunction): void => {
+                    const connection = container.get<MikroORM<IDatabaseDriver<Connection>>>
+                        (TYPES.DATABASE_CONNECTION);
+                    RequestContext.create(connection.em, next);
+                });
+
+                // Start server on part
+                app.listen(this.port, () => console.log(`app listening on port ${this.port}`));
             });
-        });
-    };
 
-    // Initalize Routes //
-
-
-    // Initalize Middleware
-    private initalizeMiddleware(): void {
-        this.server.setConfig((app) => {
-            app.use(express.json());
-        });
-    };
-
-    //////////////////////////////////////////////////
-
-    public listen(): void {
-        this.server.setConfig((app) => {
-            app.listen(this.port, () => console.log(`app listening on port ${this.port}`));
+            // Initialize Application
+            server.build();
         });
     }
 

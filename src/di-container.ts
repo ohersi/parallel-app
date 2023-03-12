@@ -1,3 +1,13 @@
-import { Container } from "inversify";
+// Packages
+import { Container } from 'inversify';
+import { bindings } from './inversify';
+import { buildProviderModule } from 'inversify-binding-decorators';
 
-export const container = new Container;
+export default async function initContainer(): Promise<Container> {
+
+    const container = new Container();
+    await container.loadAsync(bindings);
+    container.load(buildProviderModule());
+
+    return container;
+}
