@@ -6,7 +6,7 @@ import { DatabaseClient } from "../orm/mikro-orm";
 import { Connection, GetRepository, IDatabaseDriver, MikroORM, EntityRepository } from '@mikro-orm/core';
 // Imports
 import { TYPES } from '../types'
-import { Users } from '../../entities/user.entity';
+import { User } from '../../entities/user.entity';
 
 
 // Initalize Database & bindings
@@ -35,7 +35,7 @@ export const bindings = new AsyncContainerModule(async (bind): Promise<void> => 
             .toConstantValue(connection);
 
         // Repository Bindings
-        bindEntityToRepository(bind, TYPES.USER_REPOSITORY, connection, Users);
+        bindEntityToRepository(bind, TYPES.USER_REPOSITORY, connection, User);
     }
 
 });

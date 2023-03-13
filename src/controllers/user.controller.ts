@@ -1,5 +1,5 @@
 // Packages
-import { Request, Response, NextFunction, Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
