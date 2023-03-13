@@ -20,7 +20,7 @@ export default class UserService implements IService {
     //TODO: Find return type for each function instead of Promise<any>
     public getAllUsers = async (): Promise<any> => {
         try {
-            const allUsers = this.userRepository.findAll();
+            const allUsers = this.userRepository.getAll();
             return allUsers;
         }
         catch (error) {
@@ -43,7 +43,7 @@ export default class UserService implements IService {
     public newUser = async (body: any) => {
         try {
             ;
-            const createUser = this.userRepository.create(body);
+            const createUser = this.userRepository.save(body);
             await this.userRepository.persistAndFlush(createUser);
         }
         catch (error) {

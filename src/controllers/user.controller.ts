@@ -12,6 +12,8 @@ import { TYPES } from '../utils/types';
 @controller(`/api/v1/users`)
 export default class UserController implements IController {
 
+    //TODO: Research implementing express caching
+
     private readonly service: UserService;
 
     constructor(@inject(TYPES.USER_SERVICE) userService: UserService) {

@@ -5,7 +5,7 @@ export default interface IRepository<T> {
     updateByID(entity: T, id: number) : Promise<T>; // UPDATE
     deleteByID(entity: T, id: number): Promise<T>; // DELETE
 
-    findByID(id: number): Promise<T>; // READ
-    search(entity: T, id: number): Promise<T[]>; // READ
+    findByID(id: number): Promise<T | null>; // READ
+    getAll(): Promise<T[]>; // READ
 
 }

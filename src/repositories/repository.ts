@@ -1,11 +1,20 @@
 import IRepository from "./interfaces/repository.interface";
 import { EntityRepository } from '@mikro-orm/postgresql';
 import BaseEntity from "src/entities/base.entity";
+import { Loaded } from "@mikro-orm/core";
 
 export default class Repository<T extends BaseEntity> extends EntityRepository<T> implements IRepository<T> {
 
+    // TODO: Return create entity DTO?
     async save(entity: T): Promise<T> {
-        throw new Error("Method not implemented.");
+        try {
+            const res = this.create(entity);
+            await this.persistAndFlush(res);
+            return res;
+        }
+        catch (error) {
+            throw new Error("Method not implemented.");
+        }
     };
 
     updateByID(entity: T, id: number): Promise<T> {
@@ -16,14 +25,26 @@ export default class Repository<T extends BaseEntity> extends EntityRepository<T
         throw new Error("Method not implmented.");
     };
 
-    async findByID(id: number): Promise<T> {
+    async findByID(id: number): Promise<Loaded<T, never> | null> {
         // TODO: find return type of res
-        const res: any = await this.find( { id } as any);
-        return res;
+        try {
+            const res = await this.findOne({ id } as any);
+            return res;
+        }
+        catch (error) {
+            throw new Error("ID Not found");
+        }
+
     };
 
-    search(entity: T, id: number): Promise<T[]> {
-        throw new Error("Method not implmented.");
+    getAll(): Promise<Loaded<T, never>[]> {
+        try {
+            const res = this.findAll();
+            return res;
+        }
+        catch (error) {
+            throw new Error("Method not implmented.");
+        }
     };
 
 }
