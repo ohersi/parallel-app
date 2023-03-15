@@ -3,7 +3,7 @@ import { inject } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 // Imports
 import { User } from '../entities/user.entity';
-import IService from './service.interface';
+import IService from './interfaces/service.interface';
 import UserRepository from '../repositories/user.repository';
 import { TYPES } from '../utils/types';
 
