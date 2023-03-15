@@ -1,5 +1,5 @@
-export default class IService {
-
-    constructor() {}
-    // TODO: Research base service interface
+export default interface IService {
+    getAll(): Promise<any>;
+    findByID(id: number): Promise<any>;
+    create(body: any): Promise<any>;
 }

@@ -27,7 +27,7 @@ export default class UserController implements IController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const results = await this.service.getAllUsers();
+            const results = await this.service.getAll();
             res.send(results);
         }
         catch (error) {
@@ -43,7 +43,7 @@ export default class UserController implements IController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.service.getUserByID(id);
+            const results = await this.service.findByID(id);
             res.send(results);
         }
         catch (error) {
@@ -58,7 +58,7 @@ export default class UserController implements IController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const results = await this.service.newUser(req.body);
+            const results = await this.service.create(req.body);
             res.status(201).send("User created.");
         }
         catch (error) {

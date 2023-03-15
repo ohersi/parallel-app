@@ -6,11 +6,10 @@ import { User } from '../entities/user.entity';
 import IService from './interfaces/service.interface';
 import UserRepository from '../repositories/user.repository';
 import { TYPES } from '../utils/types';
-import IUserService from './interfaces/user.service.interface';
 
 
 @provide(TYPES.USER_SERVICE)
-export default class UserService implements IService, IUserService {
+export default class UserService implements IService {
 
     private userRepository: UserRepository;
 
@@ -19,7 +18,7 @@ export default class UserService implements IService, IUserService {
     }
 
     //TODO: Find return type for each function instead of Promise<any>
-    public getAllUsers = async (): Promise<any> => {
+    public getAll = async (): Promise<any> => {
         try {
             const allUsers = await this.userRepository.getAll();
             return allUsers;
@@ -29,7 +28,7 @@ export default class UserService implements IService, IUserService {
         }
     }
 
-    public getUserByID = async (id: number): Promise<any> => {
+    public findByID = async (id: number): Promise<any> => {
         try {
             const user = await this.userRepository.findByID(id);
             return user;
@@ -41,7 +40,7 @@ export default class UserService implements IService, IUserService {
 
     // TODO: Create userDTO 
     // TODO: Create UserExpection
-    public newUser = async (body: any) => {
+    public create = async (body: any) => {
         try {
             ;
             const createUser = this.userRepository.save(body);
