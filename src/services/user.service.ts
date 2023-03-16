@@ -24,7 +24,7 @@ export default class UserService implements IService {
             return allUsers;
         }
         catch (error) {
-            return error;
+            throw new Error("Unexpected error");
         }
     }
 
@@ -34,7 +34,7 @@ export default class UserService implements IService {
             return user;
         }
         catch (error) {
-            return error;
+            throw new Error("User not found?");
         }
     }
 
