@@ -62,7 +62,8 @@ export default class UserController implements IController {
             res.status(201).send("User created.");
         }
         catch (error) {
-            next(new HttpException(400, 'Doesnt work!'));
+            next(new HttpException(400, 'User was not created'));
+            res.status(400).send("User was not created");
         }
     }
 

@@ -6,6 +6,7 @@ import { User } from '../entities/user.entity';
 import IService from './interfaces/service.interface';
 import UserRepository from '../repositories/user.repository';
 import { TYPES } from '../utils/types';
+import UserDTO from '../dto/user.dto';
 
 
 @provide(TYPES.USER_SERVICE)
@@ -31,23 +32,34 @@ export default class UserService implements IService {
     public findByID = async (id: number): Promise<any> => {
         try {
             const user = await this.userRepository.findByID(id);
+            if (user == null) {
+                throw new Error("User not found");
+            };
             return user;
         }
         catch (error) {
-            throw new Error("User not found?");
+            throw new Error("Error with repo");
         }
     }
 
-    // TODO: Create userDTO 
     // TODO: Create UserExpection
-    public create = async (body: any) => {
+    //TODO: Return JWT Token instead of DTO
+    public create = async (body: any): Promise<UserDTO | void> => {
         try {
-            ;
+            let userDTO = new UserDTO();
             const createUser = this.userRepository.save(body);
-            await this.userRepository.persistAndFlush(createUser);
+            await this.userRepository.persistAndFlush(createUser).then(async () => {
+                userDTO.id = (await createUser).id;
+                userDTO.firstname = (await createUser).firstname;
+                userDTO.lastname = (await createUser).lastname;
+                userDTO.email = (await createUser).email;
+                userDTO.password = (await createUser).password;
+                userDTO.profileimg = (await createUser).profileimg;
+            }).then(() => { return userDTO }
+            );
         }
         catch (error) {
-            return error;
+            throw new Error("User was not created")
         }
     }
 }

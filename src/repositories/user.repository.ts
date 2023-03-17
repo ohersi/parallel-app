@@ -12,7 +12,7 @@ export default class UserRepository extends EntityRepository<User> implements IR
 
     // TODO: Custom methods 
 
-    async save(entity: User): Promise<any> {
+    async save(entity: User): Promise<User> {
         try {
             const res = this.create(entity);
             await this.persistAndFlush(res);
