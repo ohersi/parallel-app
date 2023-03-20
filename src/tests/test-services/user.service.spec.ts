@@ -8,109 +8,100 @@ import UserService from "../../services/user.service";
 import { User } from "../../entities/user.entity";
 import UserDTO from "../../dto/user.dto";
 import { Loaded } from "@mikro-orm/core";
+import { TYPES } from "../../utils/types";
+import UserRepository from "../../repositories/user.repository";
 
-const mockedUserService = mockDeep<UserService>();
+const mockedUserRepo = mockDeep<UserRepository>();
 
-const entity = {
-    id: 1,
-    firstname: 'Test',
-    lastname: 'Tester',
-    email: 'email@email.com',
-    password: 'password',
-    profileimg: 'avatar'
-};
-
-const testUser = new UserDTO();
-testUser.id = 1;
-testUser.firstname = 'Test';
-testUser.lastname = 'Tester';
-testUser.email = 'email@email.com';
-testUser.password = 'password';
-testUser.profileimg = 'avatar';
-
-let loadedUser: any;
+let loadedUser: Loaded<User, never>[];
 
 describe('user-service', () => {
 
     let sut: UserService;
+    let repo: UserRepository;
 
     beforeEach(() => {
+        // Create mocked UserRepository to inject into userService
         const moduleRef = createTestingModule(UserModule);
-        // Rebind to mock UserService- currently bound to UserRepository
-        moduleRef.bind(UserService).toConstantValue(mockedUserService);
-        // Retrieve new UserService
-        sut = moduleRef.get(UserService);
-        // Clear mocked UserService
-        mockReset(mockedUserService);
+        moduleRef.bind(TYPES.USER_REPOSITORY).toConstantValue(mockedUserRepo);
+        repo = moduleRef.get(TYPES.USER_REPOSITORY);
+
+        // Create new UserService
+        sut = new UserService(mockedUserRepo);
+
+        // Reset mock
+        mockReset(mockedUserRepo);;
     });
 
     it("is defined", () => {
-        expect(mockedUserService).toBeDefined();
+        expect(sut).toBeDefined();
+        expect(mockedUserRepo).toBeDefined();
     });
 
 
     describe("getAll()", () => {
         //** Loaded<User, never>[] return type is causing issues, cant figure out how to mock it */ 
-        it("should return all the users", async () => {
+        it("should return all the users and call nested repo.getAll function", async () => {
             // Arrange
 
             // Act
-            //** mocking the return of the getAll fn; returns any (actual returns Loaded<User, never>[]) */
-            mockedUserService.getAll.mockResolvedValue(loadedUser);
-            // Call getAll fn
+            //** Call getAll fn * /
             const results = await sut.getAll();
 
             // Assert
+            //** Expect getAll to return Loaded User and repo.getAll fn is called  */
             expect(results).toEqual(loadedUser);
-        })
+            expect(mockedUserRepo.getAll).toBeCalled();
+        });
 
     });
 
     describe("findByID()", () => {
         // TODO: Replace Error with UserExpections
         it("should throw error if a user is not found", async () => {
-
-            // Arrange
-
             // Act
-            mockedUserService.findByID.mockResolvedValue(Error("User not found"));
-            const results = await sut.findByID(-999);
+            const results = sut.findByID(-999);
 
-            // Assert
-            expect(results).toEqual(Error("User not found"));
-        })
+            // Assert 
+            await expect(results).rejects.toThrow(Error);
+            await expect(results).rejects.toThrowError("User not found");
+        });
 
-        //** Loaded<User, never>[] return type is causing issues, cant figure out how to mock it */ 
-        it("should return user info from the id", async () => {
+        it("should call nested repo.findByID function", async () => {
             // Arrange
             let userID: number = 1;
 
             // Act
-            //** mocking the return of the findByID function; returns any (actual returns Loaded<User, never>[]) */
-            mockedUserService.findByID.mockResolvedValue(loadedUser);
-            // Call findByID function
-            const results = await sut.findByID(userID);
+            try {
+                await sut.findByID(userID);
+            }
+            catch (error) { }
 
             // Assert
-            expect(results).toEqual(loadedUser);
+            expect(mockedUserRepo.findByID).toBeCalled();
         })
     });
 
     describe("create()", () => {
-        //** Loaded<User, never>[] return type is causing issues, cant figure out how to mock it */ 
-        it("should return newly created user object", async () => {
+        it("should call nested repo.save function", async () => {
             // Arrange
+            const entity = {
+                id: 1,
+                firstname: 'Test',
+                lastname: 'Tester',
+                email: 'email@email.com',
+                password: 'password',
+                profileimg: 'avatar'
+            }
 
             // Act
-            //** mocking the return of the create function; returns user entity */
-            mockedUserService.create.mockResolvedValue(testUser);
-            // Call findByID function
-            const results = await sut.create(entity);
-
+            try {
+                await sut.create(entity);
+            }
+            catch (error) { }
 
             // Assert
-            // TODO: Check if properties and valeus match
-            expect(results).toEqual(testUser);
+            expect(mockedUserRepo.save).toBeCalled();
         })
     });
 

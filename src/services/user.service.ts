@@ -7,6 +7,7 @@ import IService from './interfaces/service.interface';
 import UserRepository from '../repositories/user.repository';
 import { TYPES } from '../utils/types';
 import UserDTO from '../dto/user.dto';
+import { Loaded } from '@mikro-orm/core';
 
 
 @provide(TYPES.USER_SERVICE)
@@ -19,7 +20,7 @@ export default class UserService implements IService {
     }
 
     //TODO: Find return type for each function instead of Promise<any>
-    public getAll = async (): Promise<any> => {
+    public getAll = async (): Promise<Loaded<User, never>[]> => {
         try {
             const allUsers = await this.userRepository.getAll();
             return allUsers;
@@ -29,16 +30,16 @@ export default class UserService implements IService {
         }
     }
 
-    public findByID = async (id: number): Promise<any> => {
+    public findByID = async (id: number): Promise<Loaded<User, never> | null> => {
         try {
             const user = await this.userRepository.findByID(id);
             if (user == null) {
-                throw new Error("User not found");
+                throw Error("User not found");
             };
             return user;
         }
         catch (error) {
-            throw new Error("Error with repo");
+            throw Error("User not found");
         }
     }
 
