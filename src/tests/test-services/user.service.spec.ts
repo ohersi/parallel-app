@@ -8,7 +8,7 @@ import UserService from "../../services/user.service";
 import { User } from "../../entities/user.entity";
 import UserDTO from "../../dto/user.dto";
 import { Loaded } from "@mikro-orm/core";
-import { TYPES } from "../../utils/types";
+import { TYPES } from "../../utils/types"; 
 import UserRepository from "../../repositories/user.repository";
 
 const mockedUserRepo = mockDeep<UserRepository>();
@@ -33,7 +33,7 @@ describe('user-service', () => {
         mockReset(mockedUserRepo);;
     });
 
-    it("is defined", () => {
+    it("service and mocked repo are defined", () => {
         expect(sut).toBeDefined();
         expect(mockedUserRepo).toBeDefined();
     });
@@ -53,6 +53,8 @@ describe('user-service', () => {
             expect(results).toEqual(loadedUser);
             expect(mockedUserRepo.getAll).toBeCalled();
         });
+
+        //TODO: Return error if there are no users in the database
 
     });
 
