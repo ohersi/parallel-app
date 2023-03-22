@@ -7,4 +7,7 @@ export enum TYPES_ENUM {
   
     // Services
     USER_SERVICE = 'UserService',
+    
+    // Use Cases
+    CREATE_USER_USECASE = 'CreateUserUsecase',
   }

@@ -51,20 +51,4 @@ export default class UserController implements IController {
         }
     }
 
-    @httpPost('/')
-    private async createUser(
-        @request() req: Request,
-        @response() res: Response,
-        @next() next: NextFunction)
-        : Promise<Response | void> {
-        try {
-            const results = await this.service.create(req.body);
-            res.status(201).send("User created.");
-        }
-        catch (error) {
-            next(new HttpException(400, 'User was not created'));
-            res.status(400).send("User was not created");
-        }
-    }
-
 };

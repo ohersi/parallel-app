@@ -43,24 +43,4 @@ export default class UserService implements IService {
         }
     }
 
-    // TODO: Create UserExpection
-    //TODO: Return JWT Token instead of DTO
-    public create = async (body: any): Promise<UserDTO | void> => {
-        try {
-            let userDTO = new UserDTO();
-            const createUser = this.userRepository.save(body);
-            await this.userRepository.persistAndFlush(createUser).then(async () => {
-                userDTO.id = (await createUser).id;
-                userDTO.firstname = (await createUser).firstname;
-                userDTO.lastname = (await createUser).lastname;
-                userDTO.email = (await createUser).email;
-                userDTO.password = (await createUser).password;
-                userDTO.profileimg = (await createUser).profileimg;
-            }).then(() => { return userDTO }
-            );
-        }
-        catch (error) {
-            throw new Error("User was not created")
-        }
-    }
 }

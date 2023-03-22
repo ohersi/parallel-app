@@ -1,5 +1,6 @@
 // declare metadata by @controller annotation
 import '../../controllers/user.controller'
+import '../../controllers/createUser.controller'
 // Packages
 import { AsyncContainerModule, interfaces } from 'inversify';
 import { DatabaseClient } from "../orm/mikro-orm";
