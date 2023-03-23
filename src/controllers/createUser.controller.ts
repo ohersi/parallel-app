@@ -17,18 +17,31 @@ export default class createUserController {
     }
 
     @httpPost('/')
-    private async createUser(
+    public async createUser(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
-        try {
-            const results = await this.usecase.execute(req.body);
-            res.status(201).send("User created.");
+
+        //TODO: Validation req.body in Joi or Yep
+
+        if (!Object.keys(req.body).length) {
+            res.status(400);
+            res.send({ message: "Input is empty" });
         }
-        catch (error) {
-            next(new HttpException(400, 'User was not created'));
-            res.status(400).send("User was not created");
+        else {
+            const results: Boolean = await this.usecase.execute(req.body);
+            // TODO: Find appropriate return to check
+            if (results == true) {
+                res.status(201);
+                res.send({ message: "User was created" });
+            }
+            else {
+                // next(new HttpException(400, 'User was not created'));
+                //TODO: Return correct status code
+                res.status(500);
+                res.send({ message: "User not created" });
+            }
         }
     }
 
