@@ -2,6 +2,9 @@
 import 'reflect-metadata';
 // Packages
 import express, { Application, NextFunction } from 'express';
+import cors from 'cors';
+import compression from 'compression';
+import helmet from 'helmet';
 import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { Connection, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
@@ -33,6 +36,16 @@ export class App {
 
                 // Initalize JSON Parser
                 app.use(express.json());
+
+                // Initalize Compression
+                app.use(compression());
+
+                // Initalize Express Security - Helment
+                app.use(helmet());
+
+                // Initalize CORS
+                //TODO: Set approved sites
+                // app.use(cors());
 
                 // Create Different Instances For Each Request
                 app.use((_req, _res, next: NextFunction): void => {

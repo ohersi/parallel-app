@@ -24,24 +24,33 @@ export default class createUserController {
         : Promise<Response | void> {
 
         //TODO: Validation req.body in Joi or Yep
+        // TODO: Fix nested if else 
 
-        if (!Object.keys(req.body).length) {
+        const { firstname, lastname, email, password, profileimg } = req.body;
+
+        if (Object.keys(req.body).length === 0) {
             res.status(400);
             res.send({ message: "Input is empty" });
+
+        }
+        else if (!firstname || !lastname || !email || !password || !profileimg) {
+            res.status(400);
+            res.send({ message: `Missing fields` });
+        }
+
+        const results: Boolean = await this.usecase.execute(req.body);
+        // TODO: Find appropriate return to check
+        if (results == true) {
+            res.status(201);
+            res.send({ message: "User was created" });
+            return;
         }
         else {
-            const results: Boolean = await this.usecase.execute(req.body);
-            // TODO: Find appropriate return to check
-            if (results == true) {
-                res.status(201);
-                res.send({ message: "User was created" });
-            }
-            else {
-                // next(new HttpException(400, 'User was not created'));
-                //TODO: Return correct status code
-                res.status(500);
-                res.send({ message: "User not created" });
-            }
+            // next(new HttpException(400, 'User was not created'));
+            //TODO: Return correct status code
+            res.status(500);
+            res.send({ message: "User not created" });
+            return;
         }
     }
 

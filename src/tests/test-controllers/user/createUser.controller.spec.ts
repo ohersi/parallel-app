@@ -21,7 +21,11 @@ describe("createUserController", () => {
         controller = new createUserController(mockedCreateUserUseCase);
 
         mockReset(mockedCreateUserUseCase);
-    })
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks()
+      })
 
     it("should be defined", () => {
         expect(controller).toBeDefined();
@@ -35,12 +39,36 @@ describe("createUserController", () => {
             it("return a status of 400", async () => {
                 // GIVEN/ARRANGE
                 requestMock.body = {};
+
                 // WHEN/ACT
                 await controller.createUser(requestMock, responseMock, nextMock);
+
                 // THEN/ASSERT
                 expect(responseMock.status).toBeCalledWith(400);
                 expect(responseMock.send).toBeCalledWith({ message: "Input is empty" });
 
+            })
+        })
+
+        describe("and an input field is missing", () => {
+
+            it("return a status of 400", async () => {
+                //GIVEN
+                requestMock.body = {
+                    id: 1, 
+                    firstname: "Test", 
+                    lastname: "Tester", 
+                    email: "email@email.com",
+                    password: "password",
+                    profileimg: ""
+                }
+
+                //WHEN
+                await controller.createUser(requestMock, responseMock, nextMock);
+                
+                //THEN
+                expect(responseMock.status).toBeCalledWith(400);
+                expect(responseMock.send).toBeCalledWith({ message: `Missing fields`});
             })
         })
 
