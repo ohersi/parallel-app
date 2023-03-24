@@ -32,8 +32,8 @@ export default class createUserUseCase {
     //TODO: Return JWT Token instead of DTO
     public execute = async (body: any): Promise<Boolean> => {
         try {
-            const createUser = await this.userRepository.save(body);
-            await this.userRepository.persistAndFlush(createUser);
+            // const createUser = await this.userRepository.save(body);
+            // await this.userRepository.persistAndFlush(createUser);
             //TODO: Return custom response with JTWT inside of trues
             return true;
         }

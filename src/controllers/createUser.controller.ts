@@ -5,6 +5,8 @@ import { inject } from 'inversify'
 // Imports
 import createUserUseCase from "../services/usercases/createUser.usecase";
 import HttpException from '../utils/exceptions/http.exception';
+import validationMiddleware from '../middleware/validation.middleware';
+import userValidation from '../resources/validations/user.validation';
 import { TYPES } from '../utils/types';
 
 @controller(`/api/v1/users`)
@@ -16,14 +18,13 @@ export default class createUserController {
         this.usecase = createUserUsecase;
     }
 
-    @httpPost('/')
+    @httpPost('/', validationMiddleware(userValidation.create))
     public async createUser(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
-
-        //TODO: Validation req.body in Joi or Yep
+        
         // TODO: Fix nested if else 
 
         const { firstname, lastname, email, password, profileimg } = req.body;
@@ -33,6 +34,7 @@ export default class createUserController {
             res.send({ message: "Input is empty" });
 
         }
+        //TODO: Remove and replace test with Joi test
         else if (!firstname || !lastname || !email || !password || !profileimg) {
             res.status(400);
             res.send({ message: `Missing fields` });
