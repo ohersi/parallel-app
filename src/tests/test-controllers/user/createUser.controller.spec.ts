@@ -8,8 +8,6 @@ import createUserController from '../../../controllers/createUser.controller'
 import createUserUseCase from "../../../services/usercases/createUser.usecase";
 import validationMiddleware from "../../../middleware/validation.middleware";
 import userValidation from "../../../resources/validations/user.validation";
-import { createTestingModule } from "../../create-testing-module";
-import { UserModule } from "../../test-modules/user.module";
 import { start } from '../../../app'
 
 // Controller is lean, only directs to usecase
@@ -103,10 +101,9 @@ describe("createUserController", () => {
                 //WHEN
                 //TODO: Fix supertest ignoring next(new HttpExpection)
                 const results = await request(app).post('/api/v1/users/').send(testUser);
-                expect(results.status).toEqual(500);
 
                 //THEN
-
+                expect(results.status).toEqual(500);
             })
         });
 

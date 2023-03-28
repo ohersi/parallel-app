@@ -4,7 +4,6 @@ import { controller, httpPost, request, response, next } from 'inversify-express
 import { inject } from 'inversify'
 // Imports
 import createUserUseCase from "../services/usercases/createUser.usecase";
-import HttpException from '../utils/exceptions/http.exception';
 import validationMiddleware from '../middleware/validation.middleware';
 import userValidation from '../resources/validations/user.validation';
 import { TYPES } from '../utils/types';
@@ -30,11 +29,9 @@ export default class createUserController {
             res.status(201);
             res.send({ message: "User was created" });
         }
-        catch (error: any) {
-            //TODO: Return correct status code
-            //TODO: Add back next(new HttpException(500, { message: error.message }))
+        catch (err: any) {
             res.status(500);
-            res.send({ message: error.message });
+            res.send({ error: { status: 500 }, message: err.message });
         }
     }
 
