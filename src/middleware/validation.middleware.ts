@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import Joi from "joi";
 
-const validationMiddleware = (schema: Joi.Schema): RequestHandler => {
+const validationMiddleware = (schema: Joi.Schema): RequestHandler =>
 
-    return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
         const validationOptions = {
             abortEarly: false, // Prevents validation from ending after finding the first error, allows it to continue
@@ -25,14 +25,15 @@ const validationMiddleware = (schema: Joi.Schema): RequestHandler => {
                 e.details.forEach((error: Joi.ValidationErrorItem) => {
                     errors.push(error.message)
                 });
-                res.status(400).send({ errors });
+                res.status(400);
+                res.send({ errors });
             }
             else {
-               res.status(400).send(`Unexpected error: ${e}`)
-               console.log("Unexpected error", e); 
+                res.status(100);
+                res.send(`Unexpected error: ${e}`);
             }
         }
-    }
-};
+
+    };
 
 export default validationMiddleware;

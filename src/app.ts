@@ -13,54 +13,46 @@ import ErrorMiddleware from './middleware/error.middleware';
 import initContainer from './utils/ioc/di-container';
 import { TYPES } from './utils/types';
 
-export class App {
+export const start = async (port: Number) => {
 
-    public port: number;
-    public container: Promise<Container>;
+    const container: Container = await initContainer();
 
-    constructor(port: number) {
-        this.port = port;
-        this.container = initContainer();
-        this.start();
-    };
+    const server: InversifyExpressServer = new InversifyExpressServer(container);
 
-    private start() {
+    server.setConfig((app: Application) => {
 
-        this.container.then((container: Container) => {
+        // Initalize JSON Parser
+        app.use(express.json());
 
-            const server = new InversifyExpressServer(container);
+        // Initalize Compression
+        app.use(compression());
 
-            server.setConfig((app: Application) => {
-                // Initalize Error Handling
-                app.use(ErrorMiddleware);
+        // Initalize Express Security - Helment
+        app.use(helmet());
 
-                // Initalize JSON Parser
-                app.use(express.json());
+        // Initalize CORS
+        //TODO: Set approved sites
+        // app.use(cors());
 
-                // Initalize Compression
-                app.use(compression());
+        // Create Different Instances For Each Request
+        app.use((req, res, next: NextFunction): void => {
+            const connection = container.get<MikroORM<IDatabaseDriver<Connection>>>
+                (TYPES.DATABASE_CONNECTION);
+            RequestContext.create(connection.em, next);
 
-                // Initalize Express Security - Helment
-                app.use(helmet());
-
-                // Initalize CORS
-                //TODO: Set approved sites
-                // app.use(cors());
-
-                // Create Different Instances For Each Request
-                app.use((_req, _res, next: NextFunction): void => {
-                    const connection = container.get<MikroORM<IDatabaseDriver<Connection>>>
-                        (TYPES.DATABASE_CONNECTION);
-                    RequestContext.create(connection.em, next);
-                });
-
-                // Start server on part
-                app.listen(this.port, () => console.log(`app listening on port ${this.port}`));
-            });
-
-            // Initialize Application
-            server.build();
+            // Initalize Error Handling
+            app.use(ErrorMiddleware);
         });
-    }
 
-};
+        // Start server on port
+        if (process.env.NODE_ENV !== 'test') {
+            app.listen(port, () => console.log(`app listening on port ${port}`));
+        }
+        else {
+            // Test server on port 8080
+            app.listen(8080, () => console.log(`app listening on port ${8080}`));
+        }
+    });
+
+    return server;
+}

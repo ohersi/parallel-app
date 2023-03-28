@@ -13,8 +13,8 @@ const complexityOptions = {
 
 // Create user
 const create = Joi.object({
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
+    firstname: Joi.string().required().max(30),
+    lastname: Joi.string().required().max(30),
     email: Joi.string().email().lowercase().required(),
     password: passwordComplexity(complexityOptions).required(),
     profileimg: Joi.string().required(),

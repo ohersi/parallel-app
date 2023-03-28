@@ -1,6 +1,6 @@
 // Packages
 import { Request, Response, NextFunction } from 'express';
-import { controller, httpGet, httpPost, request, response, next } from 'inversify-express-utils'
+import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
 import createUserUseCase from "../services/usercases/createUser.usecase";
@@ -24,35 +24,17 @@ export default class createUserController {
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
-        
-        // TODO: Fix nested if else 
-
-        const { firstname, lastname, email, password, profileimg } = req.body;
-
-        if (Object.keys(req.body).length === 0) {
-            res.status(400);
-            res.send({ message: "Input is empty" });
-
-        }
-        //TODO: Remove and replace test with Joi test
-        else if (!firstname || !lastname || !email || !password || !profileimg) {
-            res.status(400);
-            res.send({ message: `Missing fields` });
-        }
-
-        const results: Boolean = await this.usecase.execute(req.body);
-        // TODO: Find appropriate return to check
-        if (results == true) {
+        try {
+            // TODO: Find appropriate return to check
+            const results = await this.usecase.execute(req.body);
             res.status(201);
             res.send({ message: "User was created" });
-            return;
         }
-        else {
-            // next(new HttpException(400, 'User was not created'));
+        catch (error: any) {
             //TODO: Return correct status code
+            //TODO: Add back next(new HttpException(500, { message: error.message }))
             res.status(500);
-            res.send({ message: "User not created" });
-            return;
+            res.send({ message: error.message });
         }
     }
 

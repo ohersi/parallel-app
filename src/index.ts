@@ -1,3 +1,8 @@
-import { App } from "./app";
+import { start } from "./app";
 
-const app = new App(Number(3000));
+(async () => {
+    const server = await start(3000);
+    // Initialize Application
+    return server.build();
+})();
+
