@@ -1,6 +1,5 @@
 // declare metadata by @controller annotation
-import '../../controllers/user.controller'
-import '../../controllers/createUser.controller'
+import * as controllers from '../ioc/imports/controllers-imports'
 // Packages
 import { AsyncContainerModule, interfaces } from 'inversify';
 import { DatabaseClient } from "../orm/mikro-orm";
@@ -9,6 +8,11 @@ import { Connection, GetRepository, IDatabaseDriver, MikroORM, EntityRepository 
 import { TYPES } from '../types'
 import { User } from '../../entities/user.entity';
 
+// Classes w/ @controller need to be imported one unique time then it can be declared
+// Bulk import only  works if the module w/ all the imports is invoked
+// So controllers is assigned to controllerModule and the thing works... idk 
+// More info: https://github.com/inversify/inversify-express-utils#important-information-about-the-controller-decorator //
+let controllerModules = controllers;
 
 // Initalize Database & bindings
 

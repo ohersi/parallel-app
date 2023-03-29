@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import createUserUseCase from "../services/usercases/createUser.usecase";
+import createUserUseCase from "../services/usecases/user/createUser.usecase";
 import validationMiddleware from '../middleware/validation.middleware';
 import userValidation from '../resources/validations/user.validation';
 import { TYPES } from '../utils/types';

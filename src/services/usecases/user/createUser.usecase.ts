@@ -8,15 +8,15 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import UserRepository from "../../repositories/user.repository"
-import UserDTO from "../../dto/user.dto";
-import { TYPES } from "../../utils/types";
+import UserRepository from "../../../repositories/user.repository"
+import UserDTO from "../../../dto/user.dto";
+import { TYPES } from "../../../utils/types";
 
 
 //** USE CASE */
-// GIVEN user object has has all fields
-// WHEN creating a new user
-// THEN user is created
+// GIVEN: user object has has all fields
+// WHEN: creating a new user
+// THEN: user is created
 
 @provide(TYPES.CREATE_USER_USECASE)
 export default class createUserUseCase {

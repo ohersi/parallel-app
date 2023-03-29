@@ -35,20 +35,4 @@ export default class UserController implements IController {
         }
     }
 
-    @httpGet('/:id')
-    private async getUserByID(
-        @request() req: Request,
-        @response() res: Response,
-        @next() next: NextFunction)
-        : Promise<Response | void> {
-        try {
-            const id = parseInt(req.params.id);
-            const results = await this.service.findByID(id);
-            res.send(results);
-        }
-        catch (error) {
-            next(new HttpException(400, 'Doesnt work!'));
-        }
-    }
-
 };

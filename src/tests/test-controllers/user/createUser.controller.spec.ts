@@ -3,9 +3,10 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
+import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import createUserController from '../../../controllers/createUser.controller'
-import createUserUseCase from "../../../services/usercases/createUser.usecase";
+import createUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import validationMiddleware from "../../../middleware/validation.middleware";
 import userValidation from "../../../resources/validations/user.validation";
 import { start } from '../../../app'
@@ -33,6 +34,8 @@ describe("createUserController", () => {
     beforeEach(() => {
         controller = new createUserController(mockedCreateUserUseCase);
         mockReset(mockedCreateUserUseCase);
+        // Inversify clean up existing metadata
+        cleanUpMetadata();
     })
 
     afterEach(() => {
