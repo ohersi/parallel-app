@@ -11,4 +11,5 @@ export enum TYPES_ENUM {
     // Use Cases
     CREATE_USER_USECASE = 'CreateUserUsecase',
     GET_USER_BY_ID_USECASE = 'GetUserByIdUseCase',
+    GET_ALL_USERS_USECASE = 'GetAllUsersUseCase',
   }

@@ -9,12 +9,12 @@ import { Loaded } from "@mikro-orm/core";
 
 
 //** USE CASE */
-// GIVEN: a user id
-// WHEN: find a user matching the id
-// THEN: return a user object
+// GIVEN: -
+// WHEN: find all users in database
+// THEN: return all users
 
-@provide(TYPES.GET_USER_BY_ID_USECASE)
-export default class GetUserByIdUseCase {
+@provide(TYPES.GET_ALL_USERS_USECASE)
+export default class GetAllUsersUseCase {
 
     private userRepository: UserRepository;
 
@@ -22,16 +22,13 @@ export default class GetUserByIdUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (id: number): Promise<Loaded<User, never> | null> => {
+    public execute = async (): Promise<Loaded<User, never>[]> => {
         try {
-            const user = await this.userRepository.findByID(id);
-            if (user == null) {
-                throw new Error("User not found");
-            };
-            return user;
+            const allUsers = await this.userRepository.getAll();
+            return allUsers;
         }
         catch (error) {
-            throw  new Error("User not found");
+            throw new Error("Unexpected error with database, cannot get all users");
         }
     }
 }

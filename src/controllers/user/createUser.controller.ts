@@ -3,17 +3,17 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import createUserUseCase from "../services/usecases/user/createUser.usecase";
-import validationMiddleware from '../middleware/validation.middleware';
-import userValidation from '../resources/validations/user.validation';
-import { TYPES } from '../utils/types';
+import CreateUserUseCase from "../../services/usecases/user/createUser.usecase";
+import validationMiddleware from '../../middleware/validation.middleware';
+import userValidation from '../../resources/validations/user.validation';
+import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
 export default class createUserController {
 
-    private readonly usecase: createUserUseCase;
+    private readonly usecase: CreateUserUseCase;
 
-    constructor(@inject(TYPES.CREATE_USER_USECASE) createUserUsecase: createUserUseCase) {
+    constructor(@inject(TYPES.CREATE_USER_USECASE) createUserUsecase: CreateUserUseCase) {
         this.usecase = createUserUsecase;
     }
 

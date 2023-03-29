@@ -19,7 +19,7 @@ import { TYPES } from "../../../utils/types";
 // THEN: user is created
 
 @provide(TYPES.CREATE_USER_USECASE)
-export default class createUserUseCase {
+export default class CreateUserUseCase {
 
     private userRepository: UserRepository;
 

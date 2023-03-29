@@ -1,22 +1,19 @@
 //Packages
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
-import { Application, NextFunction, Request, Response } from 'express';
+import { Application } from 'express';
 import request from "supertest";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import getUserByIdController from "../../../controllers/getUserById.controller";
-import getUserByIdUseCase from "../../../services/usecases/user/getUserById.usecase";
+import GetUserByIdController from "../../../controllers/user/getUserById.controller";
+import GetUserByIdUseCase from "../../../services/usecases/user/getUserById.usecase";
 import { start } from '../../../app'
 
 describe("getUserByIdController", () => {
     // Mocks
-    const mockedGetUserByIDUseCase = mockDeep<getUserByIdUseCase>();
-    const requestMock = mockDeep<Request>();
-    const responseMock = mockDeep<Response>();
-    const nextMock = mockDeep<NextFunction>();
+    const mockedGetUserByIDUseCase = mockDeep<GetUserByIdUseCase>();
     // System Under Test (sut)
-    let controller: getUserByIdController;
+    let controller: GetUserByIdController;
 
     // Supertest setup
     let app: Application;
@@ -28,7 +25,7 @@ describe("getUserByIdController", () => {
     })
 
     beforeEach(() => {
-        controller = new getUserByIdController(mockedGetUserByIDUseCase);
+        controller = new GetUserByIdController(mockedGetUserByIDUseCase);
         mockReset(mockedGetUserByIDUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
@@ -50,7 +47,7 @@ describe("getUserByIdController", () => {
 
         describe("and the user corresponding to the id is found", () => {
 
-            it("returns a user object", async () => {
+            it("returns a user object and status of 500", async () => {
                 // GIVEN
                 const id = 1;
 
@@ -58,9 +55,24 @@ describe("getUserByIdController", () => {
                 const results = await request(app).get(`/api/v1/users/${id}`);
 
                 // THEN
-                expect(results.status).toEqual(201);
+                expect(results.status).toEqual(200);
+                expect(results.body).toHaveProperty('id');
             })
-        })
+        });
 
-    })
-})
+        describe("and the user corresponding to the id is not found", () => {
+
+            it("return a status of 500", async () => {
+                // GIVEN
+                const id = -99;
+
+                // WHEN
+                const results = await request(app).get(`/api/v1/users/${id}`);
+
+                // THEN
+                expect(results.status).toEqual(500);
+            })
+        });
+
+    });
+});

@@ -3,20 +3,20 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import getUserByIdUseCase from '../services/usecases/user/getUserById.usecase';
-import { TYPES } from '../utils/types';
+import GetUserByIdUseCase from '../../services/usecases/user/getUserById.usecase';
+import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
-export default class getUserByIdController {
+export default class GetUserByIdController {
 
-    private readonly usecase: getUserByIdUseCase;
+    private readonly usecase: GetUserByIdUseCase;
 
-    constructor(@inject(TYPES.GET_USER_BY_ID_USECASE) getUserByIdUseCase: getUserByIdUseCase) {
+    constructor(@inject(TYPES.GET_USER_BY_ID_USECASE) getUserByIdUseCase: GetUserByIdUseCase) {
         this.usecase = getUserByIdUseCase;
     }
 
     @httpGet('/:id')
-    public async createUser(
+    public async getUserByID(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -24,7 +24,7 @@ export default class getUserByIdController {
         try {
             const id = parseInt(req.params.id);
             const results = await this.usecase.execute(id);
-            res.status(201);
+            res.status(200);
             res.send(results);
         }
         catch (err: any) {

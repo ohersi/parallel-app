@@ -1,38 +1,27 @@
 //Packages
-import { mockDeep } from "jest-mock-extended";
+import { mockDeep, objectContainsKey } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
-import { Application, NextFunction, Request, Response } from 'express';
-import request from "supertest";
+import { NextFunction, Request, Response } from 'express';
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import createUserController from '../../../controllers/createUser.controller'
-import createUserUseCase from "../../../services/usecases/user/createUser.usecase";
+import CreateUserController from '../../../controllers/user/createUser.controller'
+import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import validationMiddleware from "../../../middleware/validation.middleware";
 import userValidation from "../../../resources/validations/user.validation";
-import { start } from '../../../app'
 
 // Controller is lean, only directs to usecase
 // Test is concerned with HTTP request and responses
 describe("createUserController", () => {
     // Mocks
-    const mockedCreateUserUseCase = mockDeep<createUserUseCase>();
+    const mockedCreateUserUseCase = mockDeep<CreateUserUseCase>();
     const requestMock = mockDeep<Request>();
     const responseMock = mockDeep<Response>();
     const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
-    let controller: createUserController;
-
-    // Supertest setup
-    let app: Application;
-
-    beforeAll(async () => {
-        const res = await start(5000);
-        app = res.build();
-        return app;
-    })
+    let controller: CreateUserController;
 
     beforeEach(() => {
-        controller = new createUserController(mockedCreateUserUseCase);
+        controller = new CreateUserController(mockedCreateUserUseCase);
         mockReset(mockedCreateUserUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
@@ -40,10 +29,6 @@ describe("createUserController", () => {
 
     afterEach(() => {
         jest.clearAllMocks()
-    })
-
-    afterAll(() => {
-        //TODO: Close server --- server.close() or w/e
     })
 
     it("should be defined", () => {
@@ -98,19 +83,14 @@ describe("createUserController", () => {
 
             it("return a status of 500", async () => {
                 //GIVEN
-                const testUser = {
-                    firstname: "Test",
-                    lastname: "Tester",
-                    email: "email@email.com",
-                    password: "Abcxyz123!",
-                    profileimg: "avatar"
-                }
-                //WHEN
-                //TODO: Fix supertest ignoring next(new HttpExpection)
-                const results = await request(app).post('/api/v1/users/').send(testUser);
+
+                // WHEN
+                mockedCreateUserUseCase.execute.mockRejectedValue(Error);
+                await controller.createUser(requestMock, responseMock, nextMock);
 
                 //THEN
-                expect(results.status).toEqual(500);
+                expect(responseMock.status).toBeCalledWith(500);
+                expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
             })
         });
 
