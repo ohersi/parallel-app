@@ -42,8 +42,12 @@ describe("createUserController", () => {
         jest.clearAllMocks()
     })
 
+    afterAll(() => {
+        //TODO: Close server --- server.close() or w/e
+    })
+
     it("should be defined", () => {
-        expect(requestMock).toBeDefined();
+        expect(controller).toBeDefined();
     })
 
     describe('When creating a user', () => {

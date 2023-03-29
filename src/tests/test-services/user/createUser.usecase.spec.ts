@@ -1,4 +1,4 @@
-import createUserUseCase from "../../../services/usercases/createUser.usecase";
+import createUserUseCase from "../../../services/user.service";
 
 describe("createUserUseCase", () => {
 

@@ -15,9 +15,9 @@ import { TYPES } from './utils/types';
 
 export const start = async (port: Number) => {
 
-    const container: Container = await initContainer();
+    const container = await initContainer();
 
-    const server: InversifyExpressServer = new InversifyExpressServer(container);
+    const server = new InversifyExpressServer(container);
 
     server.setConfig((app: Application) => {
 
@@ -44,15 +44,14 @@ export const start = async (port: Number) => {
             app.use(ErrorMiddleware);
         });
 
-        // Start server on port
+        // Start server on part
         if (process.env.NODE_ENV !== 'test') {
             app.listen(port, () => console.log(`app listening on port ${port}`));
         }
-        else {
-            // Test server on port 8080
-            app.listen(8080, () => console.log(`app listening on port ${8080}`));
-        }
     });
+
+    // Initialize Application
+    // server.build();
 
     return server;
 }
