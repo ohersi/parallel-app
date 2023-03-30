@@ -3,6 +3,6 @@ export default {
   testEnvironment: "node",
   testPathIgnorePatterns: ['/node_modules/'],
   transform: {},
-  setupFilesAfterEnv: ["./src/tests/metadata.ts"],
+  setupFilesAfterEnv: ["./src/tests/utils/jest.setup.ts"],
 }
 
