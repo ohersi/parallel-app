@@ -1,7 +1,4 @@
 // USER CONTROLLER //
-import  '../../../controllers/user/user.controller'
-export * from  '../../../controllers/user/user.controller'
-
 import  '../../../controllers/user/createUser.controller'
 export * from  '../../../controllers/user/createUser.controller'
 

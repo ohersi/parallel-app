@@ -1,12 +1,14 @@
-import createUserUseCase from "../../../services/user.service";
+import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 
 describe("createUserUseCase", () => {
 
-    let useCase: createUserUseCase;
+    let useCase: CreateUserUseCase;
 
     it("should be defined", () => {
-        expect(createUserUseCase).toBeDefined();
+        expect(CreateUserUseCase).toBeDefined();
     })
+
+    //TODO: Create a in-memory database to write tests on?
 
     // describe('When creating a user', () => {
 

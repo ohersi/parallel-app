@@ -44,6 +44,7 @@
     "@types/jest": "^29.4.1",
     "@types/supertest": "^2.0.12",
     "nodemon": "^2.0.21",
+    "pg-mem": "^2.6.10",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "ts-morph": "^17.0.1",
