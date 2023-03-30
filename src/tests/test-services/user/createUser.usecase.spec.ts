@@ -11,19 +11,28 @@ describe("createUserUseCase", () => {
     let createUserUseCase: CreateUserUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
-    
+
     //TODO: Create mock of createUserUseCase
+    
+    beforeAll(async () => {
+        // Setup database and repos
+        orm = await memOrm;
+        users = orm.em.getRepository<User>(User);
+    })
+
+    beforeEach(async () => {
+
+
+    });
+
+    afterAll(async () => {
+        // Close db
+        orm.close();
+    });
 
     it("should be defined", () => {
         // expect(createUserUseCase).toBeDefined();
     })
-
-    beforeEach(async () => {
-        // Setup database and repos
-        orm = await memOrm;
-        users = orm.em.getRepository<User>(User);
-        // 
-    });
 
     describe('When creating a user', () => {
 
@@ -44,7 +53,7 @@ describe("createUserUseCase", () => {
             const creatUser = users.create(testUser);
             // Persist and flush to database
             await orm.em.persistAndFlush(creatUser);
-            
+
             // THEN
             const getUser = await orm.em.findOne(User, 1);
             expect(getUser).toEqual(testUser);
