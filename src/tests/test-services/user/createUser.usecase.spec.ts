@@ -6,58 +6,56 @@ import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import { memOrm } from "../../utils/init-db.setup";
 
-describe("createUserUseCase", () => {
+describe("CreateUserUseCase", () => {
 
     let createUserUseCase: CreateUserUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
-    //TODO: Create mock of createUserUseCase
-    
-    beforeAll(async () => {
-        // Setup database and repos
-        orm = await memOrm;
-        users = orm.em.getRepository<User>(User);
-    })
-
-    beforeEach(async () => {
-
-
-    });
-
-    afterAll(async () => {
-        // Close db
-        orm.close();
-    });
+    const testUser = {
+        id: 1,
+        firstname: "Test",
+        lastname: "Testerson",
+        email: "email@email.com",
+        password: "password",
+        profileimg: "avatar",
+    }
 
     it("should be defined", () => {
         // expect(createUserUseCase).toBeDefined();
     })
 
-    describe('When creating a user', () => {
+    beforeAll(async () => {
+        // Setup database and repos
+        orm = await memOrm;
+        users = orm.em.getRepository<User>(User);
+        // 
+    });
 
-        const testUser = {
-            id: 1,
-            firstname: "Test",
-            lastname: "Testerson",
-            email: "email@email.com",
-            password: "password",
-            profileimg: "avatar",
-        }
+    afterAll(async () => {
+        await orm.close();
+    })
 
-        it("should ______", async () => {
-            // GIVEN
+    describe('When creating a user,', () => {
 
-            // WHEN
-            // Create user
-            const creatUser = users.create(testUser);
-            // Persist and flush to database
-            await orm.em.persistAndFlush(creatUser);
+        describe("and the user doesnt exist in the db,", () => {
 
-            // THEN
-            const getUser = await orm.em.findOne(User, 1);
-            expect(getUser).toEqual(testUser);
+            it("insert user into db.", async () => {
+                // GIVEN
+
+                // WHEN
+                // Create user
+                const creatUser = users.create(testUser);
+                // Persist and flush to database
+                await orm.em.persistAndFlush(creatUser);
+
+                // THEN
+                const getUser = await orm.em.findOne(User, 1);
+                expect(getUser).toEqual(testUser);
+            })
         })
+
+
 
         // describe("and the user already exists", () => {
 
