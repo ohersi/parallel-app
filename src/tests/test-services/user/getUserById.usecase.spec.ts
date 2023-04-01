@@ -1,5 +1,8 @@
 // Packages
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
+import { mockDeep } from "jest-mock-extended";
+import { mockReset } from "jest-mock-extended/lib/Mock";
+import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
@@ -8,7 +11,8 @@ import { memOrm } from "../../utils/init-db.setup";
 
 describe("GetUserByIdUseCase", () => {
 
-    let getUserByIdUseCase: GetUserByIdUseCase;
+    const mockedUserRepo = mockDeep<UserRepository>();
+    let service: GetUserByIdUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
@@ -21,6 +25,11 @@ describe("GetUserByIdUseCase", () => {
         profileimg: "avatar",
     }
 
+    beforeEach(() => {
+        service = new GetUserByIdUseCase(mockedUserRepo);
+        mockReset(mockedUserRepo);
+        cleanUpMetadata();
+    })
 
     it("should be defined", () => {
         // expect(getUserByIdUseCase).toBeDefined();
@@ -53,9 +62,12 @@ describe("GetUserByIdUseCase", () => {
 
                 // WHEN
                 const getUser = await orm.em.findOne(User, id);
+                mockedUserRepo.findByID.mockResolvedValue(getUser);
+
+                const results = await service.execute(id);
 
                 // THEN
-                expect(getUser).toEqual(testUser);
+                expect(results).toEqual(testUser);
             })
         })
 
@@ -67,9 +79,12 @@ describe("GetUserByIdUseCase", () => {
 
                 // WHEN
                 const getUser = await orm.em.findOne(User, id);
+                mockedUserRepo.findByID.mockResolvedValue(getUser);
 
+                const results = await service.execute(id);
                 // THEN
                 expect(getUser).toEqual(null);
+                expect(results).toEqual(null);
             })
         })
     })

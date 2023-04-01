@@ -25,13 +25,13 @@ export default class GetUserByIdUseCase {
     public execute = async (id: number): Promise<Loaded<User, never> | null> => {
         try {
             const user = await this.userRepository.findByID(id);
-            if (user == null) {
-                throw new Error("User not found");
+            if (!user) {
+                return null;
             };
             return user;
         }
         catch (error) {
-            throw  new Error("User not found");
+            throw new Error("Unexpected error w/ database, user not found");
         }
     }
 }

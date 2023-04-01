@@ -30,12 +30,11 @@ export default class CreateUserUseCase {
 
     // TODO: Create UserExpection
     //TODO: Return JWT Token instead of DTO
-    public execute = async (body: any): Promise<Boolean | Error> => {
+    public execute = async (body: any): Promise<void | Error> => {
         try {
-            // const createUser = await this.userRepository.save(body);
-            // await this.userRepository.persistAndFlush(createUser);
-            //TODO: Return custom response with JTWT inside of trues
-            throw new Error("Error with creating user entity in database");
+            const createUser = await this.userRepository.save(body);
+            await this.userRepository.persistAndFlush(createUser);
+            //TODO: Return custom response with JTWT
         }
         catch (error) {
             throw new Error("Error with creating user entity in database");

@@ -1,5 +1,8 @@
 // Packages
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
+import { mockDeep } from "jest-mock-extended";
+import { mockReset } from "jest-mock-extended/lib/Mock";
+import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
@@ -8,7 +11,8 @@ import { memOrm } from "../../utils/init-db.setup";
 
 describe("GetAllUsersUseCase", () => {
 
-    let getAllUserUseCase: GetAllUsersUseCase;
+    const mockedUserRepo = mockDeep<UserRepository>();
+    let service: GetAllUsersUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
@@ -31,8 +35,10 @@ describe("GetAllUsersUseCase", () => {
         },
     ]
 
-    it("should be defined", () => {
-        // expect(getAllUserUseCase).toBeDefined();
+    beforeEach(() => {
+        service = new GetAllUsersUseCase(mockedUserRepo);
+        mockReset(mockedUserRepo);
+        cleanUpMetadata();
     })
 
     beforeAll(async () => {
@@ -51,6 +57,10 @@ describe("GetAllUsersUseCase", () => {
         await orm.close();
     })
 
+    it("should be defined", () => {
+        expect(service).toBeDefined();
+    })
+
     describe('When getting all users,', () => {
 
         describe("and users do exist in the db,", () => {
@@ -59,10 +69,14 @@ describe("GetAllUsersUseCase", () => {
                 // GIVEN
 
                 // WHEN
+                //** Instead of mocking results, FAKE the database using in-mem db to actually simulate the prod db call  */
                 const getAllUsers = await orm.em.find(User, {});
-                // THEN
+                mockedUserRepo.getAll.mockResolvedValue(getAllUsers);
 
-                // expect(getAllUsers).toEqual(usersArray);
+                const results = await service.execute();
+
+                // THEN
+                expect(results).toEqual(usersArray);
             })
         })
 
@@ -74,9 +88,12 @@ describe("GetAllUsersUseCase", () => {
                 // WHEN
                 //TODO: Research deleting table rows
                 const getAllUsers = await orm.em.find(User, -999);
-                // THEN
+                mockedUserRepo.getAll.mockResolvedValue([]);
 
-                expect(getAllUsers).toEqual([]);
+                const results = await service.execute();
+
+                // THEN
+                expect(results).toEqual([]);
             })
         })
 

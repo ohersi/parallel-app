@@ -24,8 +24,14 @@ export default class GetUserByIdController {
         try {
             const id = parseInt(req.params.id);
             const results = await this.usecase.execute(id);
-            res.status(200);
-            res.send(results);
+            if (!results) {
+                res.status(500);
+                res.send({ error: { status: 500 }, message: 'No users found with that id' });
+            }
+            else {
+                res.status(200);
+                res.send(results)
+            }
         }
         catch (err: any) {
             res.status(500);

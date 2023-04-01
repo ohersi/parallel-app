@@ -1,5 +1,8 @@
 // Packages
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
+import { mockDeep } from "jest-mock-extended";
+import { mockReset } from "jest-mock-extended/lib/Mock";
+import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
@@ -8,7 +11,8 @@ import { memOrm } from "../../utils/init-db.setup";
 
 describe("CreateUserUseCase", () => {
 
-    let createUserUseCase: CreateUserUseCase;
+    const mockedUserRepo = mockDeep<UserRepository>();
+    let service: CreateUserUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
@@ -20,20 +24,24 @@ describe("CreateUserUseCase", () => {
         password: "password",
         profileimg: "avatar",
     }
-
-    it("should be defined", () => {
-        // expect(createUserUseCase).toBeDefined();
+    beforeEach(() => {
+        service = new CreateUserUseCase(mockedUserRepo);
+        mockReset(mockedUserRepo);
+        cleanUpMetadata();
     })
 
     beforeAll(async () => {
         // Setup database and repos
         orm = await memOrm;
         users = orm.em.getRepository<User>(User);
-        // 
     });
 
     afterAll(async () => {
         await orm.close();
+    })
+
+    it("should be defined", () => {
+        expect(service).toBeDefined();
     })
 
     describe('When creating a user,', () => {
@@ -49,9 +57,14 @@ describe("CreateUserUseCase", () => {
                 // Persist and flush to database
                 await orm.em.persistAndFlush(creatUser);
 
+                mockedUserRepo.save.mockResolvedValue(creatUser);
+                const results = await service.execute(testUser);
+
                 // THEN
-                const getUser = await orm.em.findOne(User, 1);
+                const getUser = await orm.em.findOne(User, testUser.id);
                 expect(getUser).toEqual(testUser);
+                //TODO: Return should be a custom dto with jwt
+                expect(results).toBe(undefined);
             })
         })
 
