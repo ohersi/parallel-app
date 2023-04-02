@@ -52,12 +52,19 @@ describe("CreateUserUseCase", () => {
                 // GIVEN
 
                 // WHEN
-                // Create user
-                const creatUser = users.create(testUser);
-                // Persist and flush to database
-                await orm.em.persistAndFlush(creatUser);
-
-                mockedUserRepo.save.mockResolvedValue(creatUser);
+                // Check if user exists in db
+                const checkIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
+                // If email doesnt exist create user
+                if (!checkIfEmailExists) {
+                    const createtUser = users.create(testUser);
+                    // Persist and flush to database
+                    await orm.em.persistAndFlush(createtUser);
+                    // Set mocked result to be newly created user
+                    mockedUserRepo.save.mockResolvedValue(createtUser);
+                }
+                else {
+                    mockedUserRepo.save.mockRejectedValue(Error);
+                }
                 const results = await service.execute(testUser);
 
                 // THEN
@@ -66,20 +73,31 @@ describe("CreateUserUseCase", () => {
                 //TODO: Return should be a custom dto with jwt
                 expect(results).toBe(undefined);
             })
-        })
+        });  
 
+        describe("and the user already exists,", () => {
 
+            it("return an Error stating the user email already exists.", async () => {
+                // GIVEN
+                // Pre insert user into db
+                const createtUser = users.create(testUser);
+                // Persist and flush to database
+                await orm.em.persistAndFlush(createtUser);
 
-        // describe("and the user already exists", () => {
+                // WHEN
+                // Check if user exists in db
+                const returnUserIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
 
-        //     it("should prevent the user from being created and return user already exists?", () => {
+                if (returnUserIfEmailExists) {
+                    // Set mocked result to be user found by email
+                    mockedUserRepo.findByEmail.mockResolvedValue(createtUser);
+                }
 
-        //     })
-        // })
+                // THEN
+                // Expect service to throw error since user email already exists
+                 expect(async () => { await service.execute(testUser)}).rejects.toThrow(Error);
+            })
+        });
 
-
-        // it("should __ if user info is not ___", () => {
-
-        // })
-    })
+    });
 });

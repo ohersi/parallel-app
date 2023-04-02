@@ -6,6 +6,7 @@ export default interface IRepository<T> {
     deleteByID(entity: T, id: number): Promise<T>; // DELETE
 
     findByID(id: number): Promise<T | null>; // READ
+    findByEmail(email: string): Promise<T | null> // READ
     getAll(): Promise<T[]>; // READ
 
 }

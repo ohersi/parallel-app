@@ -27,17 +27,21 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-
-    // TODO: Create UserExpection
-    //TODO: Return JWT Token instead of DTO
+    //TODO: Return JWT Token
     public execute = async (body: any): Promise<void | Error> => {
         try {
-            const createUser = await this.userRepository.save(body);
-            await this.userRepository.persistAndFlush(createUser);
-            //TODO: Return custom response with JTWT
+            const user = await this.userRepository.findByEmail(body.email);
+            if (!user) {
+                const createUser = await this.userRepository.save(body);
+                await this.userRepository.persistAndFlush(createUser);
+            }
+            else {
+                //TODO: Create UserException 
+                throw new Error(`Email already exists: ${user.email}`)
+            }
         }
-        catch (error) {
-            throw new Error("Error with creating user entity in database");
+        catch (err: any) {
+            throw Error(err.message);
         }
     }
 }

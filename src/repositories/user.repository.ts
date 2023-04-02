@@ -32,9 +32,18 @@ export default class UserRepository extends EntityRepository<User> implements IR
     };
 
     async findByID(id: number): Promise<Loaded<User, never> | null> {
-        // TODO: find return type of res
         try {
             const res = await this.findOne({ id } as any);
+            return res;
+        }
+        catch (error) {
+            throw new Error("ID Not found");
+        }
+    };
+
+    async findByEmail(email: string): Promise<Loaded<User, never> | null> {
+        try {
+            const res = await this.findOne({ email } as any);
             return res;
         }
         catch (error) {
