@@ -6,6 +6,7 @@ import UserRepository from "../../../repositories/user.repository"
 import { TYPES } from "../../../utils/types";
 import { User } from "src/entities/user.entity";
 import { Loaded } from "@mikro-orm/core";
+import UserException from "../../../utils/exceptions/user.expection";
 
 
 //** USE CASE */
@@ -27,8 +28,8 @@ export default class GetAllUsersUseCase {
             const allUsers = await this.userRepository.getAll();
             return allUsers;
         }
-        catch (error) {
-            throw new Error("Unexpected error with database, cannot get all users");
+        catch (err: any) {
+            throw new UserException(err.message);
         }
     }
 }

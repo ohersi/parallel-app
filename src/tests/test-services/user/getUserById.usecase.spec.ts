@@ -4,10 +4,11 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
+import { memOrm } from "../../utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetUserByIdUseCase from '../../../services/usecases/user/getUserById.usecase'
-import { memOrm } from "../../utils/init-db.setup";
+import UserException from "../../../utils/exceptions/user.expection";
 
 describe("GetUserByIdUseCase", () => {
 
@@ -85,6 +86,20 @@ describe("GetUserByIdUseCase", () => {
                 // THEN
                 expect(getUser).toEqual(null);
                 expect(results).toEqual(null);
+            })
+        })
+
+        describe('and db throws an error,', () => {
+
+            it("return the thrown error.", async () => {
+                // GIVEN
+                const id = -999;
+
+                // WHEN
+                mockedUserRepo.findByID.mockRejectedValue(Error);
+
+                // THEN
+                expect(async() => { await service.execute(id) }).rejects.toThrow(UserException);
             })
         })
     })

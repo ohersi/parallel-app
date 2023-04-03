@@ -6,6 +6,7 @@ import UserRepository from "../../../repositories/user.repository"
 import { TYPES } from "../../../utils/types";
 import { User } from "src/entities/user.entity";
 import { Loaded } from "@mikro-orm/core";
+import UserException from "../../../utils/exceptions/user.expection";
 
 
 //** USE CASE */
@@ -30,8 +31,8 @@ export default class GetUserByIdUseCase {
             };
             return user;
         }
-        catch (error) {
-            throw new Error("Unexpected error w/ database, user not found");
+        catch (err: any) {
+            throw new UserException(err.message);
         }
     }
 }

@@ -11,6 +11,7 @@ import { provide } from "inversify-binding-decorators";
 import UserRepository from "../../../repositories/user.repository"
 import UserDTO from "../../../dto/user.dto";
 import { TYPES } from "../../../utils/types";
+import UserException from "../../../utils/exceptions/user.expection";
 
 
 //** USE CASE */
@@ -28,17 +29,15 @@ export default class CreateUserUseCase {
     }
 
     //TODO: Return JWT Token
-    public execute = async (body: any): Promise<void | Error> => {
+    public execute = async (body: any): Promise<void | UserException> => {
         try {
-            const user = await this.userRepository.findByEmail(body.email);
-            if (!user) {
-                const createUser = await this.userRepository.save(body);
-                await this.userRepository.persistAndFlush(createUser);
+            const foundUserEmail = await this.userRepository.findByEmail(body.email);
+            if (foundUserEmail) {
+                //TODO: Create UserException
+                throw new UserException(`Email already exists: ${foundUserEmail.email}`)
             }
-            else {
-                //TODO: Create UserException 
-                throw new Error(`Email already exists: ${user.email}`)
-            }
+            const createUser = await this.userRepository.save(body);
+            await this.userRepository.persistAndFlush(createUser);
         }
         catch (err: any) {
             throw Error(err.message);
