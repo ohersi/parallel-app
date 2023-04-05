@@ -11,7 +11,7 @@ import { provide } from "inversify-binding-decorators";
 import UserRepository from "../../../repositories/user.repository"
 import UserDTO from "../../../dto/user.dto";
 import { TYPES } from "../../../utils/types";
-import { passwordEncoder } from "../../../resources/security/passwordEncoder";
+import { hash } from "../../../resources/security/encryption";
 import UserException from "../../../utils/exceptions/user.expection";
 
 
@@ -37,7 +37,7 @@ export default class CreateUserUseCase {
                 throw new UserException(`Email already exists: ${foundUserEmail.email}`)
             }
             // Hash password
-            body.password = await passwordEncoder(body.password);
+            body.password = await hash(body.password);
 
             const createUser = await this.userRepository.save(body);
             await this.userRepository.persistAndFlush(createUser);
