@@ -4,6 +4,8 @@ import { controller, request, response, next, httpPost } from 'inversify-express
 import { inject } from 'inversify'
 // Imports
 import LoginUserUseCase from '../../services/usecases/user/loginUser.usecase';
+import validationMiddleware from '../../middleware/validation.middleware';
+import userValidation from '../../resources/validations/user.validation';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
@@ -15,14 +17,13 @@ export default class LoginUserController {
         this.usecase = loginUserUseCase;
     }
 
-    @httpPost('/login')
+    @httpPost('/login', validationMiddleware(userValidation.login))
     public async loginUser (
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            // TODO: req must contain keys email & password only, convert to DTO?
             const results = await this.usecase.execute(req.body);
             if (!results) {
                 res.status(500);

@@ -29,4 +29,11 @@ const update = Joi.object({
     profileimg: Joi.string().required(),
 });
 
-export default { create, update };
+// Login user
+const login = Joi.object({
+    email: Joi.string().email().lowercase().required(),
+    password: Joi.string().required(),
+});
+
+
+export default { create, update, login };
