@@ -7,6 +7,6 @@ export default {
   testTimeout: 90000,
   collectCoverage: true,
   collectCoverageFrom: ["./src/**"],
-  coveragePathIgnorePatterns: ["/node_modules/", ".src/repositories/**", "./src/dto", "./src/middleware", "./src/utils/", "./src/tests/create-testing-module.ts", "./index.ts",],
+  coveragePathIgnorePatterns: ["/node_modules/", ".src/repositories/", "./src/dto", "./src/middleware", "./src/utils/", "./src/tests/create-testing-module.ts", "./index.ts",],
 }
 

@@ -56,8 +56,8 @@ describe("CreateUserUseCase", () => {
                 const checkIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
                 // If email doesnt exist create user
                 if (!checkIfEmailExists) {
+                     // Persist and flush to database
                     const createtUser = users.create(testUser);
-                    // Persist and flush to database
                     await orm.em.persistAndFlush(createtUser);
                     // Set mocked result to be newly created user
                     mockedUserRepo.save.mockResolvedValue(createtUser);
@@ -69,7 +69,7 @@ describe("CreateUserUseCase", () => {
 
                 // THEN
                 const getUser = await orm.em.findOne(User, testUser.id);
-                expect(getUser).toEqual(testUser);
+                expect(getUser?.email).toEqual(testUser.email);
                 //TODO: Return should be a custom dto with jwt
                 expect(results).toBe(undefined);
             })

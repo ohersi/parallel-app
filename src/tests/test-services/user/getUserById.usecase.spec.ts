@@ -99,7 +99,7 @@ describe("GetUserByIdUseCase", () => {
                 mockedUserRepo.findByID.mockRejectedValue(Error);
 
                 // THEN
-                expect(async() => { await service.execute(id) }).rejects.toThrow(UserException);
+                expect(async() => { await service.execute(id) }).rejects.toThrowError(UserException);
             })
         })
     })

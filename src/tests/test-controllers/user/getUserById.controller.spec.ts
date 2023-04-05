@@ -47,7 +47,7 @@ describe("getUserByIdController", () => {
 
         describe("and the user corresponding to the id is found", () => {
 
-            it("returns a user object and status of 500", async () => {
+            it("returns a user object and status of 200", async () => {
                 // GIVEN
                 const id = 1;
 
