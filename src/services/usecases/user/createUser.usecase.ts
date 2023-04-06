@@ -10,10 +10,9 @@ import { provide } from "inversify-binding-decorators";
 // Imports
 import UserRepository from "../../../repositories/user.repository"
 import UserDTO from "../../../dto/user.dto";
+import UserException from "../../../utils/exceptions/user.expection";
 import { TYPES } from "../../../utils/types";
 import { hash } from "../../../resources/security/encryption";
-import UserException from "../../../utils/exceptions/user.expection";
-
 
 //** USE CASE */
 // GIVEN: user object has has all fields
@@ -29,7 +28,6 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    //TODO: Return JWT Token
     public execute = async (body: any): Promise<void | UserException> => {
         try {
             const foundUserEmail = await this.userRepository.findByEmail(body.email);
@@ -39,7 +37,7 @@ export default class CreateUserUseCase {
             // Hash password
             body.password = await hash(body.password);
             // Add to db, persists and flush
-           const createdUser = await this.userRepository.save(body);
+            const createdUser = await this.userRepository.save(body);
         }
         catch (err: any) {
             throw Error(err.message);
