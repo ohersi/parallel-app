@@ -41,12 +41,8 @@ describe("GetUserByIdUseCase", () => {
         orm = await memOrm;
         // Select repo
         users = orm.em.getRepository<User>(User);
-
         // Insert test user into in-mem db
-        // Create user
-        const creatUser = users.create(testUser);
-        // Persist and flush to database
-        await orm.em.persistAndFlush(creatUser);
+        await users.save(testUser);
     });
 
     afterAll(async () => {
@@ -99,7 +95,7 @@ describe("GetUserByIdUseCase", () => {
                 mockedUserRepo.findByID.mockRejectedValue(Error);
 
                 // THEN
-                expect(async() => { await service.execute(id) }).rejects.toThrowError(UserException);
+                expect(async () => { await service.execute(id) }).rejects.toThrowError(UserException);
             })
         })
     })

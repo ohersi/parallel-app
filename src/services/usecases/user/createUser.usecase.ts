@@ -38,9 +38,8 @@ export default class CreateUserUseCase {
             }
             // Hash password
             body.password = await hash(body.password);
-
-            const createUser = await this.userRepository.save(body);
-            await this.userRepository.persistAndFlush(createUser);
+            // Add to db, persists and flush
+           const createdUser = await this.userRepository.save(body);
         }
         catch (err: any) {
             throw Error(err.message);

@@ -57,8 +57,7 @@ describe("CreateUserUseCase", () => {
                 // If email doesnt exist create user
                 if (!checkIfEmailExists) {
                      // Persist and flush to database
-                    const createtUser = users.create(testUser);
-                    await orm.em.persistAndFlush(createtUser);
+                    const createtUser = await users.save(testUser);
                     // Set mocked result to be newly created user
                     mockedUserRepo.save.mockResolvedValue(createtUser);
                 }
@@ -80,9 +79,7 @@ describe("CreateUserUseCase", () => {
             it("return an Error stating the user email already exists.", async () => {
                 // GIVEN
                 // Pre insert user into db
-                const createtUser = users.create(testUser);
-                // Persist and flush to database
-                await orm.em.persistAndFlush(createtUser);
+                const createtUser = await users.save(testUser);
 
                 // WHEN
                 // Check if user exists in db

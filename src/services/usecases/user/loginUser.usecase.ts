@@ -4,12 +4,9 @@ import { provide } from "inversify-binding-decorators";
 // Imports
 import UserRepository from "../../../repositories/user.repository"
 import { TYPES } from "../../../utils/types";
-import { User } from "../../../entities/user.entity";
-import { Loaded } from "@mikro-orm/core";
 import UserException from "../../../utils/exceptions/user.expection";
 import { decrypt } from "../../../resources/security/encryption";
 import UserDTO from "../../../dto/user.dto";
-import { boolean } from "joi";
 
 
 //** USE CASE */
@@ -29,7 +26,7 @@ export default class LoginUserUseCase {
     public execute = async (body: any): Promise<UserDTO | boolean | UserException> => {
         try {
             const foundUser = await this.userRepository.findByEmail(body.email);
-            if (foundUser) {
+            if (foundUser ) {
                 // Check if body passwords matches one foundUser
                 const match = await decrypt(body.password, foundUser.password);
                 if (match) {
