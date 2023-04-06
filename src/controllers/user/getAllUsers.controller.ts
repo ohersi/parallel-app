@@ -5,7 +5,6 @@ import { inject } from 'inversify'
 // Imports
 import GetAllUsersUseCase from '../../services/usecases/user/getAllUsers.usecase';
 import { TYPES } from '../../utils/types';
-import { sessionAuth } from '../../middleware/sessionAuth.middleware';
 
 
 @controller(`/api/v1/users`)
@@ -17,7 +16,7 @@ export default class GetAllUsersController {
         this.usecase = getAllUsersUseCase;
     }
 
-    @httpGet('/', sessionAuth)
+    @httpGet('/')
     public async getAllUsers(
         @request() req: Request,
         @response() res: Response,

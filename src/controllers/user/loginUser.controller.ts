@@ -7,7 +7,6 @@ import LoginUserUseCase from '../../services/usecases/user/loginUser.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
 import userValidation from '../../resources/validations/user.validation';
 import { TYPES } from '../../utils/types';
-import UserDTO from '../../dto/user.dto';
 
 @controller(`/api/v1/users`)
 export default class LoginUserController {
@@ -19,7 +18,7 @@ export default class LoginUserController {
     }
 
     @httpPost('/login', validationMiddleware(userValidation.login))
-    public async loginUser(
+    public async loginUser (
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -31,11 +30,8 @@ export default class LoginUserController {
                 res.send({ error: { status: 500 }, message: 'password or email does not match' });
             }
             else {
-                if (results instanceof UserDTO) {
-                    req.session.userID = results?.id;
-                } 
                 res.status(200);
-                res.send(results);
+                res.send(results)
             }
         }
         catch (err: any) {
