@@ -5,6 +5,7 @@ import express, { Application, NextFunction } from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
+import session from 'express-session';
 import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { Connection, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
@@ -15,9 +16,9 @@ import { TYPES } from './utils/types';
 
 export const start = async (port: Number) => {
 
-    const container = await initContainer();
+    const container: Container = await initContainer();
 
-    const server = new InversifyExpressServer(container);
+    const server: InversifyExpressServer = new InversifyExpressServer(container);
 
     server.setConfig((app: Application) => {
 
@@ -33,6 +34,19 @@ export const start = async (port: Number) => {
         // Initalize CORS
         //TODO: Set approved sites
         // app.use(cors());
+
+        // Throw error if env file is missing secret key
+        if (!process.env.SECRET_KEY) throw new Error("SECRET_KEY must be defined");
+
+        // Initalize sessions
+        app.use(session({
+            secret: process.env.SECRET_KEY,
+            resave: false,
+            saveUninitialized: false,
+            cookie: { 
+                secure: false // remove when in prod
+            }
+        }));
 
         // Create Different Instances For Each Request
         app.use((req, res, next: NextFunction): void => {
