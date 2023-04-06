@@ -4,6 +4,7 @@ import { controller, request, response, next, httpPost } from 'inversify-express
 import { inject } from 'inversify'
 // Imports
 import LoginUserUseCase from '../../services/usecases/user/loginUser.usecase';
+import UserDTO from '../../dto/user.dto';
 import validationMiddleware from '../../middleware/validation.middleware';
 import userValidation from '../../resources/validations/user.validation';
 import { TYPES } from '../../utils/types';
@@ -30,8 +31,13 @@ export default class LoginUserController {
                 res.send({ error: { status: 500 }, message: 'password or email does not match' });
             }
             else {
+                if (results instanceof UserDTO && results.id) {
+                    req.session.user = {
+                        id: results.id,
+                    };
+                };
                 res.status(200);
-                res.send(results)
+                res.send(results);
             }
         }
         catch (err: any) {
