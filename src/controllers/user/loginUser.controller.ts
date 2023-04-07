@@ -37,7 +37,7 @@ export default class LoginUserController {
                     };
                 };
                 res.status(200);
-                res.send(results);
+                res.send([results, req.session]);
             }
         }
         catch (err: any) {

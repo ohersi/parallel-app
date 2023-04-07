@@ -9,7 +9,7 @@ declare module "express-session" {
 }
 
 export const sessionAuth = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.session?.user?.id) {
+    if (!req.session?.user) {
         return res.status(401).send("Unauthorized access");
     }
     next();
