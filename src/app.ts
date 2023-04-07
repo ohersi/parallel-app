@@ -6,6 +6,8 @@ import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
 import session from 'express-session';
+import { Redis } from 'ioredis';
+import RedisStore from 'connect-redis';
 import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { Connection, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
@@ -15,6 +17,13 @@ import initContainer from './utils/ioc/di-container';
 import { TYPES } from './utils/types';
 
 export const start = async (port: Number) => {
+
+    //Initalize Redis client
+    const redisClient = new Redis();
+    // Initalize Redis store
+    const redisStore = new RedisStore({
+        client: redisClient
+    })
 
     const container: Container = await initContainer();
 
@@ -34,8 +43,11 @@ export const start = async (port: Number) => {
         // Initalize CORS
         //TODO: Set approved sites
         // app.use(cors());
+
+        // Check for secret key & setup session
         if (!process.env.SECRET_KEY) throw new Error("SECRET_KEY env variable is missing");
         app.use(session({
+            store: redisStore,
             secret: process.env.SECRET_KEY,
             resave: false,
             saveUninitialized: false,
