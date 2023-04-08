@@ -7,7 +7,15 @@ import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import GetAllUsersController from "../../../controllers/user/getAllUsers.controller";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
-import { start } from '../../../app'
+import { start } from '../../../app';
+
+
+// Set sessionAuth middlware to stub before app is generated
+jest.mock("../../../middleware/sessionAuth.middleware", () => ({
+    sessionAuth: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    }
+}));
 
 describe("GetAllUsersController", () => {
     // Mocks
@@ -32,10 +40,11 @@ describe("GetAllUsersController", () => {
         mockReset(mockedGetAllUsersUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
+
     })
 
     afterEach(() => {
-        jest.clearAllMocks()
+        jest.clearAllMocks();
     })
 
     afterAll(() => {
@@ -50,7 +59,7 @@ describe("GetAllUsersController", () => {
 
         describe("and users are found,", () => {
 
-             it("returns an array of all user objects and status code of 200.", async () => {
+            it("returns an array of all user objects and status code of 200.", async () => {
                 // GIVEN
 
                 // WHEN
