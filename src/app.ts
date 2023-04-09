@@ -16,10 +16,16 @@ import ErrorMiddleware from './middleware/error.middleware';
 import initContainer from './utils/ioc/di-container';
 import { TYPES } from './utils/types';
 
+export const redisContainer = {} as {
+    redis: Redis
+}
+
 export const start = async (port: Number) => {
 
     //Initalize Redis client
     const redisClient = new Redis();
+    // Export redis for entire application
+    redisContainer.redis = redisClient;
     // Initalize Redis store
     const redisStore = new RedisStore({
         client: redisClient
@@ -74,9 +80,6 @@ export const start = async (port: Number) => {
             app.listen(port, () => console.log(`app listening on port ${port}`));
         }
     });
-
-    // Initialize Application
-    // server.build();
 
     return server;
 }

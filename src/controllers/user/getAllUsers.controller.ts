@@ -1,11 +1,12 @@
 // Packages
 import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
-import { inject } from 'inversify'
+import { inject } from 'inversify';
 // Imports
 import GetAllUsersUseCase from '../../services/usecases/user/getAllUsers.usecase';
 import { TYPES } from '../../utils/types';
 import { sessionAuth } from '../../middleware/sessionAuth.middleware';
+import cache from '../../middleware/cache.middleware';
 
 
 @controller(`/api/v1/users`)
@@ -24,7 +25,7 @@ export default class GetAllUsersController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const results = await this.usecase.execute();
+            const results = await cache('users', this.usecase.execute);
             res.status(200);
             res.send(results);
         }
