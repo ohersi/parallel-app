@@ -7,6 +7,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import GetAllUsersController from "../../../controllers/user/getAllUsers.controller";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
+import cache from "../../../middleware/cache.middleware";
 import { start } from '../../../app';
 
 
@@ -74,6 +75,12 @@ describe("GetAllUsersController", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
+
+                jest.mock("../../../middleware/cache.middleware", () => ({
+                    cache: (key: string, callback: Function) => {
+                        throw new Error("error!");
+                    }
+                }));
 
                 // WHEN
                 mockedGetAllUsersUseCase.execute.mockRejectedValue(Error);

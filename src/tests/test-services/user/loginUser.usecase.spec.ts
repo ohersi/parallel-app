@@ -11,6 +11,7 @@ import UserDTO from "../../../dto/user.dto";
 import UserException from "../../../utils/exceptions/user.expection";
 import { memOrm } from "../../utils/init-db.setup";
 import * as encryption from "../../../resources/security/encryption";
+import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("LoginUserUseCase", () => {
 
@@ -26,6 +27,7 @@ describe("LoginUserUseCase", () => {
         email: "email@email.com",
         password: "password",
         profileimg: "avatar",
+        role: TYPES_ENUM.USER,
     }
     beforeEach(() => {
         service = new LogInUserUseCase(mockedUserRepo);

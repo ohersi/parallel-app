@@ -1,9 +1,10 @@
 // Packages
-import { Entity, EntityRepositoryType, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, EntityRepositoryType, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
 import UserRepository from '../repositories/user.repository';
 import BaseEntity from './base.entity';
 import IUser from './interfaces/user.entity.interface';
+import { TYPES_ENUM } from '../utils/types/enum';
 
 @Entity({ customRepository: () => UserRepository, tableName: 'users'})
 export class User implements BaseEntity, IUser {
@@ -28,4 +29,6 @@ export class User implements BaseEntity, IUser {
     @Property()
     profileimg!: string;
 
+    @Enum()
+    role!: TYPES_ENUM;
 };

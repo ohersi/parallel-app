@@ -9,6 +9,7 @@ import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetUserByIdUseCase from '../../../services/usecases/user/getUserById.usecase'
 import UserException from "../../../utils/exceptions/user.expection";
+import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("GetUserByIdUseCase", () => {
 
@@ -24,6 +25,7 @@ describe("GetUserByIdUseCase", () => {
         email: "email@email.com",
         password: "password",
         profileimg: "avatar",
+        role: TYPES_ENUM.USER,
     }
 
     beforeEach(() => {

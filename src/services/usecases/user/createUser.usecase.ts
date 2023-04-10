@@ -12,6 +12,7 @@ import UserRepository from "../../../repositories/user.repository"
 import UserDTO from "../../../dto/user.dto";
 import UserException from "../../../utils/exceptions/user.expection";
 import { TYPES } from "../../../utils/types";
+import { TYPES_ENUM } from "../../../utils/types/enum";
 import { hash } from "../../../resources/security/encryption";
 
 //** USE CASE */
@@ -36,6 +37,8 @@ export default class CreateUserUseCase {
             }
             // Hash password
             body.password = await hash(body.password);
+            // Set role
+            Object.assign(body, { role: TYPES_ENUM.USER });
             // Add to db, persists and flush
             const createdUser = await this.userRepository.save(body);
         }

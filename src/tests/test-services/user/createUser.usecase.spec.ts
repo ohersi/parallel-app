@@ -8,6 +8,7 @@ import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import { memOrm } from "../../utils/init-db.setup";
+import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("CreateUserUseCase", () => {
 
@@ -23,6 +24,7 @@ describe("CreateUserUseCase", () => {
         email: "email@email.com",
         password: "password",
         profileimg: "avatar",
+        role: TYPES_ENUM.USER,
     }
     beforeEach(() => {
         service = new CreateUserUseCase(mockedUserRepo);

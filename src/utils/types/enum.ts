@@ -1,8 +1,12 @@
 export enum TYPES_ENUM {
     // Connections
     DATABASE_CONNECTION = 'DatabaseConnection',
+
+    // User Roles
+    ADMIN = 'admin',
+    USER = 'user',
   
-    // REPOSITORIES
+    // Repositories
     USER_REPOSITORY = 'UserRepository',
   
     // Services
