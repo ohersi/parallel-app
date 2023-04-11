@@ -7,16 +7,25 @@ import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import GetAllUsersController from "../../../controllers/user/getAllUsers.controller";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
-import cache from "../../../middleware/cache.middleware";
 import { start } from '../../../app';
+import { cache } from "../../../middleware/cache.middleware";
 
-
-// Set sessionAuth middlware to stub before app is generated
-jest.mock("../../../middleware/sessionAuth.middleware", () => ({
+// Set authorization middlware to stub before app is generated
+jest.mock("../../../middleware/auth.middleware", () => ({
     sessionAuth: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+    roleAuth: (role: string) => (req: Request, res: Response, next: NextFunction) => {
         next();
     }
 }));
+
+// Mock redis caching middleware
+jest.mock("../../../middleware/cache.middleware", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
+
 
 describe("GetAllUsersController", () => {
     // Mocks
@@ -41,7 +50,6 @@ describe("GetAllUsersController", () => {
         mockReset(mockedGetAllUsersUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
-
     })
 
     afterEach(() => {
@@ -76,19 +84,12 @@ describe("GetAllUsersController", () => {
             it("return a status of 500.", async () => {
                 // GIVEN
 
-                jest.mock("../../../middleware/cache.middleware", () => ({
-                    cache: (key: string, callback: Function) => {
-                        throw new Error("error!");
-                    }
-                }));
-
                 // WHEN
-                mockedGetAllUsersUseCase.execute.mockRejectedValue(Error);
-                await controller.getAllUsers(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error);
+                const results = await request(app).get("/api/v1/users/");
 
-                // THEN
-                expect(responseMock.status).toBeCalledWith(500);
-                expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
+                // // THEN
+                expect(results.status).toEqual(500);
             })
         });
 

@@ -31,9 +31,10 @@ export default class LoginUserController {
                 res.send({ error: { status: 500 }, message: 'password or email does not match' });
             }
             else {
-                if (results instanceof UserDTO && results.id) {
+                if (results instanceof UserDTO) {
                     req.session.user = {
-                        id: results.id,
+                        id: results.id!,
+                        role: results.role!,
                     };
                 };
                 res.status(200);

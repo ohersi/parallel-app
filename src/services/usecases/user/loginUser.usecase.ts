@@ -26,12 +26,19 @@ export default class LoginUserUseCase {
     public execute = async (body: any): Promise<UserDTO | boolean | UserException> => {
         try {
             const foundUser = await this.userRepository.findByEmail(body.email);
-            if (foundUser ) {
+            if (foundUser) {
                 // Check if body passwords matches one foundUser
                 const match = await decrypt(body.password, foundUser.password);
                 if (match) {
-                    //TODO: return userDTO w/ jwt token
-                    return new UserDTO(foundUser.id, foundUser.firstname, foundUser.lastname, foundUser.email);
+                    return new UserDTO(
+                        foundUser.id,
+                        foundUser.firstname,
+                        foundUser.lastname,
+                        foundUser.email,
+                        undefined,
+                        foundUser.profileimg,
+                        foundUser.role
+                    );
                 }
             }
             return false;

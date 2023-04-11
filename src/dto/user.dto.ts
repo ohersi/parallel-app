@@ -6,6 +6,7 @@ export default class UserDTO {
     email?: string;
     password?: string;
     profileimg?: string;
+    role?: string;
 
     constructor(
         id?: number,
@@ -13,7 +14,8 @@ export default class UserDTO {
         lastname?: string,
         email?: string,
         password?:string,
-        profileimg?: string
+        profileimg?: string,
+        role?: string,
     ) {
         this.id = id;
         this.firstname = firstname;
@@ -21,5 +23,6 @@ export default class UserDTO {
         this.email = email;
         this.password = password;
         this.profileimg = profileimg;
+        this.role = role;
     }
 }

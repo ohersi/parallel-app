@@ -1,6 +1,6 @@
 import { redisContainer } from "../app";
 
-const cache = async (key: string, callback: Function) => {
+export const cache = async (key: string, callback: Function) => {
 
     const redisClient = redisContainer.redis;
 
@@ -21,5 +21,3 @@ const cache = async (key: string, callback: Function) => {
         })
     })
 };
-
-export default cache;
