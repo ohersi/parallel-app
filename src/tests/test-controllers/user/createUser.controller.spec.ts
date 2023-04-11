@@ -50,7 +50,7 @@ describe("createUserController", () => {
                 }
 
                 // WHEN
-                mockedCreateUserUseCase.execute.mockResolvedValue();
+                mockedCreateUserUseCase.execute.mockResolvedValue("");
                 await controller.createUser(requestMock, responseMock, nextMock);
 
                 // THEN

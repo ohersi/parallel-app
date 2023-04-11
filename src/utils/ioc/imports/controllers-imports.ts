@@ -11,3 +11,5 @@ export * from '../../../controllers/user/getAllUsers.controller'
 import '../../../controllers/user/loginUser.controller'
 export * from '../../../controllers/user/loginUser.controller'
 
+import '../../../controllers/user/confirmUserToken.controller'
+export * from '../../../controllers/user/confirmUserToken.controller'

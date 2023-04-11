@@ -7,6 +7,7 @@ export default class UserDTO {
     password?: string;
     profileimg?: string;
     role?: string;
+    token?: string;
 
     constructor(
         id?: number,
@@ -16,6 +17,7 @@ export default class UserDTO {
         password?:string,
         profileimg?: string,
         role?: string,
+        token?: string,
     ) {
         this.id = id;
         this.first_name = first_name;
@@ -24,5 +26,6 @@ export default class UserDTO {
         this.password = password;
         this.profileimg = profileimg;
         this.role = role;
+        this.token = token;
     }
 }

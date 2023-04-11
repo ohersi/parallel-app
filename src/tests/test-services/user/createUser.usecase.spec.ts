@@ -78,8 +78,7 @@ describe("CreateUserUseCase", () => {
                 // THEN
                 const getUser = await orm.em.findOne(User, testUser.id);
                 expect(getUser?.email).toEqual(testUser.email);
-                //TODO: Return should be a custom dto with jwt
-                expect(results).toBe(undefined);
+                expect(typeof results).toBe("string");
             })
         });  
 

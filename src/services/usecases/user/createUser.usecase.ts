@@ -14,6 +14,7 @@ import { TYPES } from "../../../utils/types";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 import { hash } from "../../../resources/security/encryption";
 import { User } from "../../../entities/user.entity";
+import { createToken } from "../../../resources/security/token";
 
 //** USE CASE */
 // GIVEN: user object has has all fields
@@ -29,7 +30,7 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (body: any): Promise<void | UserException> => {
+    public execute = async (body: any): Promise<string | UserException> => {
         try {
             const foundUserEmail = await this.userRepository.findByEmail(body.email);
             if (foundUserEmail) {
@@ -39,15 +40,19 @@ export default class CreateUserUseCase {
             body.password = await hash(body.password);
             // Create user entity
             const newUser = new User(
-                body.firstname,
-                body.lastname,
+                body.first_name,
+                body.last_name,
                 body.email,
                 body.password,
-                body.profileimg,
+                body.avatar_url,
                 TYPES_ENUM.USER
             );
             // Add to db, persists and flush
             const createdUser = await this.userRepository.save(newUser);
+            // Create jwt token
+            //TODO: Send user token to email server
+            const token = createToken(createdUser.email);
+            return token;
         }
         catch (err: any) {
             throw Error(err.message);

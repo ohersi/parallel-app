@@ -25,9 +25,9 @@ export default class createUserController {
         : Promise<Response | void> {
         try {
             // TODO: Find appropriate return to check
-            await this.usecase.execute(req.body);
+            const results = await this.usecase.execute(req.body);
             res.status(201);
-            res.send({ message: "User was created" });
+            res.send({ message: "User was created", token: results});
         }
         catch (err: any) {
             res.status(500);

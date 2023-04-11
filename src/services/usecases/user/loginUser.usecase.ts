@@ -7,6 +7,7 @@ import { TYPES } from "../../../utils/types";
 import UserException from "../../../utils/exceptions/user.expection";
 import { decrypt } from "../../../resources/security/encryption";
 import UserDTO from "../../../dto/user.dto";
+import { createToken } from "../../../resources/security/token";
 
 
 //** USE CASE */
@@ -23,7 +24,7 @@ export default class LoginUserUseCase {
         this.userRepository = userRepository;
     }
     
-    // TODO: Create email registration validator middleware
+    
     public execute = async (body: any): Promise<UserDTO | boolean | UserException> => {
         try {
             const foundUser = await this.userRepository.findByEmail(body.email);
@@ -31,6 +32,9 @@ export default class LoginUserUseCase {
                 // Check if body passwords matches one foundUser
                 const match = await decrypt(body.password, foundUser.password);
                 if (match) {
+                    // Create refresh jwt token
+                    const refreshJWT = createToken(foundUser.email);
+     // TODO: Create email registration validator middleware               
                     return new UserDTO(
                         foundUser.id,
                         foundUser.first_name,
@@ -38,7 +42,8 @@ export default class LoginUserUseCase {
                         foundUser.email,
                         undefined,
                         foundUser.avatar_url,
-                        foundUser.role
+                        foundUser.role,
+                        refreshJWT
                     );
                 }
             }
