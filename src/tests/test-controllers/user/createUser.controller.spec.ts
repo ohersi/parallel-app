@@ -42,11 +42,11 @@ describe("createUserController", () => {
             it("return a status of 201", async () => {
                 // GIVEN
                 requestMock.body = {
-                    firstname: "Test",
-                    lastname: "Tester",
+                    first_name: "Test",
+                    last_name: "Tester",
                     email: "email@email.com",
                     password: "Abcxyz123!",
-                    profileimg: "avatar"
+                    avatar_url: "avatar"
                 }
 
                 // WHEN
@@ -63,11 +63,11 @@ describe("createUserController", () => {
             it("return a status of 400", async () => {
                 //GIVEN
                 requestMock.body = {
-                    firstname: "Test",
-                    lastname: "",   // Last Name missing
+                    first_name: "Test",
+                    last_name: "",   // Last Name missing
                     email: "",  // Email missing
                     password: "Abcxyz123!",
-                    profileimg: "avatar"
+                    avatar_url: "avatar"
                 }
 
                 //WHEN

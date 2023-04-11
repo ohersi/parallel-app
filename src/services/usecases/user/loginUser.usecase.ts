@@ -22,7 +22,8 @@ export default class LoginUserUseCase {
     constructor(@inject(TYPES.USER_REPOSITORY) userRepository: UserRepository) {
         this.userRepository = userRepository;
     }
-
+    
+    // TODO: Create email registration validator middleware
     public execute = async (body: any): Promise<UserDTO | boolean | UserException> => {
         try {
             const foundUser = await this.userRepository.findByEmail(body.email);
@@ -32,11 +33,11 @@ export default class LoginUserUseCase {
                 if (match) {
                     return new UserDTO(
                         foundUser.id,
-                        foundUser.firstname,
-                        foundUser.lastname,
+                        foundUser.first_name,
+                        foundUser.last_name,
                         foundUser.email,
                         undefined,
-                        foundUser.profileimg,
+                        foundUser.avatar_url,
                         foundUser.role
                     );
                 }

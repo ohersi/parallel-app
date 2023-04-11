@@ -1,5 +1,7 @@
 import { redisContainer } from "../app";
 
+
+// TODO: Check if there is fresh data, and return that. Otherwise return stored redis cache data
 export const cache = async (key: string, callback: Function) => {
 
     const redisClient = redisContainer.redis;

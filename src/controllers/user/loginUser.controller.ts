@@ -18,8 +18,10 @@ export default class LoginUserController {
         this.usecase = loginUserUseCase;
     }
 
+    // TODO: Create email registration validator middleware
+
     @httpPost('/login', validationMiddleware(userValidation.login))
-    public async loginUser (
+    public async loginUser(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -36,6 +38,7 @@ export default class LoginUserController {
                         id: results.id!,
                         role: results.role!,
                     };
+                    delete results['role'];
                 };
                 res.status(200);
                 res.send([results, req.session]);

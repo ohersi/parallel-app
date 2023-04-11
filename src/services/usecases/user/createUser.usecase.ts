@@ -8,12 +8,12 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import UserRepository from "../../../repositories/user.repository"
-import UserDTO from "../../../dto/user.dto";
+import UserRepository from "../../../repositories/user.repository";
 import UserException from "../../../utils/exceptions/user.expection";
 import { TYPES } from "../../../utils/types";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 import { hash } from "../../../resources/security/encryption";
+import { User } from "../../../entities/user.entity";
 
 //** USE CASE */
 // GIVEN: user object has has all fields
@@ -37,10 +37,17 @@ export default class CreateUserUseCase {
             }
             // Hash password
             body.password = await hash(body.password);
-            // Set role
-            Object.assign(body, { role: TYPES_ENUM.USER });
+            // Create user entity
+            const newUser = new User(
+                body.firstname,
+                body.lastname,
+                body.email,
+                body.password,
+                body.profileimg,
+                TYPES_ENUM.USER
+            );
             // Add to db, persists and flush
-            const createdUser = await this.userRepository.save(body);
+            const createdUser = await this.userRepository.save(newUser);
         }
         catch (err: any) {
             throw Error(err.message);

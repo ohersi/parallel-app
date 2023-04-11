@@ -9,7 +9,7 @@ import UserRepository from "../../../repositories/user.repository";
 import LogInUserUseCase from "../../../services/usecases/user/loginUser.usecase";
 import UserDTO from "../../../dto/user.dto";
 import UserException from "../../../utils/exceptions/user.expection";
-import { memOrm } from "../../utils/init-db.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import * as encryption from "../../../resources/security/encryption";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 
@@ -20,15 +20,15 @@ describe("LoginUserUseCase", () => {
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let userRepo: UserRepository;
 
-    const testUser = {
-        id: 1,
-        firstname: "Test",
-        lastname: "Testerson",
-        email: "email@email.com",
-        password: "password",
-        profileimg: "avatar",
-        role: TYPES_ENUM.USER,
-    }
+    const testUser = new User(
+        "Test",
+        "Testerson",
+        "email@email.com",
+        "password",
+        "avatar",
+        TYPES_ENUM.USER
+    )
+
     beforeEach(() => {
         service = new LogInUserUseCase(mockedUserRepo);
         mockReset(mockedUserRepo);

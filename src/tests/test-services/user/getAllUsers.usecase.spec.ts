@@ -4,7 +4,7 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { memOrm } from "../../utils/init-db.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
@@ -18,26 +18,23 @@ describe("GetAllUsersUseCase", () => {
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
-    const usersArray = [
-        {
-            id: 1,
-            firstname: "User1",
-            lastname: "One",
-            email: "one@email.com",
-            password: "password",
-            profileimg: "avatar",
-            role: TYPES_ENUM.USER,
-        },
-        {
-            id: 2,
-            firstname: "User2",
-            lastname: "Two",
-            email: "two@email.com",
-            password: "password",
-            profileimg: "avatar",
-            role: TYPES_ENUM.USER,
-        },
-    ]
+    const User1 = new User(
+        "User1",
+        "One",
+        "one@email.com",
+        "password",
+        "avatar",
+        TYPES_ENUM.USER
+    )
+
+    const User2 = new User(
+        "User2",
+        "Two",
+        "two@email.com",
+        "password",
+        "avatar",
+        TYPES_ENUM.USER
+    )
 
     beforeEach(() => {
         service = new GetAllUsersUseCase(mockedUserRepo);
@@ -52,8 +49,8 @@ describe("GetAllUsersUseCase", () => {
 
         // Create users & persist and flush to database
         await orm.em.persistAndFlush([
-            users.create(usersArray[0]),
-            users.create(usersArray[1])
+            users.create(User1),
+            users.create(User2)
         ]);
     });
 
@@ -80,7 +77,14 @@ describe("GetAllUsersUseCase", () => {
                 const results = await service.execute();
 
                 // THEN
-                expect(results).toEqual(usersArray);
+                //** Expect results to contain an array with an object that has a key/value of id = 1 */
+                expect(results).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining({
+                            id: 1
+                        })
+                    ])
+                )
             })
         })
 

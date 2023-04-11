@@ -7,7 +7,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
-import { memOrm } from "../../utils/init-db.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("CreateUserUseCase", () => {
@@ -19,12 +19,11 @@ describe("CreateUserUseCase", () => {
 
     const testUser = {
         id: 1,
-        firstname: "Test",
-        lastname: "Testerson",
+        first_name: "Test",
+        last_name: "Testerson",
         email: "email@email.com",
         password: "password",
-        profileimg: "avatar",
-        role: TYPES_ENUM.USER,
+        avatar_url: "avatar"
     }
     beforeEach(() => {
         service = new CreateUserUseCase(mockedUserRepo);
@@ -58,8 +57,16 @@ describe("CreateUserUseCase", () => {
                 const checkIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
                 // If email doesnt exist create user
                 if (!checkIfEmailExists) {
+                    const newUser = new User(
+                        testUser.first_name,
+                        testUser.last_name,
+                        testUser.email,
+                        testUser.password,
+                        testUser.avatar_url,
+                        TYPES_ENUM.USER
+                    );
                      // Persist and flush to database
-                    const createtUser = await users.save(testUser);
+                    const createtUser = await users.save(newUser);
                     // Set mocked result to be newly created user
                     mockedUserRepo.save.mockResolvedValue(createtUser);
                 }
@@ -81,7 +88,15 @@ describe("CreateUserUseCase", () => {
             it("return an Error stating the user email already exists.", async () => {
                 // GIVEN
                 // Pre insert user into db
-                const createtUser = await users.save(testUser);
+                const newUser = new User(
+                    testUser.first_name,
+                    testUser.last_name,
+                    testUser.email,
+                    testUser.password,
+                    testUser.avatar_url,
+                    TYPES_ENUM.USER
+                );
+                const createtUser = await users.save(newUser);
 
                 // WHEN
                 // Check if user exists in db

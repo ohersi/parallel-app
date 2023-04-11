@@ -4,7 +4,7 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { memOrm } from "../../utils/init-db.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetUserByIdUseCase from '../../../services/usecases/user/getUserById.usecase'
@@ -18,15 +18,14 @@ describe("GetUserByIdUseCase", () => {
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
 
-    const testUser = {
-        id: 1,
-        firstname: "Test",
-        lastname: "Testerson",
-        email: "email@email.com",
-        password: "password",
-        profileimg: "avatar",
-        role: TYPES_ENUM.USER,
-    }
+    const testUser = new User(
+        "Test",
+        "Testerson",
+        "email@email.com",
+        "password",
+        "avatar",
+        TYPES_ENUM.USER
+    )
 
     beforeEach(() => {
         service = new GetUserByIdUseCase(mockedUserRepo);

@@ -1,8 +1,8 @@
 export default class UserDTO {
 
     id?: number;
-    firstname?: string;
-    lastname?: string;
+    first_name?: string;
+    last_name?: string;
     email?: string;
     password?: string;
     profileimg?: string;
@@ -10,16 +10,16 @@ export default class UserDTO {
 
     constructor(
         id?: number,
-        firstname?: string,
-        lastname?: string,
+        first_name?: string,
+        last_name?: string,
         email?: string,
         password?:string,
         profileimg?: string,
         role?: string,
     ) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.email = email;
         this.password = password;
         this.profileimg = profileimg;

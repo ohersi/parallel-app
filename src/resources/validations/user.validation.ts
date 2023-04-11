@@ -13,20 +13,20 @@ const complexityOptions = {
 
 // Create user
 const create = Joi.object({
-    firstname: Joi.string().required().max(30),
-    lastname: Joi.string().required().max(30),
+    first_name: Joi.string().required().max(30),
+    last_name: Joi.string().required().max(30),
     email: Joi.string().email().lowercase().required(),
     password: passwordComplexity(complexityOptions).required(),
-    profileimg: Joi.string().required(),
+    avatar_url: Joi.string().required(),
 });
 
 // Update user
 const update = Joi.object({
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
+    first_name: Joi.string().required(),
+    last_name: Joi.string().required(),
     email: Joi.string().email().lowercase().required(),
     password: passwordComplexity(complexityOptions).required(),
-    profileimg: Joi.string().required(),
+    avatar_url: Joi.string().required(),
 });
 
 // Login user
