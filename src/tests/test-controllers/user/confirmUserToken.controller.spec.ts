@@ -1,20 +1,18 @@
 //Packages
-import { Application } from 'express';
-import request from "supertest";
+import { Application, NextFunction, Request, Response } from 'express';
+import { mockDeep } from "jest-mock-extended";
 import { cleanUpMetadata } from "inversify-express-utils";
+import request from "supertest";
 // Imports
 import ConfirmUserTokenController from "../../../controllers/user/confirmUserToken.controller";
+import ConfirmUserTokenUseCase from '../../../services/usecases/user/confirmUserToken.usecase';
 import { start } from '../../../app';
-import { verifyToken } from '../../../resources/security/token'
-
-// Mock jwt verification
-jest.mock("../../../resources/security/token", () => ({
-    verifyToken: jest.fn()
-}));
-
-const mockVerify = verifyToken as jest.Mock;
 
 describe("ConfirmUserTokenController", () => {
+    const mockedConfirmUserTokenUseCase = mockDeep<ConfirmUserTokenUseCase>();
+    const requestMock = mockDeep<Request>();
+    const responseMock = mockDeep<Response>();
+    const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
     let controller: ConfirmUserTokenController
 
@@ -28,7 +26,7 @@ describe("ConfirmUserTokenController", () => {
     })
 
     beforeEach(() => {
-        controller = new ConfirmUserTokenController();
+        controller = new ConfirmUserTokenController(mockedConfirmUserTokenUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
     })
@@ -66,11 +64,12 @@ describe("ConfirmUserTokenController", () => {
                 // GIVEN
 
                 // WHEN
-                mockVerify.mockRejectedValue(Error);
-                const results = await request(app).get("/api/v1/registration/confirm?token=testjwt");
+                mockedConfirmUserTokenUseCase.execute.mockRejectedValue(Error);
+                await controller.confirmToken(requestMock, responseMock, nextMock);
+                
 
                 // THEN
-                expect(results.status).toEqual(500);
+                expect(responseMock.status).toBeCalledWith(500);
             })
         })
 
@@ -80,11 +79,11 @@ describe("ConfirmUserTokenController", () => {
                 // GIVEN
 
                 // WHEN
-                mockVerify.mockResolvedValue("jwt123");
-                const results = await request(app).get("/api/v1/registration/confirm?token=testjwt");
+                mockedConfirmUserTokenUseCase.execute.mockResolvedValue();
+                await controller.confirmToken(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(200);
+                expect(responseMock.status).toBeCalledWith(200);
             })
         })
 

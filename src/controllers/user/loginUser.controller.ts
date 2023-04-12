@@ -14,7 +14,7 @@ export default class LoginUserController {
 
     private readonly usecase: LoginUserUseCase;
 
-    constructor(@inject(TYPES.LOGIN_USER) loginUserUseCase: LoginUserUseCase) {
+    constructor(@inject(TYPES.LOGIN_USER_USECASE) loginUserUseCase: LoginUserUseCase) {
         this.usecase = loginUserUseCase;
     }
 

@@ -16,5 +16,6 @@ export enum TYPES_ENUM {
     CREATE_USER_USECASE = 'CreateUserUsecase',
     GET_USER_BY_ID_USECASE = 'GetUserByIdUsecase',
     GET_ALL_USERS_USECASE = 'GetAllUsersUsecase',
-    LOGIN_USER = 'LoginUser',
+    LOGIN_USER_USECASE = 'LoginUser',
+    CONFIRM_USER_TOKEN_USECASE = 'ConfirmUserTokenUseCase',
   }

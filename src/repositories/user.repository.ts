@@ -1,5 +1,5 @@
 // Packages
-import { Entity, Loaded } from '@mikro-orm/core';
+import { Entity, Loaded, QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { injectable } from 'inversify'
 // Imports
@@ -23,17 +23,27 @@ export default class UserRepository extends EntityRepository<User> implements IR
         }
     };
 
-    updateByID(entity: User, id: number): Promise<any> {
+    async updateByID(entity: User, id: number): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    deleteByID(entity: User, id: number): Promise<any> {
+    async updateEnabled(entity: User): Promise<any> {
+        try {
+            const res = this.assign(entity, { enabled: true });
+            await this.persistAndFlush(res);
+            return res;
+        } catch (error) {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    async deleteByID(entity: User, id: number): Promise<any> {
         throw new Error("Method not implmented.");
     };
 
     async findByID(id: number): Promise<Loaded<User, never> | null> {
         try {
-            const res = await this.findOne({ id } as any);
+            const res = await this.findOne(id);
             return res;
         }
         catch (error) {
@@ -51,9 +61,9 @@ export default class UserRepository extends EntityRepository<User> implements IR
         }
     };
 
-    getAll(): Promise<Loaded<User, never>[]> {
+    async getAll(): Promise<Loaded<User, never>[]> {
         try {
-            const res = this.findAll();
+            const res = this.findAll( { orderBy: { id: QueryOrder.ASC }});
             return res;
         }
         catch (error) {

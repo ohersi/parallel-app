@@ -24,7 +24,6 @@ export default class createUserController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            // TODO: Find appropriate return to check
             const results = await this.usecase.execute(req.body);
             res.status(201);
             res.send({ message: "User was created", token: results});

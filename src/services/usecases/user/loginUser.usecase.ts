@@ -15,7 +15,7 @@ import { createToken } from "../../../resources/security/token";
 // WHEN: find a user matching the email and check password matches stored one
 // THEN: return a user object
 
-@provide(TYPES.LOGIN_USER)
+@provide(TYPES.LOGIN_USER_USECASE)
 export default class LoginUserUseCase {
 
     private userRepository: UserRepository;
