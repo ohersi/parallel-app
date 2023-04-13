@@ -23,15 +23,15 @@ export default class ConfirmUserTokenController {
         : Promise<Response | void> {
         try {
             const { token } = req.query;
-            if (token) {
-                await this.usecase.execute(token.toString());
-                res.status(200);
-                res.send("User has been registered.");
-            }
-            else {
+            if (!token) {
                 res.status(500);
-                res.send({ error: { status: 500 }, message: "Missing token" });
-            }
+                return res.send({ error: { status: 500 }, message: "Missing token" });
+            }   
+            await this.usecase.execute(token.toString());
+            // TODO: Redirect to login page
+            // res.redirect('http://localhost:3000/api/v1/users/login');
+            res.status(200);
+            res.send("User has been registered.");
         }
         catch (err: any) {
             res.status(500);

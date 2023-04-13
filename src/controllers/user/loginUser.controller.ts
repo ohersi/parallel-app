@@ -2,12 +2,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpPost } from 'inversify-express-utils';
 import { inject } from 'inversify';
-import nodemailer from 'nodemailer';
 // Imports
 import LoginUserUseCase from '../../services/usecases/user/loginUser.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
 import userValidation from '../../resources/validations/user.validation';
-import { mailer } from '../../resources/mailing/mailer';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
@@ -31,19 +29,14 @@ export default class LoginUserController {
             req.session.user = {
                 id: results.id!,
                 role: results.role!,
+                token: results.token!,
             };
             delete results['role'];
-
-            let info = await mailer(results.token!);
 
             res.status(200);
             res.send([
                 results,
-                {
-                    message: "Resent verification email.",
-                    info: info.messageId,
-                    preview: nodemailer.getTestMessageUrl(info)
-                }
+                req.session
             ]);
 
         }

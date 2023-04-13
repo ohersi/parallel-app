@@ -13,3 +13,6 @@ export * from '../../../controllers/user/loginUser.controller'
 
 import '../../../controllers/user/confirmUserToken.controller'
 export * from '../../../controllers/user/confirmUserToken.controller'
+
+import '../../../controllers/user/sendUserTokenByEmail.controller'
+export * from '../../../controllers/user/sendUserTokenByEmail.controller'
