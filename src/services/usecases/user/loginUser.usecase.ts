@@ -25,7 +25,7 @@ export default class LoginUserUseCase {
     }
     
     
-    public execute = async (body: any): Promise<UserDTO | boolean | UserException> => {
+    public execute = async (body: any): Promise<UserDTO> => {
         try {
             const foundUser = await this.userRepository.findByEmail(body.email);
             if (foundUser) {
@@ -33,8 +33,7 @@ export default class LoginUserUseCase {
                 const match = await decrypt(body.password, foundUser.password);
                 if (match) {
                     // Create refresh jwt token
-                    const refreshJWT = createToken(foundUser.email);
-     // TODO: Create email registration validator middleware               
+                    const refreshJWT = createToken(foundUser.email);     
                     return new UserDTO(
                         foundUser.id,
                         foundUser.first_name,
@@ -46,8 +45,9 @@ export default class LoginUserUseCase {
                         refreshJWT
                     );
                 }
+                throw Error('password or email does not match.');
             }
-            return false;
+            throw Error('No email found.');
         }
         catch (err: any) {
             throw new UserException(err.message);

@@ -30,7 +30,7 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (body: any): Promise<string | UserException> => {
+    public execute = async (body: any): Promise<string> => {
         try {
             const foundUserEmail = await this.userRepository.findByEmail(body.email);
             if (foundUserEmail) {

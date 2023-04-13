@@ -68,7 +68,7 @@ describe("loginUserController", () => {
                     }
 
                     // WHEN
-                    mockedLoginUserUseCase.execute.mockResolvedValue(false);
+                    mockedLoginUserUseCase.execute.mockRejectedValue(Error);
                     await controller.loginUser(requestMock, responseMock, nextMock);
 
                     // THEN

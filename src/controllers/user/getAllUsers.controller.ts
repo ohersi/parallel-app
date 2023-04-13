@@ -7,7 +7,7 @@ import GetAllUsersUseCase from '../../services/usecases/user/getAllUsers.usecase
 import { TYPES } from '../../utils/types';
 import { TYPES_ENUM } from '../../utils/types/enum';
 import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
-import { cache } from '../../middleware/cache.middleware';
+import { cache } from '../../resources/caching/cache';
 
 
 @controller(`/api/v1/users`)

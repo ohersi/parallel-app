@@ -8,7 +8,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import GetAllUsersController from "../../../controllers/user/getAllUsers.controller";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
 import { start } from '../../../app';
-import { cache } from "../../../middleware/cache.middleware";
+import { cache } from "../../../resources/caching/cache";
 
 // Set authorization middlware to stub before app is generated
 jest.mock("../../../middleware/auth.middleware", () => ({
@@ -21,7 +21,7 @@ jest.mock("../../../middleware/auth.middleware", () => ({
 }));
 
 // Mock redis caching middleware
-jest.mock("../../../middleware/cache.middleware", () => ({
+jest.mock("../../../resources/caching/cache", () => ({
     cache: jest.fn()
 }));
 const mockCache = cache as jest.Mock;

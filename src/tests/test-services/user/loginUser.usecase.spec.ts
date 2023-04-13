@@ -82,7 +82,7 @@ describe("LoginUserUseCase", () => {
 
             describe("and the given password does NOT match the stored password,", () => {
 
-                it("return false.", async () => {
+                it("throw an Error stating email or password does not match.", async () => {
                     // GIVEN
 
                     // WHEN
@@ -93,32 +93,28 @@ describe("LoginUserUseCase", () => {
                     // Set mocked return of not matched passwords
                     jest.spyOn(encryption, 'decrypt').mockResolvedValue(false);
 
-                    const results = await service.execute(testUser);
-
                     // THEN
-                    expect(results).toEqual(false);
+                    expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
                 })
             })
         });
 
         describe("and the user email doesn't exists in db,", () => {
 
-            it("return false.", async () => {
+            it("throw an Error stating email or password does not match.", async () => {
                 // GIVEN
 
                 // WHEN
                 mockedUserRepo.findByEmail.mockResolvedValue(null);
 
-                const results = await service.execute(testUser);
-
                 // THEN
-                expect(results).toEqual(false);
+                expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
             })
         });
 
         describe("and the repo throws an error when trying to find a user by email,", () => {
 
-            it("return an Error stating something went wrong with the database.", async () => {
+            it("throw an Error stating something went wrong with the database.", async () => {
                 // GIVEN
 
                 // WHEN

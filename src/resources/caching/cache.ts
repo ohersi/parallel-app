@@ -1,4 +1,4 @@
-import { redisContainer } from "../app";
+import { redisContainer } from "../../app";
 
 
 // TODO: Check if there is fresh data, and return that. Otherwise return stored redis cache data
