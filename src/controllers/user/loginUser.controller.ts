@@ -28,6 +28,7 @@ export default class LoginUserController {
 
             req.session.user = {
                 id: results.id!,
+                email: results.email!,
                 role: results.role!,
                 token: results.token!,
             };

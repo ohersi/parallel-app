@@ -4,6 +4,7 @@ declare module "express-session" {
     interface SessionData {
         user: {
             id: number,
+            email: string,
             role: string,
             token?: string,
         };
@@ -13,6 +14,9 @@ declare module "express-session" {
 export const sessionAuth = (req: Request, res: Response, next: NextFunction) => {
     if (!req.session?.user) {
         return res.status(401).send("Unauthorized access, not logged in.");
+    }
+    if (req.session.user.email !== req.body?.email) {
+        return res.status(401).send("Unauthorized access, not same user.");
     }
     next();
 }

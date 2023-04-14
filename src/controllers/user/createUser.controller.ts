@@ -11,7 +11,7 @@ import { TYPES } from '../../utils/types';
 import { mailer } from '../../resources/mailing/mailer';
 
 @controller(`/api/v1/users`)
-export default class createUserController {
+export default class CreateUserController {
 
     private readonly usecase: CreateUserUseCase;
 

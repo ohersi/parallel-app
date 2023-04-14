@@ -5,7 +5,7 @@ export default class UserDTO {
     last_name?: string;
     email?: string;
     password?: string;
-    profileimg?: string;
+    avatar_url?: string;
     role?: string;
     token?: string;
 
@@ -15,7 +15,7 @@ export default class UserDTO {
         last_name?: string,
         email?: string,
         password?:string,
-        profileimg?: string,
+        avatar_url?: string,
         role?: string,
         token?: string,
     ) {
@@ -24,7 +24,7 @@ export default class UserDTO {
         this.last_name = last_name;
         this.email = email;
         this.password = password;
-        this.profileimg = profileimg;
+        this.avatar_url = avatar_url;
         this.role = role;
         this.token = token;
     }

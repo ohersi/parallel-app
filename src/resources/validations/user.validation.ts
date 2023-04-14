@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { optional } from 'joi';
 import passwordComplexity from 'joi-password-complexity';
 
 const complexityOptions = {
@@ -22,11 +22,11 @@ const create = Joi.object({
 
 // Update user
 const update = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
-    email: Joi.string().email().lowercase().required(),
-    password: passwordComplexity(complexityOptions).required(),
-    avatar_url: Joi.string().required(),
+    first_name: Joi.string().optional(),
+    last_name: Joi.string().optional(),
+    email: Joi.string().email().optional(),
+    password: Joi.string().optional(),
+    avatar_url: Joi.string().optional(),
 });
 
 // Login user
