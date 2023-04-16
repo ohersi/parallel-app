@@ -1,4 +1,4 @@
-// USER CONTROLLER //
+// USER CONTROLLERS //
 import  '../../../controllers/user/createUser.controller'
 export * from  '../../../controllers/user/createUser.controller'
 
@@ -19,3 +19,7 @@ export * from '../../../controllers/user/sendUserTokenByEmail.controller'
 
 import '../../../controllers/user/updateUser.controller'
 export * from '../../../controllers/user/updateUser.controller'
+
+// CHANNEL CONTROLLERS //
+import '../../../controllers/channel/getAllChannelsByUserId.controller'
+export * from '../../../controllers/channel/getAllChannelsByUserId.controller'

@@ -7,6 +7,7 @@ import { Connection, GetRepository, IDatabaseDriver, MikroORM, EntityRepository 
 // Imports
 import { TYPES } from '../types'
 import { User } from '../../entities/user.entity';
+import { Channel } from '../../entities/channel.entity';
 
 // Classes w/ @controller need to be imported one unique time then it can be declared
 // Bulk import only  works if the module w/ all the imports is invoked
@@ -41,6 +42,7 @@ export const bindings = new AsyncContainerModule(async (bind): Promise<void> => 
 
         // Repository Bindings
         bindEntityToRepository(bind, TYPES.USER_REPOSITORY, connection, User);
+        bindEntityToRepository(bind, TYPES.CHANNEL_REPOSITORY, connection, Channel)
     }
 
 });

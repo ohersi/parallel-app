@@ -47,6 +47,17 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             throw new Error("ID Not found");
         }
     };
+    
+    // Get all channels tied to user (order by most recently updated)
+    async getAllByUserID(id: number): Promise<Loaded<Channel, never>[]> {
+        try {
+            const res = await this.find({ user: id }, { orderBy: { date_updated: QueryOrder.DESC } })
+            return res;
+        }
+        catch (error) {
+            throw new Error("ID Not found");
+        }
+    };
 
     async getAll(): Promise<Loaded<Channel, never>[]> {
         try {
