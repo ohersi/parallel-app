@@ -15,6 +15,10 @@ const config: Options<PostgreSqlDriver> = {
     entitiesTs: ['src/**/*.entity.ts'],
     debug: true,
     metadataProvider: TsMorphMetadataProvider,
+    migrations: {
+        path: 'dist/migrations',
+        pathTs: 'src/migrations',
+    },
 };
 
 export default config;

@@ -15,15 +15,17 @@ export const sessionAuth = (req: Request, res: Response, next: NextFunction) => 
     if (!req.session?.user) {
         return res.status(401).send("Unauthorized access, not logged in.");
     }
-    if (req.session.user.email !== req.body?.email) {
-        return res.status(401).send("Unauthorized access, not same user.");
+    if (Object.keys(req.body).length) {
+        if (req.session.user.email !== req.body?.email) {
+            return res.status(401).send("Unauthorized access, not same user.");
+        }
     }
     next();
 }
 
 export const roleAuth = (role: string) =>
 
-   async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         if (req.session?.user?.role !== role) {
             return res.status(403).send("Unauthorized access, insufficient permissions.");
         }
