@@ -7,7 +7,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
-import { memOrm } from "../../test-utils/init-db.setup";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("CreateUserUseCase", () => {
@@ -25,6 +25,7 @@ describe("CreateUserUseCase", () => {
         password: "password",
         avatar_url: "avatar"
     }
+
     beforeEach(() => {
         service = new CreateUserUseCase(mockedUserRepo);
         mockReset(mockedUserRepo);
@@ -32,8 +33,8 @@ describe("CreateUserUseCase", () => {
     })
 
     beforeAll(async () => {
-        // Setup database and repos
-        orm = await memOrm;
+        // Create database instance
+        orm = await generateItems();
         users = orm.em.getRepository<User>(User);
     });
 
@@ -53,7 +54,7 @@ describe("CreateUserUseCase", () => {
                 // GIVEN
 
                 // WHEN
-                // Check if user exists in db
+                // Check if user already exists in db
                 const checkIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
                 // If email doesnt exist create user
                 if (!checkIfEmailExists) {
@@ -65,10 +66,10 @@ describe("CreateUserUseCase", () => {
                         testUser.avatar_url,
                         TYPES_ENUM.USER
                     );
-                     // Persist and flush to database
-                    const createtUser = await users.save(newUser);
+                    // Persist and flush to database
+                    const createdUser = await users.save(newUser);
                     // Set mocked result to be newly created user
-                    mockedUserRepo.save.mockResolvedValue(createtUser);
+                    mockedUserRepo.save.mockResolvedValue(createdUser);
                 }
                 else {
                     mockedUserRepo.save.mockRejectedValue(Error);
@@ -76,26 +77,16 @@ describe("CreateUserUseCase", () => {
                 const results = await service.execute(testUser);
 
                 // THEN
-                const getUser = await orm.em.findOne(User, testUser.id);
+                const getUser = await orm.em.findOne(User, { email: testUser.email });
                 expect(getUser?.email).toEqual(testUser.email);
                 expect(typeof results).toBe("string");
             })
-        });  
+        });
 
         describe("and the user already exists,", () => {
 
             it("return an Error stating the user email already exists.", async () => {
                 // GIVEN
-                // Pre insert user into db
-                const newUser = new User(
-                    testUser.first_name,
-                    testUser.last_name,
-                    testUser.email,
-                    testUser.password,
-                    testUser.avatar_url,
-                    TYPES_ENUM.USER
-                );
-                const createtUser = await users.save(newUser);
 
                 // WHEN
                 // Check if user exists in db
@@ -103,12 +94,12 @@ describe("CreateUserUseCase", () => {
 
                 if (returnUserIfEmailExists) {
                     // Set mocked result to be user found by email
-                    mockedUserRepo.findByEmail.mockResolvedValue(createtUser);
+                    mockedUserRepo.findByEmail.mockResolvedValue(returnUserIfEmailExists);
                 }
 
                 // THEN
                 // Expect service to throw error since user email already exists
-                 expect(async () => { await service.execute(testUser)}).rejects.toThrow(Error);
+                expect(async () => { await service.execute(testUser) }).rejects.toThrow(Error);
             })
         });
 

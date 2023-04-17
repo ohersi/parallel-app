@@ -9,25 +9,19 @@ import UserRepository from "../../../repositories/user.repository";
 import LogInUserUseCase from "../../../services/usecases/user/loginUser.usecase";
 import UserDTO from "../../../dto/user.dto";
 import UserException from "../../../utils/exceptions/user.expection";
-import { memOrm } from "../../test-utils/init-db.setup";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import * as encryption from "../../../resources/security/encryption";
-import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("LoginUserUseCase", () => {
 
     const mockedUserRepo = mockDeep<UserRepository>();
     let service: LogInUserUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
-    let userRepo: UserRepository;
 
-    const testUser = new User(
-        "Test",
-        "Testerson",
-        "email@email.com",
-        "password",
-        "avatar",
-        TYPES_ENUM.USER
-    )
+    let testLogin = {
+        email: "",
+        password: ""
+    };
 
     beforeEach(() => {
         service = new LogInUserUseCase(mockedUserRepo);
@@ -37,11 +31,16 @@ describe("LoginUserUseCase", () => {
 
     beforeAll(async () => {
         // Setup database and repos
-        orm = await memOrm;
-        userRepo = orm.em.getRepository<User>(User);
+        orm = await generateItems();
 
-        // Insert test user into in-mem db
-        await userRepo.save(testUser);
+        // Setup test user login info
+        const testUser = await orm.em.findOne(User, 1);
+        if (testUser) {
+            testLogin = {
+                email: testUser.email,
+                password: testUser.password
+            }
+        }
     });
 
     afterAll(async () => {
@@ -63,7 +62,7 @@ describe("LoginUserUseCase", () => {
 
                     // WHEN
                     // Check if user exists in db
-                    const foundUser = await orm.em.findOne(User, { email: testUser.email });
+                    const foundUser = await orm.em.findOne(User, { email: testLogin.email });
 
                     if (foundUser) {
                         // set mock return of found user
@@ -72,7 +71,7 @@ describe("LoginUserUseCase", () => {
                         jest.spyOn(encryption, 'decrypt').mockResolvedValue(true);
                     }
 
-                    const results = await service.execute(testUser);
+                    const results = await service.execute(testLogin);
 
                     // THEN
                     expect(results).toBeInstanceOf(UserDTO);
@@ -87,14 +86,14 @@ describe("LoginUserUseCase", () => {
 
                     // WHEN
                     // Check if user exists in db
-                    const foundUser = await orm.em.findOne(User, { email: testUser.email });
+                    const foundUser = await orm.em.findOne(User, { email: testLogin.email });
                     // set mock return of found user
                     mockedUserRepo.findByEmail.mockResolvedValue(foundUser);
                     // Set mocked return of not matched passwords
                     jest.spyOn(encryption, 'decrypt').mockResolvedValue(false);
 
                     // THEN
-                    expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
+                    expect(async () => { await service.execute(testLogin) }).rejects.toThrow(UserException);
                 })
             })
         });
@@ -108,7 +107,7 @@ describe("LoginUserUseCase", () => {
                 mockedUserRepo.findByEmail.mockResolvedValue(null);
 
                 // THEN
-                expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
+                expect(async () => { await service.execute(testLogin) }).rejects.toThrow(UserException);
             })
         });
 
@@ -121,7 +120,7 @@ describe("LoginUserUseCase", () => {
                 mockedUserRepo.findByEmail.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
+                expect(async () => { await service.execute(testLogin) }).rejects.toThrow(UserException);
             })
         })
 

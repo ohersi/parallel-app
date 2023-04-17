@@ -4,37 +4,17 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { memOrm } from "../../test-utils/init-db.setup";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
 import UserException from "../../../utils/exceptions/user.expection";
-import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("GetAllUsersUseCase", () => {
 
     const mockedUserRepo = mockDeep<UserRepository>();
     let service: GetAllUsersUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
-    let users: UserRepository;
-
-    const User1 = new User(
-        "User1",
-        "One",
-        "one@email.com",
-        "password",
-        "avatar",
-        TYPES_ENUM.USER
-    )
-
-    const User2 = new User(
-        "User2",
-        "Two",
-        "two@email.com",
-        "password",
-        "avatar",
-        TYPES_ENUM.USER
-    )
 
     beforeEach(() => {
         service = new GetAllUsersUseCase(mockedUserRepo);
@@ -44,14 +24,7 @@ describe("GetAllUsersUseCase", () => {
 
     beforeAll(async () => {
         // Setup database and repos
-        orm = await memOrm;
-        users = orm.em.getRepository<User>(User);
-
-        // Create users & persist and flush to database
-        await orm.em.persistAndFlush([
-            users.create(User1),
-            users.create(User2)
-        ]);
+        orm = await generateItems();
     });
 
     afterAll(async () => {

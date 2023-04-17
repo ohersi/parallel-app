@@ -30,14 +30,12 @@ export class Channel implements BaseEntity, IChannel {
     date_updated!: Date;
 
     constructor(
-        id: number,
         user: number,
         title: string,
         description: string,
         date_created: Date,
         date_updated: Date,
     ) {
-        this.id = id;
         this.user = user;
         this.title = title;
         this.description = description;

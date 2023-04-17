@@ -6,7 +6,7 @@ import ChannelRepository from "../../../repositories/channel.repository";
 import { TYPES } from "../../../utils/types";
 import { Channel } from "../../../entities/channel.entity";
 import { Loaded } from "@mikro-orm/core";
-import UserException from "../../../utils/exceptions/user.expection";
+import ChannelException from "../../../utils/exceptions/channel.exception";
 
 
 //** USE CASE */
@@ -29,7 +29,7 @@ export default class GetAllChannelsByUserIdUsecase {
             return allUserChannels;
         }
         catch (err: any) {
-            throw new UserException(err.message);
+            throw new ChannelException(err.message);
         }
     }
 }

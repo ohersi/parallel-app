@@ -4,28 +4,17 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { memOrm } from "../../test-utils/init-db.setup";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import GetUserByIdUseCase from '../../../services/usecases/user/getUserById.usecase'
 import UserException from "../../../utils/exceptions/user.expection";
-import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("GetUserByIdUseCase", () => {
 
     const mockedUserRepo = mockDeep<UserRepository>();
     let service: GetUserByIdUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
-    let users: UserRepository;
-
-    const testUser = new User(
-        "Test",
-        "Testerson",
-        "email@email.com",
-        "password",
-        "avatar",
-        TYPES_ENUM.USER
-    )
 
     beforeEach(() => {
         service = new GetUserByIdUseCase(mockedUserRepo);
@@ -39,11 +28,7 @@ describe("GetUserByIdUseCase", () => {
 
     beforeAll(async () => {
         // Setup database and repos
-        orm = await memOrm;
-        // Select repo
-        users = orm.em.getRepository<User>(User);
-        // Insert test user into in-mem db
-        await users.save(testUser);
+        orm = await generateItems();
     });
 
     afterAll(async () => {
@@ -65,7 +50,7 @@ describe("GetUserByIdUseCase", () => {
                 const results = await service.execute(id);
 
                 // THEN
-                expect(results).toEqual(testUser);
+                expect(results).toEqual(getUser);
             })
         })
 
