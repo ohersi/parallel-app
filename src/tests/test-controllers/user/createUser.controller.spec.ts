@@ -8,6 +8,13 @@ import CreateUserController from '../../../controllers/user/createUser.controlle
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import validationMiddleware from "../../../middleware/validation.middleware";
 import userValidation from "../../../resources/validations/user.validation";
+import { mailer } from "../../../resources/mailing/mailer";
+
+// Mock redis caching middleware
+jest.mock("../../../resources/mailing/mailer", () => ({
+    mailer: jest.fn()
+}));
+const mockMailer = mailer as jest.Mock;
 
 // Controller is lean, only directs to usecase
 // Test is concerned with HTTP request and responses
@@ -51,6 +58,7 @@ describe("createUserController", () => {
 
                 // WHEN
                 mockedCreateUserUseCase.execute.mockResolvedValue("");
+                mockMailer.mockResolvedValue("");
                 await controller.createUser(requestMock, responseMock, nextMock);
 
                 // THEN
