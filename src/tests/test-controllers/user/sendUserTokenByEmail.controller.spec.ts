@@ -63,6 +63,7 @@ describe("SendUserTokenByEmail", () => {
                     // GIVEN
                     requestMock.session.user = {
                         id: 1,
+                        email: 'email@email.com',
                         role: 'user',
                         token: "jwt123",
                     }

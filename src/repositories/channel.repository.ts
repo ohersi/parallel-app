@@ -18,8 +18,8 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             await this.persistAndFlush(res);
             return res;
         }
-        catch (error) {
-            throw new Error("Method not implemented.");
+        catch (error: any) {
+            throw new Error(error);
         }
     };
 
@@ -30,7 +30,7 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             return res;
         }
         catch (error: any) {
-            throw new Error(error.message);
+            throw new Error(error);
         }
     }
 
@@ -43,8 +43,8 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             const res = await this.findOne(id);
             return res;
         }
-        catch (error) {
-            throw new Error("ID Not found");
+        catch (error: any) {
+            throw new Error(error);
         }
     };
     
@@ -54,8 +54,8 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             const res = await this.find({ user: id }, { orderBy: { date_updated: QueryOrder.DESC } })
             return res;
         }
-        catch (error) {
-            throw new Error("ID Not found");
+        catch (error: any) {
+            throw new Error(error);
         }
     };
 
@@ -64,8 +64,8 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             const res = this.findAll({ orderBy: { id: QueryOrder.ASC } });
             return res;
         }
-        catch (error) {
-            throw new Error("Method not implmented.");
+        catch (error: any) {
+            throw new Error(error);
         }
     };
 }

@@ -23,5 +23,6 @@ export enum TYPES_ENUM {
   LOGIN_USER_USECASE = 'LoginUser',
   CONFIRM_USER_TOKEN_USECASE = 'ConfirmUserTokenUseCase',
   //**----- CHANNEL -----**//
+  GET_CHANNEL_BY_ID_USECASE = 'GetChannelByIdUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
 }

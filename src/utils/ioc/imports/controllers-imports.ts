@@ -21,5 +21,8 @@ import '../../../controllers/user/updateUser.controller'
 export * from '../../../controllers/user/updateUser.controller'
 
 // CHANNEL CONTROLLERS //
+import '../../../controllers/channel/getChannelById.controller'
+export * from '../../../controllers/channel/getChannelById.controller'
+
 import '../../../controllers/channel/getAllChannelsByUserId.controller'
 export * from '../../../controllers/channel/getAllChannelsByUserId.controller'
