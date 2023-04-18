@@ -35,7 +35,6 @@ export default class UpdateUserUsecase {
             if (!foundUser) {
                 throw new UserException('No email found.');
             }
-            // TODO: Ensure safe password changes
             if (user.password) {
                 user.password = await hash(user.password);
             }
@@ -50,7 +49,6 @@ export default class UpdateUserUsecase {
                 updatedUser.password,
                 updatedUser.avatar_url,
                 updatedUser.role,
-                updatedUser.token,
             )
         }
         catch (err: any) {

@@ -23,7 +23,7 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
         }
     };
 
-    async update(entity: Channel, data: any): Promise<any> {
+    async update(entity: Channel, data: any): Promise<Channel> {
         try {
             const res = this.assign(entity, data, { updateByPrimaryKey: false });
             await this.persistAndFlush(res);

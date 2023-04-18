@@ -23,7 +23,7 @@ export default class UserRepository extends EntityRepository<User> implements IR
         }
     };
 
-    async update(entity: User, data: any): Promise<any> {
+    async update(entity: User, data: any): Promise<User> {
         try {
             const res = this.assign(entity, data, { updateByPrimaryKey: false });
             await this.persistAndFlush(res);
