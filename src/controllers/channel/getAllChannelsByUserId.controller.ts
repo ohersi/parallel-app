@@ -29,6 +29,7 @@ export default class GetAllChannelsByUserIdController {
             const userID  = parseInt(req.params.id)
             const results = await this.usecase.execute(userID);
             // const results = await cache('users', this.usecase.execute);
+            res.status(200);
             res.send(results);
         }
         catch (err: any) {

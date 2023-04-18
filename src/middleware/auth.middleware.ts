@@ -15,7 +15,7 @@ export const sessionAuth = (req: Request, res: Response, next: NextFunction) => 
     if (!req.session?.user) {
         return res.status(401).send("Unauthorized access, not logged in.");
     }
-    if (Object.keys(req.body).length) {
+    if (Object.keys(req.body).length && req.body.email) {
         if (req.session.user.email !== req.body?.email) {
             return res.status(401).send("Unauthorized access, not same user.");
         }

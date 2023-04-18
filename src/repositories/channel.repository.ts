@@ -47,6 +47,16 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
             throw new Error(error);
         }
     };
+
+    async findByUserIDAndTitle(id: number, name: string): Promise<Loaded<Channel, never> | null> {
+        try {
+            const res = await this.findOne({ user: id, title: name });
+            return res;
+        } 
+        catch (error: any) {
+            throw new Error(error);
+        }
+    };
     
     // Get all channels tied to user (order by most recently updated)
     async getAllByUserID(id: number): Promise<Loaded<Channel, never>[]> {
