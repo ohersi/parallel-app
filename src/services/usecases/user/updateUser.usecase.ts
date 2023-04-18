@@ -28,7 +28,7 @@ export default class UpdateUserUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (user: UserDTO): Promise<any> => {
+    public execute = async (user: UserDTO): Promise<UserDTO> => {
         try {
             // Find user
             const foundUser = await this.userRepository.findByEmail(user.email!);
@@ -52,7 +52,7 @@ export default class UpdateUserUsecase {
             )
         }
         catch (err: any) {
-            throw Error(err.message);
+            throw new UserException(err.message);
         }
     }
 }

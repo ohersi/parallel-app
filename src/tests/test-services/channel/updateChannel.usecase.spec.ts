@@ -75,9 +75,9 @@ describe("UpdateChannelUsecase", () => {
                     })
                 })
 
-                describe("and the cannot be updated to the database,", () => {
+                describe("and the channel cannot be updated to the database,", () => {
 
-                    it("throws an Error from the db.", async () => {
+                    it("throw an Error from the db.", async () => {
                         // GIVEN
                         const id = 1;
                         const userID = 1;

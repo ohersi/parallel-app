@@ -20,7 +20,7 @@ export default class UpdateUserController {
     }
 
     @httpPut('/update', validationMiddleware(userValidation.update), sessionAuth)
-    public async createUser(
+    public async updateUser(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
