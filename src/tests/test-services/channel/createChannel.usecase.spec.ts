@@ -4,8 +4,9 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { generateItems } from "../../test-utils/generate-items.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { Channel } from "../../../entities/channel.entity";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
 import CreateChannelUsecase from '../../../services/usecases/channel/createChannel.usecase';
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
@@ -30,7 +31,10 @@ describe("CreateChannelUsecase", () => {
 
     beforeAll(async () => {
         // Create database instance
-        orm = await generateItems();
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
         channels = orm.em.getRepository<Channel>(Channel);
     });
 

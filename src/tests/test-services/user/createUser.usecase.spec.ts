@@ -4,6 +4,7 @@ import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
@@ -28,13 +29,17 @@ describe("CreateUserUseCase", () => {
 
     beforeEach(() => {
         service = new CreateUserUseCase(mockedUserRepo);
+        // Restore im-mem db to original state
         mockReset(mockedUserRepo);
-        cleanUpMetadata();
+        cleanUpMetadata()
     })
 
     beforeAll(async () => {
         // Create database instance
-        orm = await generateItems();
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
         users = orm.em.getRepository<User>(User);
     });
 

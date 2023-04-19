@@ -45,7 +45,7 @@ export default class UserRepository extends EntityRepository<User> implements IR
         }
     }
 
-    async deleteByID(entity: User, id: number): Promise<any> {
+    async delete(entity: User): Promise<any> {
         throw new Error("Method not implmented.");
     };
 

@@ -3,9 +3,11 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { IBackup } from 'pg-mem';
 // Imports
-import { generateItems } from "../../test-utils/generate-items.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import UserRepository from "../../../repositories/user.repository";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
 import UserException from "../../../utils/exceptions/user.expection";
@@ -15,16 +17,24 @@ describe("GetAllUsersUseCase", () => {
     const mockedUserRepo = mockDeep<UserRepository>();
     let service: GetAllUsersUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
+    let backup: IBackup;
 
     beforeEach(() => {
         service = new GetAllUsersUseCase(mockedUserRepo);
+        // Restore im-mem db to original state
+        backup.restore();
         mockReset(mockedUserRepo);
         cleanUpMetadata();
     })
 
     beforeAll(async () => {
-        // Setup database and repos
-        orm = await generateItems();
+        // Create database instance
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
+        // Create backup of db
+        backup = execute.memDb.backup();
     });
 
     afterAll(async () => {

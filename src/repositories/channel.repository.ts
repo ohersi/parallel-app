@@ -10,8 +10,6 @@ import IRepository from './interfaces/repository.interface';
 @Entity({ customRepository: () => Channel })
 export default class ChannelRepository extends EntityRepository<Channel> implements IRepository<Channel>  {
 
-    // TODO: Custom methods 
-
     async save(entity: Channel): Promise<Channel> {
         try {
             const res = this.create(entity);
@@ -34,8 +32,13 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
         }
     }
 
-    async deleteByID(entity: Channel, id: number): Promise<any> {
-        throw new Error("Method not implmented.");
+    async delete(entity: Channel): Promise<any> {
+        try {
+            await this.removeAndFlush(entity);
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
     };
 
     async findByID(id: number): Promise<Loaded<Channel, never> | null> {
@@ -52,12 +55,12 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
         try {
             const res = await this.findOne({ user: id, title: name });
             return res;
-        } 
+        }
         catch (error: any) {
             throw new Error(error);
         }
     };
-    
+
     // Get all channels tied to user (order by most recently updated)
     async getAllByUserID(id: number): Promise<Loaded<Channel, never>[]> {
         try {

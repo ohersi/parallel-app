@@ -3,14 +3,15 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { IBackup } from 'pg-mem';
 // Imports
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
+import UserDTO from "../../../dto/user.dto";
 import UserRepository from "../../../repositories/user.repository";
 import UpdateUserUsecase from '../../../services/usecases/user/updateUser.usecase'
-import { generateItems } from "../../test-utils/generate-items.setup";
-import { TYPES_ENUM } from "../../../utils/types/enum";
 import UserException from "../../../utils/exceptions/user.expection";
-import UserDTO from "../../../dto/user.dto";
+import { generateItems } from "../../test-utils/generate-items.setup";
 
 describe("UpdateUserUsecase", () => {
 
@@ -18,6 +19,7 @@ describe("UpdateUserUsecase", () => {
     let service: UpdateUserUsecase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let users: UserRepository;
+    let backup: IBackup;
 
     const testUser = {
         id: 1,
@@ -30,14 +32,21 @@ describe("UpdateUserUsecase", () => {
 
     beforeEach(() => {
         service = new UpdateUserUsecase(mockedUserRepo);
+        // Restore im-mem db to original state
+        backup.restore();
         mockReset(mockedUserRepo);
         cleanUpMetadata();
     })
 
     beforeAll(async () => {
         // Create database instance
-        orm = await generateItems();
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
         users = orm.em.getRepository<User>(User);
+        // Create backup of db
+        backup = execute.memDb.backup();
     });
 
     afterAll(async () => {
@@ -71,7 +80,7 @@ describe("UpdateUserUsecase", () => {
                     const results = await service.execute(user);
 
                     // THEN
-                   expect(results).toBeInstanceOf(UserDTO);
+                    expect(results).toBeInstanceOf(UserDTO);
                 })
             })
 

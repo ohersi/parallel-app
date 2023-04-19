@@ -27,6 +27,9 @@ export * from '../../../controllers/channel/createChannel.controller'
 import '../../../controllers/channel/updateChannel.controller'
 export * from '../../../controllers/channel/updateChannel.controller'
 
+import '../../../controllers/channel/deleteChannel.controller'
+export * from '../../../controllers/channel/deleteChannel.controller'
+
 import '../../../controllers/channel/getChannelById.controller'
 export * from '../../../controllers/channel/getChannelById.controller'
 

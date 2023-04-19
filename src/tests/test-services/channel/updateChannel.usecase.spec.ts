@@ -3,9 +3,11 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { IBackup } from 'pg-mem';
 // Imports
-import { generateItems } from "../../test-utils/generate-items.setup";
+import { memOrm } from "../../test-utils/init-db.setup";
 import { Channel } from "../../../entities/channel.entity";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
 import UpdateChannelUsecase from '../../../services/usecases/channel/updateChannel.usecase'
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
@@ -17,6 +19,7 @@ describe("UpdateChannelUsecase", () => {
     let service: UpdateChannelUsecase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let channels: ChannelRepository;
+    let backup: IBackup;
 
     const testChannel = {
         title: "update test channel",
@@ -25,14 +28,21 @@ describe("UpdateChannelUsecase", () => {
 
     beforeEach(() => {
         service = new UpdateChannelUsecase(mockedChannelRepo);
+        // Restore im-mem db to original state
+        backup.restore();
         mockReset(mockedChannelRepo);
         cleanUpMetadata();
     })
 
     beforeAll(async () => {
         // Create database instance
-        orm = await generateItems();
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
         channels = orm.em.getRepository<Channel>(Channel);
+        // Create backup of db
+        backup = execute.memDb.backup();
     });
 
     afterAll(async () => {

@@ -3,13 +3,15 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { IBackup } from 'pg-mem';
 // Imports
+import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
+import UserDTO from "../../../dto/user.dto";
+import { generateItems } from "../../test-utils/generate-items.setup";
 import UserRepository from "../../../repositories/user.repository";
 import LogInUserUseCase from "../../../services/usecases/user/loginUser.usecase";
-import UserDTO from "../../../dto/user.dto";
 import UserException from "../../../utils/exceptions/user.expection";
-import { generateItems } from "../../test-utils/generate-items.setup";
 import * as encryption from "../../../resources/security/encryption";
 
 describe("LoginUserUseCase", () => {
@@ -17,6 +19,7 @@ describe("LoginUserUseCase", () => {
     const mockedUserRepo = mockDeep<UserRepository>();
     let service: LogInUserUseCase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
+    let backup: IBackup;
 
     let testLogin = {
         email: "",
@@ -25,13 +28,20 @@ describe("LoginUserUseCase", () => {
 
     beforeEach(() => {
         service = new LogInUserUseCase(mockedUserRepo);
+        // Restore im-mem db to original state
+        backup.restore();
         mockReset(mockedUserRepo);
         cleanUpMetadata();
     })
 
     beforeAll(async () => {
-        // Setup database and repos
-        orm = await generateItems();
+        // Create database instance
+        const execute = await memOrm;
+        orm = execute.memOrm;
+        // Generate test entities
+        await generateItems(orm);
+        // Create backup of db
+        backup = execute.memDb.backup();
 
         // Setup test user login info
         const testUser = await orm.em.findOne(User, 1);
