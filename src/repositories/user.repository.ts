@@ -34,6 +34,15 @@ export default class UserRepository extends EntityRepository<User> implements IR
         }
     }
 
+    async delete(entity: User): Promise<any> {
+        try {
+            await this.removeAndFlush(entity);
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    };
+
     async updateEnabled(entity: User): Promise<any> {
         try {
             const res = this.assign(entity, { enabled: true }, { updateByPrimaryKey: false });
@@ -44,10 +53,6 @@ export default class UserRepository extends EntityRepository<User> implements IR
             throw new Error(error.message);
         }
     }
-
-    async delete(entity: User): Promise<any> {
-        throw new Error("Method not implmented.");
-    };
 
     async findByID(id: number): Promise<Loaded<User, never> | null> {
         try {

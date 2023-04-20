@@ -5,18 +5,20 @@ import { Application, NextFunction, Request, Response } from 'express';
 import { cleanUpMetadata } from "inversify-express-utils";
 import request from "supertest";
 // Imports
-import DeleteChannelController from "../../../controllers/channel/deleteChannel.controller";
-import DeleteChannelUsecase from "../../../services/usecases/channel/deleteChannel.usecase";
-import { start } from '../../../app';
+import DeleteUserController from "../../../controllers/user/deleteUser.controller";
+import DeleteUserUsecase from "../../../services/usecases/user/deleteUser.usecase";
+import { start } from "../../../app";
 
-describe("DeleteChannelController", () => {
+// Controller is lean, only directs to usecase
+// Test is concerned with HTTP request and responses
+describe("DeleteUserController", () => {
     // Mocks
-    const mockedUsecase = mockDeep<DeleteChannelUsecase>();
+    const mockedDeleteUserUseCase = mockDeep<DeleteUserUsecase>();
     const requestMock = mockDeep<Request>();
     const responseMock = mockDeep<Response>();
     const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
-    let controller: DeleteChannelController;
+    let controller: DeleteUserController;
 
     // Supertest setup
     let app: Application;
@@ -28,14 +30,14 @@ describe("DeleteChannelController", () => {
     })
 
     beforeEach(() => {
-        controller = new DeleteChannelController(mockedUsecase);
-        mockReset(mockedUsecase);
+        controller = new DeleteUserController(mockedDeleteUserUseCase);
+        mockReset(mockedDeleteUserUseCase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
     })
 
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.clearAllMocks()
     })
 
     afterAll(() => {
@@ -46,59 +48,53 @@ describe("DeleteChannelController", () => {
         expect(controller).toBeDefined();
     })
 
-    describe("When deleting a channel,", () => {
+    describe('When deleting a user', () => {
 
-        describe("and there is a user logged in,", () => {
+        describe("and a user is logged in,", () => {
 
-            describe("and the channel has been successfully been deleted,", () => {
+            describe("and the user has been successfully deleted,", () => {
 
-                it("return status of 200.", async () => {
+                it("return a status of 200.", async () => {
                     // GIVEN
-                    const id = 1;
-                    const userID = 1;
 
                     // WHEN
-                    mockedUsecase.execute.mockResolvedValue(null);
-                    await controller.deleteChannel(requestMock, responseMock, nextMock);
+                    mockedDeleteUserUseCase.execute.mockResolvedValue(null);
+                    await controller.deleteUser(requestMock, responseMock, nextMock);
 
-                    // THEN
+                    //THEN
                     expect(responseMock.status).toBeCalledWith(200);
                 })
             })
 
-            describe("and the channel cannot be deleted,", () => {
+            describe("and the user cannot be deleted,", () => {
 
                 it("return a status of 500.", async () => {
                     // GIVEN
-                    const id = 1;
-                    const userID = 1;
 
                     // WHEN
-                    mockedUsecase.execute.mockRejectedValue(Error);
-                    await controller.deleteChannel(requestMock, responseMock, nextMock);
+                    mockedDeleteUserUseCase.execute.mockRejectedValue(Error);
+                    await controller.deleteUser(requestMock, responseMock, nextMock);
 
-                    // THEN
+                    //THEN
                     expect(responseMock.status).toBeCalledWith(500);
                     expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
                 })
             })
-
         })
 
-        describe("and there is NOT a user logged in,", () => {
+        describe("and a user is NOT logged in,", () => {
 
             it("return a status of 400.", async () => {
                 // GIVEN
                 const id = 1;
 
                 // WHEN
-                const results = await request(app).delete(`/api/v1/channels/${id}`);
+                const results = await request(app).delete(`/api/v1/users/${id}`);
 
                 // THEN
                 expect(results.status).toEqual(401);
             })
         })
+    })
 
-
-    });
 });

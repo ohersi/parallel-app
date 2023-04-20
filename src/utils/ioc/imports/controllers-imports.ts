@@ -2,6 +2,12 @@
 import  '../../../controllers/user/createUser.controller'
 export * from  '../../../controllers/user/createUser.controller'
 
+import '../../../controllers/user/updateUser.controller'
+export * from '../../../controllers/user/updateUser.controller'
+
+import '../../../controllers/user/deleteUser.controller'
+export * from '../../../controllers/user/deleteUser.controller'
+
 import '../../../controllers/user/getUserById.controller'
 export * from '../../../controllers/user/getUserById.controller'
 
@@ -17,8 +23,6 @@ export * from '../../../controllers/user/confirmUserToken.controller'
 import '../../../controllers/user/sendUserTokenByEmail.controller'
 export * from '../../../controllers/user/sendUserTokenByEmail.controller'
 
-import '../../../controllers/user/updateUser.controller'
-export * from '../../../controllers/user/updateUser.controller'
 
 // CHANNEL CONTROLLERS //
 import '../../../controllers/channel/createChannel.controller'
