@@ -1,55 +1,14 @@
 // Packages
 import { Entity, Loaded, QueryOrder, wrap } from '@mikro-orm/core';
-import { EntityRepository } from '@mikro-orm/postgresql';
 import { injectable } from 'inversify'
 // Imports
 import { Channel } from '../entities/channel.entity';
 import IRepository from './interfaces/repository.interface';
+import BaseRepository from './base.repository';
 
 @injectable()
 @Entity({ customRepository: () => Channel })
-export default class ChannelRepository extends EntityRepository<Channel> implements IRepository<Channel>  {
-
-    async save(entity: Channel): Promise<Channel> {
-        try {
-            const res = this.create(entity);
-            await this.persistAndFlush(res);
-            return res;
-        }
-        catch (error: any) {
-            throw new Error(error);
-        }
-    };
-
-    async update(entity: Channel, data: any): Promise<Channel> {
-        try {
-            const res = this.assign(entity, data, { updateByPrimaryKey: false });
-            await this.persistAndFlush(res);
-            return res;
-        }
-        catch (error: any) {
-            throw new Error(error);
-        }
-    }
-
-    async delete(entity: Channel): Promise<any> {
-        try {
-            await this.removeAndFlush(entity);
-        }
-        catch (error: any) {
-            throw new Error(error);
-        }
-    };
-
-    async findByID(id: number): Promise<Loaded<Channel, never> | null> {
-        try {
-            const res = await this.findOne(id);
-            return res;
-        }
-        catch (error: any) {
-            throw new Error(error);
-        }
-    };
+export default class ChannelRepository extends BaseRepository<Channel> implements IRepository<Channel>  {
 
     async findByUserIDAndTitle(id: number, name: string): Promise<Loaded<Channel, never> | null> {
         try {
@@ -65,16 +24,6 @@ export default class ChannelRepository extends EntityRepository<Channel> impleme
     async getAllByUserID(id: number): Promise<Loaded<Channel, never>[]> {
         try {
             const res = await this.find({ user: id }, { orderBy: { date_updated: QueryOrder.DESC } })
-            return res;
-        }
-        catch (error: any) {
-            throw new Error(error);
-        }
-    };
-
-    async getAll(): Promise<Loaded<Channel, never>[]> {
-        try {
-            const res = this.findAll({ orderBy: { id: QueryOrder.ASC } });
             return res;
         }
         catch (error: any) {

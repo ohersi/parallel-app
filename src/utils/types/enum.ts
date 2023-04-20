@@ -9,6 +9,7 @@ export enum TYPES_ENUM {
   // Repositories
   USER_REPOSITORY = 'UserRepository',
   CHANNEL_REPOSITORY = 'ChannelRepository',
+  BLOCK_REPOSITORY = 'BlockRepository',
 
   // Services
   USER_SERVICE = 'UserService',
