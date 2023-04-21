@@ -1,10 +1,12 @@
 // Packages
-import { Entity, EntityRepositoryType, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, EntityRepositoryType, Enum, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
 import ChannelRepository from '../repositories/channel.repository';
 import IChannel from './interfaces/channel.entity.interface';
 import BaseEntity from './base.entity';
 import { User } from './user.entity';
+import { Block } from './block.entity';
+import { Connection } from './connection.entity';
 
 @Entity({ customRepository: () => ChannelRepository, tableName: 'channels' })
 export class Channel implements BaseEntity, IChannel {
@@ -22,6 +24,9 @@ export class Channel implements BaseEntity, IChannel {
 
     @Property()
     description!: string;
+
+    @ManyToMany({ entity: () => Block, pivotEntity: () => Connection })
+    blocks = new Collection<Block>(this)
 
     @Property()
     date_created!: Date;

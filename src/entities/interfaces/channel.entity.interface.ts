@@ -3,6 +3,7 @@ export default interface IChannel {
     user: number;
     title: string;
     description: string;
+    blocks: any;
     date_created: Date;
     date_updated: Date;
 } 

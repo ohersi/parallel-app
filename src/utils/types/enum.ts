@@ -10,6 +10,7 @@ export enum TYPES_ENUM {
   USER_REPOSITORY = 'UserRepository',
   CHANNEL_REPOSITORY = 'ChannelRepository',
   BLOCK_REPOSITORY = 'BlockRepository',
+  CONNECTION_REPOSITORY = 'ConnectionRepository',
 
   // Services
   USER_SERVICE = 'UserService',
@@ -30,4 +31,6 @@ export enum TYPES_ENUM {
   DELETE_CHANNEL_USECASE = 'DeleteChannelUsecase',
   GET_CHANNEL_BY_ID_USECASE = 'GetChannelByIdUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
+   //**----- BLOCK -----**//
+   CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
 }

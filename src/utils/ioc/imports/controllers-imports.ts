@@ -39,3 +39,8 @@ export * from '../../../controllers/channel/getChannelById.controller'
 
 import '../../../controllers/channel/getAllChannelsByUserId.controller'
 export * from '../../../controllers/channel/getAllChannelsByUserId.controller'
+
+
+// BLOCK CONTROLLERS //
+import '../../../controllers/block/createBlock.controller'
+export * from '../../../controllers/block/createBlock.controller'

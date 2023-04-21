@@ -1,10 +1,11 @@
 // Packages
-import { Entity, EntityRepositoryType, Enum, ManyToOne, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, EntityRepositoryType, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
 import IBlock from './interfaces/block.entity.interface';
 import BaseEntity from './base.entity';
 import { User } from './user.entity';
 import BlockRepository from '../repositories/block.repository';
+import { Channel } from './channel.entity';
 
 @Entity({ customRepository: () => BlockRepository, tableName: 'blocks' })
 export class Block implements BaseEntity, IBlock {
@@ -14,8 +15,11 @@ export class Block implements BaseEntity, IBlock {
     @PrimaryKey()
     id!: number;
 
-    @OneToOne(() => User, { mapToPk: true })
+    @ManyToOne(() => User, { mapToPk: true })
     user!: number;
+
+    @ManyToMany({entity: () => Channel, mappedBy: b => b.blocks })
+    channels = new Collection<Channel>(this);
 
     @Property()
     title!: string;
