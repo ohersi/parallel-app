@@ -68,7 +68,7 @@ describe("CreateChannelUsecase", () => {
                     );
                     // Persist and flush to database
                     const createdChannel = await channels.save(newChannel);
-                    // Set mocked result to be newly created user
+                    // Set mocked result to be newly created channel
                     mockedChannelRepo.save.mockResolvedValue(createdChannel);
                 }
                 else {

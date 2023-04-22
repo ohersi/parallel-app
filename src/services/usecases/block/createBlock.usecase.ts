@@ -39,7 +39,7 @@ export default class CreateBlockUsecase {
                 throw new Error(`No channel found matching that id.`);
             }
             if (foundChannel.user !== userID) {
-                throw new Error('User logged in does not match the user of the channel being edited.');
+                throw new Error('User logged in does not match the user of the channel being added to.');
             }
             // Create block entity
             const newBlock = new Block(

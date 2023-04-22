@@ -3,15 +3,20 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 // Imports
 import { User } from "../../entities/user.entity";
 import { Channel } from "../../entities/channel.entity";
+import { Block } from "../../entities/block.entity";
 import UserRepository from "../../repositories/user.repository";
 import ChannelRepository from "../../repositories/channel.repository";
+import BlockRepository from "../../repositories/block.repository";
 import { TYPES_ENUM } from "../../utils/types/enum";
 
 export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) => {
     let users: UserRepository;
     let channels: ChannelRepository;
+    let blocks: BlockRepository;
 
     users = orm.em.getRepository<User>(User);
+    channels = orm.em.getRepository<Channel>(Channel);
+    blocks = orm.em.getRepository<Block>(Block);
 
     for (let i = 1; i <= 3; i++) {
         let user = new User(
@@ -31,8 +36,21 @@ export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) 
             new Date(),
         );
 
+        let block = new Block(
+            1,
+            `block title ${i}`,
+            `block description ${i}`,
+            "source_url",
+            "image_url",
+            new Date(),
+            new Date()
+        )
+
         orm.em.persist(user);
         orm.em.persist(channel);
+        orm.em.persist(block);
+        // Add to collection
+        block.channels.add(channel);
     }
 
     await orm.em.flush();
