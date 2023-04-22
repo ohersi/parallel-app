@@ -10,9 +10,9 @@ import { Connection } from "../../../entities/connection.entity";
 import { TYPES } from "../../../utils/types";
 
 //** USE CASE */
-// GIVEN: channel object has has all fields
-// WHEN: creating a new channel
-// THEN: channel is created
+// GIVEN: block object has has all fields
+// WHEN: creating a new block
+// THEN: block is created
 
 @provide(TYPES.CREATE_BLOCK_USECASE)
 export default class CreateBlockUsecase {

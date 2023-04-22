@@ -33,4 +33,5 @@ export enum TYPES_ENUM {
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
    //**----- BLOCK -----**//
    CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
+   UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
 }

@@ -4,7 +4,6 @@ import { provide } from "inversify-binding-decorators";
 // Imports
 import ChannelRepository from "../../../repositories/channel.repository";
 import ChannelException from "../../../utils/exceptions/channel.exception";
-import { Channel } from "../../../entities/channel.entity";
 import ChannelDTO from "../../../dto/channel.dto";
 import { TYPES } from "../../../utils/types";
 
@@ -32,16 +31,19 @@ export default class UpdateChannelUsecase {
             if (foundChannel.user !== userID) {
                 throw new ChannelException('User logged in does not match the user of the channel being edited.');
             }
-            // Update channel 
-            const updatedChannel = await this.channelRepository.update(foundChannel, channel);
+            // Update time
+            channel.date_updated = new Date();
+
+            const results = await this.channelRepository.update(foundChannel, channel);
+
             // Return dto with updated channel info
             return new ChannelDTO(
-                updatedChannel.user,
-                updatedChannel.title,
-                updatedChannel.description,
-                updatedChannel.date_created,
-                new Date()
-            )
+                undefined,
+                results.title,
+                results.description,
+                results.date_created,
+                results.date_updated
+            );
         }
         catch (err: any) {
             throw new ChannelException(err.message);
