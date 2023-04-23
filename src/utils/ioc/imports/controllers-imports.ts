@@ -47,3 +47,6 @@ export * from '../../../controllers/block/createBlock.controller';
 
 import '../../../controllers/block/updateBlock.controller';
 export * from '../../../controllers/block/updateBlock.controller';
+
+import '../../../controllers/block/deleteBlock.controller';
+export * from '../../../controllers/block/deleteBlock.controller';

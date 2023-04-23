@@ -34,4 +34,5 @@ export enum TYPES_ENUM {
    //**----- BLOCK -----**//
    CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
    UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
+   DELETE_BLOCK_USECASE = 'DeleteBlockUsecase',
 }

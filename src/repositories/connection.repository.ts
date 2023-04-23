@@ -41,6 +41,17 @@ export default class ConnectionRepository extends EntityRepository<Connection> i
         }
     };
 
+    async deleteAll(entities: Connection[]): Promise<any> {
+        try {
+            entities.forEach(async (connection: Connection) => {
+                await this.removeAndFlush(connection);
+            });
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
     async findByID(id: number): Promise<Loaded<Connection, never> | null> {
         try {
             const res = await this.findOne({ id: id } as any);
@@ -53,11 +64,31 @@ export default class ConnectionRepository extends EntityRepository<Connection> i
 
     async getAll(): Promise<Loaded<Connection, never>[]> {
         try {
-            const res = this.findAll({ orderBy: { id: QueryOrder.ASC } as any});
+            const res = this.findAll({ orderBy: { id: QueryOrder.ASC } as any });
             return res;
         }
         catch (error: any) {
             throw new Error(error);
         }
     };
+
+    async findAllByBlockID(id: number): Promise<Loaded<Connection, never>[]> {
+        try {
+            const res = this.find({ block: id });
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async findAllByChannelID(id: number): Promise<Loaded<Connection, never>[]> {
+        try {
+            const res = this.find({ connected_channel: id });
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
 }
