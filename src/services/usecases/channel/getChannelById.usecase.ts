@@ -23,9 +23,9 @@ export default class GetChannelByIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number): Promise<Loaded<Channel, never> | null> => {
+    public execute = async (id: number) => {
         try {
-            const channel = await this.channelRepository.findByID(id);
+            const channel = await this.channelRepository.getChannelAndBlocks(id);
             return channel;
         }
         catch (err: any) {

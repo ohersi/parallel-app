@@ -55,7 +55,7 @@ describe("GetAllChannelsByUserIdUsecase", () => {
 
                 // WHEN
                 //** Instead of mocking results, FAKE the database using in-mem db to actually simulate the prod db call  */
-                const getUserChannels = await orm.em.find(Channel, { user: id });
+                const getUserChannels = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
                 mockedChannelRepo.getAllByUserID.mockResolvedValue(getUserChannels);
 
                 const results = await service.execute(id);
@@ -79,7 +79,7 @@ describe("GetAllChannelsByUserIdUsecase", () => {
                 const id = -99;
 
                 // WHEN
-                const getUserChannels = await orm.em.find(Channel, { user: id });
+                const getUserChannels = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
                 mockedChannelRepo.getAllByUserID.mockResolvedValue(getUserChannels);
 
                 const results = await service.execute(id);

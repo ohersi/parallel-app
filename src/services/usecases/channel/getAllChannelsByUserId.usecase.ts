@@ -23,7 +23,7 @@ export default class GetAllChannelsByUserIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (userID: number): Promise<Loaded<Channel, never>[]> => {
+    public execute = async (userID: number): Promise<Loaded<Channel, "blocks">[]> => {
         try {
             const allUserChannels = await this.channelRepository.getAllByUserID(userID);
             return allUserChannels;

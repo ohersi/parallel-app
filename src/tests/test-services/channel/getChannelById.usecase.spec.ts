@@ -54,8 +54,8 @@ describe("GetChannelByIdUsecase", () => {
                 const id = 1;
 
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, id);
-                mockedChannelRepo.findByID.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
+                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
 
                 const results = await service.execute(id);
 
@@ -71,14 +71,14 @@ describe("GetChannelByIdUsecase", () => {
                 const id = -99;
 
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, id);
-                mockedChannelRepo.findByID.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
+                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
 
                 const results = await service.execute(id);
 
                 // THEN
-                expect(getChannel).toEqual(null);
-                expect(results).toEqual(null);
+                expect(getChannel).toEqual([]);
+                expect(results).toEqual([]);
             })
         })
 
@@ -89,7 +89,7 @@ describe("GetChannelByIdUsecase", () => {
                 const id = -99;
 
                 // WHEN
-                mockedChannelRepo.findByID.mockRejectedValue(Error);
+                mockedChannelRepo.getChannelAndBlocks.mockRejectedValue(Error);
 
                 // THEN
                 expect(async () => { await service.execute(id) }).rejects.toThrow(ChannelExeption);

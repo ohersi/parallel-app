@@ -26,15 +26,15 @@ export default class GetChannelByIdController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const id  = parseInt(req.params.id)
-            const results = await this.usecase.execute(id);
-            if (!results) {
+            const channelID = parseInt(req.params.id);
+            const results = await this.usecase.execute(channelID);
+            if (Array.isArray(results) && !results.length) {
                 res.status(500);
                 res.send({ error: { status: 500 }, message: 'No channels found with that id' });
             }
             else {
                 res.status(200);
-                res.send(results)
+                res.send(results);
             }
         }
         catch (err: any) {

@@ -55,7 +55,6 @@ describe("GetChannelByIdController", () => {
 
                 // THEN
                 expect(results.status).toEqual(200);
-                expect(results.body).toHaveProperty('id');
             })
         })
 
