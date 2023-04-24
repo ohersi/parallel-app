@@ -1,11 +1,11 @@
 // Packages
 import { inject } from "inversify";
+import { Loaded } from "@mikro-orm/core";
 import { provide } from "inversify-binding-decorators";
 // Imports
+import { Channel } from "../../../entities/channel.entity";
 import ChannelRepository from "../../../repositories/channel.repository";
 import { TYPES } from "../../../utils/types";
-import { Channel } from "../../../entities/channel.entity";
-import { Loaded } from "@mikro-orm/core";
 import ChannelException from "../../../utils/exceptions/channel.exception";
 
 

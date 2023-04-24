@@ -50,3 +50,6 @@ export * from '../../../controllers/block/updateBlock.controller';
 
 import '../../../controllers/block/deleteBlock.controller';
 export * from '../../../controllers/block/deleteBlock.controller';
+
+import '../../../controllers/block/getBlockById.controller';
+export * from '../../../controllers/block/getBlockById.controller';
