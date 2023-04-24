@@ -36,4 +36,5 @@ export enum TYPES_ENUM {
    UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
    DELETE_BLOCK_USECASE = 'DeleteBlockUsecase',
    GET_BLOCK_BY_ID_USECASE = 'GetBlockByIdUsecase',
+   GET_ALL_BLOCKS_USECASE = 'GetAllBlocksUsecase',
 }

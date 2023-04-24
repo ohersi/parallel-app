@@ -53,3 +53,6 @@ export * from '../../../controllers/block/deleteBlock.controller';
 
 import '../../../controllers/block/getBlockById.controller';
 export * from '../../../controllers/block/getBlockById.controller';
+
+import '../../../controllers/block/getAllBlocks.controller';
+export * from '../../../controllers/block/getAllBlocks.controller';
