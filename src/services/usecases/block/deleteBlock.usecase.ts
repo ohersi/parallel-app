@@ -26,7 +26,7 @@ export default class DeleteBlockUsecase {
         this.connectionRepository = connectionRepository;
     }
 
-    public execute = async (blockID: number, userID: number) => {
+    public execute = async (blockID: number, userID: number): Promise<void> => {
         try {
             // Find block
             const foundBlock = await this.blockRepository.findByID(blockID);
@@ -42,10 +42,10 @@ export default class DeleteBlockUsecase {
 
             // Find and delete all connections
             const foundConnections = await this.connectionRepository.findAllByBlockID(blockID);
-            const deleteConnections = await this.connectionRepository.deleteAll(foundConnections);
+            await this.connectionRepository.deleteAll(foundConnections);
 
             // Delete block
-            const results = await this.blockRepository.delete(foundBlock);
+            await this.blockRepository.delete(foundBlock);
         }
         catch (err: any) {
             throw new BlockException(err.message);

@@ -22,7 +22,7 @@ export default class DeleteChannelUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number, userID: number): Promise<any> => {
+    public execute = async (id: number, userID: number): Promise<void> => {
         try {
             // Find channel
             const foundChannel = await this.channelRepository.findByID(id);
@@ -33,8 +33,7 @@ export default class DeleteChannelUsecase {
                 throw new ChannelException('User logged in does not match the user of the channel being deleted.');
             }
             // Delete channel
-            const res = await this.channelRepository.delete(foundChannel);
-            return res;
+            await this.channelRepository.delete(foundChannel);
         }
         catch (err: any) {
             throw new ChannelException(err.message);

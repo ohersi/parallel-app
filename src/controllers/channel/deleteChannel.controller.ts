@@ -27,10 +27,10 @@ export default class DeleteChannelController {
             const id = parseInt(req.params.id);
             const userID = req.session.user?.id!;
 
-           const results = await this.usecase.execute(id, userID);
+            await this.usecase.execute(id, userID);
 
             res.status(200);
-            res.send({ message: "Channel has been deleted.", results: results });
+            res.send({ message: "Channel has been deleted." });
         }
         catch (err: any) {
             res.status(500);

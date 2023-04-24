@@ -26,11 +26,11 @@ export default class DeleteBlockController {
         try {
             const blockID = parseInt(req.params.id);
             const userID = req.session.user?.id!;
-            
-            const results = await this.usecase.execute(blockID, userID);
+
+            await this.usecase.execute(blockID, userID);
 
             res.status(200);
-            res.send({ message: "Block has been deleted.", results: results });
+            res.send({ message: "Block has been deleted." });
         }
         catch (err: any) {
             res.status(500);

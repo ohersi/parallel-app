@@ -5,18 +5,19 @@ import { Application, NextFunction, Request, Response } from 'express';
 import { cleanUpMetadata } from "inversify-express-utils";
 import request from "supertest";
 // Imports
-import DeleteChannelController from "../../../controllers/channel/deleteChannel.controller";
-import DeleteChannelUsecase from "../../../services/usecases/channel/deleteChannel.usecase";
+import DeleteBlockController from "../../../controllers/block/deleteBlock.controller";
+import DeleteBlockUsecase from "../../../services/usecases/block/deleteBlock.usecase";
 import { start } from '../../../app';
 
-describe("DeleteChannelController", () => {
+
+describe("DeleteBlockController", () => {
     // Mocks
-    const mockedUsecase = mockDeep<DeleteChannelUsecase>();
+    const mockedUsecase = mockDeep<DeleteBlockUsecase>();
     const requestMock = mockDeep<Request>();
     const responseMock = mockDeep<Response>();
     const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
-    let controller: DeleteChannelController;
+    let controller: DeleteBlockController;
 
     // Supertest setup
     let app: Application;
@@ -28,7 +29,7 @@ describe("DeleteChannelController", () => {
     })
 
     beforeEach(() => {
-        controller = new DeleteChannelController(mockedUsecase);
+        controller = new DeleteBlockController(mockedUsecase);
         mockReset(mockedUsecase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
@@ -46,35 +47,33 @@ describe("DeleteChannelController", () => {
         expect(controller).toBeDefined();
     })
 
-    describe("When deleting a channel,", () => {
+    describe("When deleting a block,", () => {
 
         describe("and there is a user logged in,", () => {
 
-            describe("and the channel has been successfully been deleted,", () => {
+            describe("and the block has been successfully been deleted,", () => {
 
                 it("return status of 200.", async () => {
                     // GIVEN
-                    const id = 1;
-                    const userID = 1;
+                    const blockID = 1;
 
                     // WHEN
-                    await controller.deleteChannel(requestMock, responseMock, nextMock);
+                    await controller.deleteBlock(requestMock, responseMock, nextMock);
 
                     // THEN
                     expect(responseMock.status).toBeCalledWith(200);
                 })
             })
 
-            describe("and the channel cannot be deleted,", () => {
+            describe("and the block cannot be deleted,", () => {
 
                 it("return a status of 500.", async () => {
                     // GIVEN
-                    const id = 1;
-                    const userID = 1;
+                    const blockID = 1;
 
                     // WHEN
                     mockedUsecase.execute.mockRejectedValue(Error);
-                    await controller.deleteChannel(requestMock, responseMock, nextMock);
+                    await controller.deleteBlock(requestMock, responseMock, nextMock);
 
                     // THEN
                     expect(responseMock.status).toBeCalledWith(500);
@@ -88,16 +87,15 @@ describe("DeleteChannelController", () => {
 
             it("return a status of 400.", async () => {
                 // GIVEN
-                const id = 1;
+                const blockID = 1;
 
                 // WHEN
-                const results = await request(app).delete(`/api/v1/channels/${id}`);
+                const results = await request(app).delete(`/api/v1/blocks/${blockID}`);
 
                 // THEN
                 expect(results.status).toEqual(401);
             })
         })
-
 
     });
 });
