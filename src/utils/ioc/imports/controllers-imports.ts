@@ -56,3 +56,8 @@ export * from '../../../controllers/block/getBlockById.controller';
 
 import '../../../controllers/block/getAllBlocks.controller';
 export * from '../../../controllers/block/getAllBlocks.controller';
+
+
+// CONNECTION CONTROLLERS //
+import '../../../controllers/connection/addConnection.controller';
+export * from '../../../controllers/connection/addConnection.controller';

@@ -31,10 +31,13 @@ export enum TYPES_ENUM {
   DELETE_CHANNEL_USECASE = 'DeleteChannelUsecase',
   GET_CHANNEL_BY_ID_USECASE = 'GetChannelByIdUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
-   //**----- BLOCK -----**//
-   CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
-   UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
-   DELETE_BLOCK_USECASE = 'DeleteBlockUsecase',
-   GET_BLOCK_BY_ID_USECASE = 'GetBlockByIdUsecase',
-   GET_ALL_BLOCKS_USECASE = 'GetAllBlocksUsecase',
+  //**----- BLOCK -----**//
+  CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
+  UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
+  DELETE_BLOCK_USECASE = 'DeleteBlockUsecase',
+  GET_BLOCK_BY_ID_USECASE = 'GetBlockByIdUsecase',
+  GET_ALL_BLOCKS_USECASE = 'GetAllBlocksUsecase',
+  //**----- CONNECTION -----**//
+  ADD_CONNECTION_USECASE = 'AddConnectionUsecase',
+  
 }
