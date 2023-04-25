@@ -8,7 +8,6 @@ import { User } from "src/entities/user.entity";
 import { Loaded } from "@mikro-orm/core";
 import UserException from "../../../utils/exceptions/user.expection";
 
-
 //** USE CASE */
 // GIVEN: a user id
 // WHEN: find a user matching the id
@@ -29,6 +28,8 @@ export default class GetUserByIdUseCase {
             if (!user) {
                 return null;
             };
+            // Initialize friends collection
+            await user.friends.init();
             return user;
         }
         catch (err: any) {

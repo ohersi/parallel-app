@@ -64,3 +64,8 @@ export * from '../../../controllers/connection/addConnection.controller';
 
 import '../../../controllers/connection/removeConnection.controller';
 export * from '../../../controllers/connection/removeConnection.controller';
+
+
+// FRIEND CONTROLLERS //
+import '../../../controllers/friend/addFriend.controller';
+export * from '../../../controllers/friend/addFriend.controller';

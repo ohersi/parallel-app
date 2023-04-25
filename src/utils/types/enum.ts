@@ -11,6 +11,7 @@ export enum TYPES_ENUM {
   CHANNEL_REPOSITORY = 'ChannelRepository',
   BLOCK_REPOSITORY = 'BlockRepository',
   CONNECTION_REPOSITORY = 'ConnectionRepository',
+  FRIEND_REPOSITORY = 'FriendRepository',
 
   // Services
   USER_SERVICE = 'UserService',
@@ -40,5 +41,6 @@ export enum TYPES_ENUM {
   //**----- CONNECTION -----**//
   ADD_CONNECTION_USECASE = 'AddConnectionUsecase',
   REMOVE_CONNECTION_USECASE = 'RemoveConnectionUsecase',
-  
+  //**----- FRIEND -----**//
+  ADD_FRIEND_USECASE = 'AddFriendUsecase',
 }

@@ -1,10 +1,11 @@
 // Packages
-import { Entity, EntityRepositoryType, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, EntityRepositoryType, Enum, ManyToMany, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
 import UserRepository from '../repositories/user.repository';
 import BaseEntity from './base.entity';
 import IUser from './interfaces/user.entity.interface';
 import { TYPES_ENUM } from '../utils/types/enum';
+import { Friend } from './friend.entity';
 
 @Entity({ customRepository: () => UserRepository, tableName: 'users' })
 export class User implements BaseEntity, IUser {
@@ -25,6 +26,9 @@ export class User implements BaseEntity, IUser {
 
     @Property()
     password!: string;
+
+    @ManyToMany({ entity: () => User, pivotEntity: () => Friend })
+    friends = new Collection<User>(this);
 
     @Property()
     avatar_url!: string;
