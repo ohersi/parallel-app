@@ -58,7 +58,7 @@ export default class AddFriendUsecase {
             loggedInUser.friends.add(followUser);
         }
         catch (err: any) {
-            throw new Error(err.message);
+            throw new FriendException(err.message);
         }
     }
 }

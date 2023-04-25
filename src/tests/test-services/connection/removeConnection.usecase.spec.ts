@@ -133,8 +133,24 @@ describe("RemoveConnectionUsecase", () => {
 
                     describe("and a connection CANNOT be found between block and channel,", () => {
 
-                        it("throw an Error stating no connection found.", () => {
+                        it("throw an Error stating no connection found.", async () => {
+                            // GIVEN
+                            const blockID = 1;
+                            const channelID = 1;
+                            const userID = 1;
 
+                            // WHEN
+                            const foundChannel = await orm.em.findOne(Channel, channelID);
+                            const foundBlock = await orm.em.findOne(Block, blockID);
+                            mockedChannelRepo.findByID.mockResolvedValue(foundChannel);
+                            mockedBlockRepo.findByID.mockResolvedValue(foundBlock);
+
+                            if (foundChannel && foundBlock) {
+                                mockedConnectionRepo.findByBlockAndChannelID.mockRejectedValue(Error);
+                            }
+
+                            // THEN
+                            expect(async () => await service.execute(blockID, userID, channelID)).rejects.toThrow(Error);
                         })
                     })
                 })
