@@ -4,19 +4,23 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { User } from "../../entities/user.entity";
 import { Channel } from "../../entities/channel.entity";
 import { Block } from "../../entities/block.entity";
+import { Friend } from "../../entities/friend.entity";
 import UserRepository from "../../repositories/user.repository";
 import ChannelRepository from "../../repositories/channel.repository";
 import BlockRepository from "../../repositories/block.repository";
+import FriendRepository from "../../repositories/friend.repository";
 import { TYPES_ENUM } from "../../utils/types/enum";
 
 export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) => {
     let users: UserRepository;
     let channels: ChannelRepository;
     let blocks: BlockRepository;
+    let friends: FriendRepository;
 
     users = orm.em.getRepository<User>(User);
     channels = orm.em.getRepository<Channel>(Channel);
     blocks = orm.em.getRepository<Block>(Block);
+    friends = orm.em.getRepository<Friend>(Friend);
 
     for (let i = 1; i <= 3; i++) {
         let user = new User(

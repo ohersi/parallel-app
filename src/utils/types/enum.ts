@@ -43,4 +43,5 @@ export enum TYPES_ENUM {
   REMOVE_CONNECTION_USECASE = 'RemoveConnectionUsecase',
   //**----- FRIEND -----**//
   ADD_FRIEND_USECASE = 'AddFriendUsecase',
+  REMOVE_FRIEND_USECASE = 'RemoveFriendUsecase',
 }
