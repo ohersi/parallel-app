@@ -4,6 +4,6 @@ import IBaseEntity from './interfaces/base.interface';
 @Entity({ abstract: true })
 export default abstract class BaseEntity implements IBaseEntity {
     
-    @PrimaryKey()
-    id!: number;
+    // @PrimaryKey()
+    // id!: number;
 };
