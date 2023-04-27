@@ -6,6 +6,7 @@ import ChannelRepository from "../../../repositories/channel.repository";
 import ChannelException from "../../../utils/exceptions/channel.exception";
 import ChannelDTO from "../../../dto/channel.dto";
 import { TYPES } from "../../../utils/types";
+import { convertToSlug, checkSlug } from "../../../resources/helper/text-manipulation";
 
 //** USE CASE */
 // GIVEN: channel object has has all fields
@@ -34,6 +35,11 @@ export default class UpdateChannelUsecase {
             // Update time
             channel.date_updated = new Date();
 
+            // Update slug
+            const slugifyTitle = convertToSlug(channel.title);
+            const slug = await checkSlug(slugifyTitle, foundChannel.slug, this.channelRepository);
+            channel.slug = slug;
+
             const results = await this.channelRepository.update(foundChannel, channel);
 
             // Return dto with updated channel info
@@ -41,6 +47,7 @@ export default class UpdateChannelUsecase {
                 undefined,
                 results.title,
                 results.description,
+                results.slug,
                 results.date_created,
                 results.date_updated
             );

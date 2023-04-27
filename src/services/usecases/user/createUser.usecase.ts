@@ -3,10 +3,10 @@
 //** WHEN I exercise the behavior under test aka Excerise/Act */
 //** THEN we expect the following changes aka Verify/Assert */
 
-
 // Packages
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
+import { nanoid } from 'nanoid';
 // Imports
 import UserRepository from "../../../repositories/user.repository";
 import UserException from "../../../utils/exceptions/user.expection";
@@ -15,6 +15,7 @@ import { TYPES_ENUM } from "../../../utils/types/enum";
 import { hash } from "../../../resources/security/encryption";
 import { User } from "../../../entities/user.entity";
 import { createToken } from "../../../resources/security/token";
+import { convertToSlug } from "../../../resources/helper/text-manipulation";
 
 //** USE CASE */
 // GIVEN: user object has has all fields
@@ -38,19 +39,28 @@ export default class CreateUserUseCase {
             }
             // Hash password
             body.password = await hash(body.password);
+            // Create slug and fullname
+            const fullname = body.first_name.concat(' ', body.last_name);
+            let slug = convertToSlug(fullname);
+            // Check if slug already exists, if so add unique identifier at the end
+            const slugExists = await this.userRepository.findOne({ slug: slug });
+            if (slugExists) {
+                slug = slug.concat("-", nanoid(12)); 
+            }
             // Create user entity
             const newUser = new User(
+                slug,
                 body.first_name,
                 body.last_name,
+                fullname,
                 body.email,
                 body.password,
-                body.avatar_url,
+                body.avatar,
                 TYPES_ENUM.USER
             );
             // Add to db, persists and flush
             const createdUser = await this.userRepository.save(newUser);
             // Create jwt token
-            //TODO: Send user token to email server
             const token = createToken(createdUser.email);
             return token;
         }

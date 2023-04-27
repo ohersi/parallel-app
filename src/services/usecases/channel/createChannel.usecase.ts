@@ -6,6 +6,8 @@ import ChannelRepository from "../../../repositories/channel.repository";
 import ChannelException from "../../../utils/exceptions/channel.exception";
 import { Channel } from "../../../entities/channel.entity";
 import { TYPES } from "../../../utils/types";
+import { convertToSlug } from "../../../resources/helper/text-manipulation";
+import { nanoid } from "nanoid";
 
 //** USE CASE */
 // GIVEN: channel object has has all fields
@@ -31,11 +33,18 @@ export default class CreateChannelUsecase {
             if (foundChannel) {
                 throw new ChannelException(`Channel with title: ${foundChannel.title} already exists for this user.`)
             }
+            // Check if slug exists / Create slug
+            let slug = convertToSlug(body.title);
+            const slugExists = await this.channelRepository.findOne({ slug: slug });
+            if (slugExists) {
+                slug = slug.concat("-", nanoid(12));
+            }
             // Create channel entity
             const newChannel = new Channel(
                 userID,
                 body.title,
                 body.description,
+                slug,
                 new Date(),
                 new Date()
             );

@@ -12,6 +12,7 @@ import ChannelRepository from '../../../repositories/channel.repository';
 import UpdateChannelUsecase from '../../../services/usecases/channel/updateChannel.usecase'
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
 import ChannelDTO from "../../../dto/channel.dto";
+import { checkSlug, convertToSlug } from "../../../resources/helper/text-manipulation";
 
 describe("UpdateChannelUsecase", () => {
 
@@ -72,6 +73,10 @@ describe("UpdateChannelUsecase", () => {
                         mockedChannelRepo.findByID.mockResolvedValue(foundChannel);
 
                         if (foundChannel) {
+                            // Update slug
+                            const slugifyTitle = convertToSlug(testChannel.title);
+                            const slug = await checkSlug(slugifyTitle, foundChannel.slug, channels);
+                            channel.slug = slug;
                             // Persist and flush to database
                             const updatedChannel = await channels.update(foundChannel, channel);
                             // Set mocked result to be updated channel

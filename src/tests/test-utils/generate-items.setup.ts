@@ -24,8 +24,10 @@ export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) 
 
     for (let i = 1; i <= 3; i++) {
         let user = new User(
+            `first-name-${i}`,
             `FirstName${i}`,
             `LastName${i}`,
+            `FirstName${i} LastName${i}`,
             `${i}email@email.com`,
             "password",
             "avatar",
@@ -36,6 +38,7 @@ export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) 
             1,
             `channel title ${i}`,
             `channel description ${i}`,
+            `channel-title-${i}`,
             new Date(),
             new Date(),
         );

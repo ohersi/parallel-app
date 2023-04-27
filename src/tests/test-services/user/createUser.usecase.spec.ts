@@ -3,12 +3,14 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { nanoid } from "nanoid";
 // Imports
 import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
 import UserRepository from "../../../repositories/user.repository";
 import CreateUserUseCase from "../../../services/usecases/user/createUser.usecase";
 import { generateItems } from "../../test-utils/generate-items.setup";
+import { convertToSlug } from "../../../resources/helper/text-manipulation";
 import { TYPES_ENUM } from "../../../utils/types/enum";
 
 describe("CreateUserUseCase", () => {
@@ -63,9 +65,19 @@ describe("CreateUserUseCase", () => {
                 const checkIfEmailExists = await orm.em.findOne(User, { email: testUser.email });
                 // If email doesnt exist create user
                 if (!checkIfEmailExists) {
+                    // Create slug and fullname
+                    const fullname = testUser.first_name.concat(' ', testUser.last_name);
+                    let slug = convertToSlug(fullname);
+                    // Check if slug already exists, if so add unique identifier at the end
+                    const slugExists = await orm.em.findOne(User, { slug: slug });
+                    if (slugExists) {
+                        slug = slug.concat("-", nanoid(12));
+                    }
                     const newUser = new User(
+                        slug,
                         testUser.first_name,
                         testUser.last_name,
+                        fullname,
                         testUser.email,
                         testUser.password,
                         testUser.avatar_url,

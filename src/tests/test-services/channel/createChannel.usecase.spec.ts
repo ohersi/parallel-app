@@ -3,6 +3,7 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
+import { nanoid } from "nanoid";
 // Imports
 import { memOrm } from "../../test-utils/init-db.setup";
 import { Channel } from "../../../entities/channel.entity";
@@ -10,6 +11,7 @@ import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
 import CreateChannelUsecase from '../../../services/usecases/channel/createChannel.usecase';
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
+import { convertToSlug } from "../../../resources/helper/text-manipulation";
 
 describe("CreateChannelUsecase", () => {
 
@@ -59,10 +61,17 @@ describe("CreateChannelUsecase", () => {
                 const foundChannel = await orm.em.findOne(Channel, { user: userID, title: testChannel.title });
 
                 if (!foundChannel) {
+                    // Check if slug exists / Create slug
+                    let slug = convertToSlug(testChannel.title);
+                    const slugExists = await orm.em.findOne(Channel, { slug: slug });
+                    if (slugExists) {
+                        slug = slug.concat("-", nanoid(12));
+                    }
                     const newChannel = new Channel(
                         userID,
                         testChannel.title,
                         testChannel.description,
+                        slug,
                         new Date(),
                         new Date()
                     );

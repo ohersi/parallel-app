@@ -1,6 +1,8 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: "node",
+  coverageProvider: 'v8',
+  maxWorkers: 2,
   testPathIgnorePatterns: ['/node_modules/'],
   transform: {},
   setupFilesAfterEnv: ["./src/tests/test-utils/jest.setup.ts"],

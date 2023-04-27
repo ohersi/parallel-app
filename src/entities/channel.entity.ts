@@ -25,6 +25,9 @@ export class Channel implements BaseEntity, IChannel {
     @Property()
     description!: string;
 
+    @Property()
+    slug!: string;
+
     @ManyToMany({ entity: () => Block, pivotEntity: () => Connection })
     blocks = new Collection<Block>(this)
 
@@ -38,12 +41,14 @@ export class Channel implements BaseEntity, IChannel {
         user: number,
         title: string,
         description: string,
+        slug: string,
         date_created: Date,
         date_updated: Date,
     ) {
         this.user = user;
         this.title = title;
         this.description = description;
+        this.slug = slug;
         this.date_created = date_created;
         this.date_updated = date_updated;
     }

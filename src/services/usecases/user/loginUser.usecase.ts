@@ -36,11 +36,13 @@ export default class LoginUserUseCase {
                     const refreshJWT = createToken(foundUser.email);     
                     return new UserDTO(
                         foundUser.id,
+                        foundUser.slug,
                         foundUser.first_name,
                         foundUser.last_name,
+                        foundUser.full_name,
                         foundUser.email,
                         undefined,
-                        foundUser.avatar_url,
+                        foundUser.avatar,
                         foundUser.role,
                         refreshJWT
                     );

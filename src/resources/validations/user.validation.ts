@@ -17,7 +17,7 @@ const create = Joi.object({
     last_name: Joi.string().required().max(30),
     email: Joi.string().email().lowercase().required(),
     password: passwordComplexity(complexityOptions).required(),
-    avatar_url: Joi.string().required(),
+    avatar: Joi.string().required(),
 });
 
 // Update user
@@ -26,7 +26,7 @@ const update = Joi.object({
     last_name: Joi.string().optional(),
     email: Joi.string().email().optional(),
     password: Joi.string().optional(),
-    avatar_url: Joi.string().optional(),
+    avatar: Joi.string().optional(),
 });
 
 // Login user

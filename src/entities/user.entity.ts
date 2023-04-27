@@ -16,10 +16,16 @@ export class User implements BaseEntity, IUser {
     id!: number;
 
     @Property()
+    slug!: string;
+
+    @Property()
     first_name!: string;
 
     @Property()
     last_name!: string;
+
+    @Property()
+    full_name!: string;
 
     @Property()
     email!: string;
@@ -31,7 +37,7 @@ export class User implements BaseEntity, IUser {
     friends = new Collection<User>(this);
 
     @Property()
-    avatar_url!: string;
+    avatar!: string;
 
     @Property()
     enabled: boolean = false;
@@ -43,18 +49,22 @@ export class User implements BaseEntity, IUser {
     role!: TYPES_ENUM;
 
     constructor(
+        slug: string,
         first_name: string,
         last_name: string,
+        full_name: string,
         email: string,
         password: string,
-        avatar_url: string,
+        avatar: string,
         role: TYPES_ENUM,
     ) {
+        this.slug = slug;
         this.first_name = first_name;
         this.last_name = last_name;
+        this.full_name = full_name;
         this.email = email;
         this.password = password;
-        this.avatar_url = avatar_url;
+        this.avatar = avatar;
         this.role = role;
     }
 };

@@ -13,6 +13,7 @@ import UserException from "../../../utils/exceptions/user.expection";
 import UserDTO from "../../../dto/user.dto";
 import { hash } from "../../../resources/security/encryption";
 import { TYPES } from "../../../utils/types";
+import { convertToSlug, concatNames } from "../../../resources/helper/text-manipulation";
 
 //** USE CASE */
 // GIVEN: user object has has all fields
@@ -38,16 +39,25 @@ export default class UpdateUserUsecase {
             if (user.password) {
                 user.password = await hash(user.password);
             }
+
+            // Update slug and full name
+            const fullname = concatNames(user.first_name, user.last_name, foundUser.first_name, foundUser.last_name);
+            const slug = convertToSlug(fullname);
+            user.full_name = fullname;
+            user.slug = slug;
+
             // Update user
             const updatedUser = await this.userRepository.update(foundUser, user);
             // Return dto with updated user info
             return new UserDTO(
                 updatedUser.id,
+                updatedUser.slug,
                 updatedUser.first_name,
                 updatedUser.last_name,
+                updatedUser.full_name,
                 updatedUser.email,
-                updatedUser.password,
-                updatedUser.avatar_url,
+                undefined,
+                updatedUser.avatar,
                 updatedUser.role,
             )
         }
