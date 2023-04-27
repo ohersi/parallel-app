@@ -10,7 +10,7 @@ import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
 import { cache } from '../../resources/caching/cache';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/api/v1/users`)
 export default class GetAllChannelsByUserIdController {
 
     private readonly usecase: GetAllChannelsByUserIdUsecase;
@@ -19,7 +19,7 @@ export default class GetAllChannelsByUserIdController {
         this.usecase = getAllChannelsByUserID;
     }
 
-    @httpGet('/user/:id')
+    @httpGet('/:id/channels')
     public async getAllChannelsByUserID(
         @request() req: Request,
         @response() res: Response,

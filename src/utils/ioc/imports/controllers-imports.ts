@@ -40,6 +40,9 @@ export * from '../../../controllers/channel/updateChannel.controller';
 import '../../../controllers/channel/deleteChannel.controller';
 export * from '../../../controllers/channel/deleteChannel.controller';
 
+import '../../../controllers/channel/getAllChannels.controller';
+export * from '../../../controllers/channel/getAllChannels.controller';
+
 import '../../../controllers/channel/getChannelById.controller';
 export * from '../../../controllers/channel/getChannelById.controller';
 
