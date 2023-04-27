@@ -26,8 +26,18 @@ export default class UserRepository extends BaseRepository<User> implements IRep
             const res = await this.findOne({ email } as any);
             return res;
         }
-        catch (error) {
-            throw new Error("ID Not found");
+        catch (error: any) {
+            throw new Error(error.message);
         }
     };
+
+    async findAllFriends(id: number) {
+        try {
+            const res = await this.find({ id: id }, { populate: ['friends'] });
+            return res;
+        } 
+        catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
 }

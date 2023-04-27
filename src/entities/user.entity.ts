@@ -30,7 +30,7 @@ export class User implements BaseEntity, IUser {
     @Property()
     email!: string;
 
-    @Property()
+    @Property({ hidden: true })
     password!: string;
 
     @ManyToMany({ entity: () => User, pivotEntity: () => Friend })

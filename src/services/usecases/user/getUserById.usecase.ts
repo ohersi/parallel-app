@@ -28,8 +28,6 @@ export default class GetUserByIdUseCase {
             if (!user) {
                 return null;
             };
-            // Initialize friends collection
-            await user.friends.init();
             return user;
         }
         catch (err: any) {

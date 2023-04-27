@@ -31,9 +31,9 @@ export default class FriendRepository extends BaseRepository<Friend> implements 
         }
     }
 
-    async findAllFollowing(following_id: number): Promise<Loaded<Friend, never>[]> {
+    async findAllFollowing(following_id: number): Promise<Loaded<Friend, "followed_user">[]> {
         try {
-            const res = this.find({ following_user: following_id });
+            const res = this.find({ following_user: following_id }, { populate: ['followed_user']});
             return res;
         }
         catch (error: any) {

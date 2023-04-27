@@ -24,6 +24,7 @@ export enum TYPES_ENUM {
   DELETE_USER_USECASE = 'DeleteUserUsecase',
   GET_USER_BY_ID_USECASE = 'GetUserByIdUsecase',
   GET_ALL_USERS_USECASE = 'GetAllUsersUsecase',
+  GET_USER_FRIENDS_USECASE = 'GetUserFriendsUsecase',
   LOGIN_USER_USECASE = 'LoginUser',
   CONFIRM_USER_TOKEN_USECASE = 'ConfirmUserTokenUseCase',
   //**----- CHANNEL -----**//
