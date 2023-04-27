@@ -17,6 +17,9 @@ export * from '../../../controllers/user/getAllUsers.controller';
 import '../../../controllers/user/getUserFriends.controller';
 export * from '../../../controllers/user/getUserFriends.controller';
 
+import '../../../controllers/user/getUserFollowers.controller';
+export * from '../../../controllers/user/getUserFollowers.controller';
+
 import '../../../controllers/user/loginUser.controller';
 export * from '../../../controllers/user/loginUser.controller';
 

@@ -3,20 +3,20 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import GetUserFriendsUsecase from '../../services/usecases/user/getUserFriends.usecase';
+import GetUserFollowersUsecase from '../../services/usecases/user/getUserFollowers.usecase';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
-export default class GetUserFriendsController {
+export default class GetUserFollowersController {
 
-    private readonly usecase: GetUserFriendsUsecase;
+    private readonly usecase: GetUserFollowersUsecase;
 
-    constructor(@inject(TYPES.GET_USER_FRIENDS_USECASE) getUserFriendUsecase: GetUserFriendsUsecase) {
-        this.usecase = getUserFriendUsecase;
+    constructor(@inject(TYPES.GET_USER_FOLLOWERS_USECASE) getUserFollowersUsecase: GetUserFollowersUsecase) {
+        this.usecase = getUserFollowersUsecase;
     }
 
-    @httpGet('/:id/following')
-    public async getUserFriends(
+    @httpGet('/:id/followers')
+    public async getUserFollowers(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -24,10 +24,10 @@ export default class GetUserFriendsController {
         try {
             const id = parseInt(req.params.id);
             const results = await this.usecase.execute(id);
-
+            
             if (Array.isArray(results) && !results.length) {
                 res.status(500);
-                return res.send({ error: { status: 500 }, message: `user with id [${id}] following 0 others.`});
+                return res.send({ error: { status: 500 }, message: `user with id [${id}] has no followers.` });
             }
             res.status(200);
             res.send(results);
