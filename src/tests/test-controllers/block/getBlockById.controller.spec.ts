@@ -62,25 +62,9 @@ describe("GetChannelByIdController", () => {
                     expect(results.status).toEqual(200);
                 })
             })
-
-            describe("and block object is empty,", () => {
-
-                it("return a status of 500.", async () => {
-                    // GIVEN
-                    const id = 1;
-
-                    // WHEN
-                    mockedUsecase.execute.mockResolvedValue([]);
-                    await controller.getBlockByID(requestMock, responseMock, nextMock);
-
-                    // THEN
-                    expect(responseMock.status).toBeCalledWith(500);
-                    expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
-                })
-            })
         })
 
-        describe("and the block corresponding to the id is not found,", () => {
+        describe("and the block corresponding to the id is NOT found,", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
@@ -89,9 +73,24 @@ describe("GetChannelByIdController", () => {
                 const results = await request(app).get(`/api/v1/blocks/${id}`);
 
                 // THEN
-                expect(results.status).toEqual(500);
+                expect(results.status).toEqual(404);
+            })
+        })
+
+        describe("and the database throws an error,", () => {
+
+            it("return a status of 500.", async () => {
+                // GIVEN
+                const id = 1;
+
+                // WHEN
+                mockedUsecase.execute.mockRejectedValue(Error);
+                await controller.getBlockByID(requestMock, responseMock, nextMock);
+
+                // THEN
+                expect(responseMock.status).toBeCalledWith(500);
+                expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
             })
         });
-
     });
 });

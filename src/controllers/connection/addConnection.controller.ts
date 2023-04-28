@@ -26,8 +26,8 @@ export default class AddConnectionController {
         try {
             const { channel } = req.query;
             if (!channel) {
-                res.status(500);
-                return res.send({ error: { status: 500 }, message: "Missing channel." });
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: "Missing channel." });
             }
             const blockID = parseInt(req.params.id);
             const channelID = parseInt(channel.toString());

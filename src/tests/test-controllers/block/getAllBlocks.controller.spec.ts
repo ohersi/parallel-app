@@ -1,5 +1,5 @@
 //Packages
-import { mockDeep } from "jest-mock-extended";
+import { mockDeep, objectContainsKey } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
@@ -77,12 +77,29 @@ describe("GetAllBlocksController", () => {
                 // THEN
                 expect(results.status).toEqual(200);
             })
+
+
         })
 
-        describe("and not blocks are found,", () => {
+        describe("and no blocks are found,", () => {
+
+            it("return a status of 404.", async () => {
+                // GIVEN
+
+                // WHEN
+                mockCache.mockResolvedValue([]);
+                const results = await request(app).get("/api/v1/blocks/");
+
+                // // THEN
+                expect(results.status).toEqual(404);
+            })
+        });
+
+        describe("and the database throws an error,", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
+                const id = 1;
 
                 // WHEN
                 mockCache.mockRejectedValue(Error);

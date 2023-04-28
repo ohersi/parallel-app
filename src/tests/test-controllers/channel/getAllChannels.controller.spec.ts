@@ -69,6 +69,20 @@ describe("GetAllChannelsController", () => {
             })
         })
 
+         describe("and the channels are not found,", () => {
+
+            it("return status code of 404.", async () => {
+                // GIVEN
+
+                // WHEN
+                mockCache.mockResolvedValue([]);
+                const results = await request(app).get(`/api/v1/channels/`);
+
+                // THEN
+                expect(results.status).toEqual(404);
+            })
+        })
+
         describe("and the database throws an error,", () => {
 
             it("return a status of 500.", async () => {

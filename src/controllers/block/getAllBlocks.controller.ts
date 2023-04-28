@@ -26,6 +26,10 @@ export default class GetAllBlocksController {
         : Promise<Response | void> {
         try {
             const results = await cache('blocks', this.usecase.execute);
+            if (Array.isArray(results) && !results.length) {
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: 'No blocks found.' });
+            }
             res.status(200);
             res.send(results);
         }

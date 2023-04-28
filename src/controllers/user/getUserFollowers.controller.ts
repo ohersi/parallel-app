@@ -26,8 +26,8 @@ export default class GetUserFollowersController {
             const results = await this.usecase.execute(id);
             
             if (Array.isArray(results) && !results.length) {
-                res.status(500);
-                return res.send({ error: { status: 500 }, message: `user with id [${id}] has no followers.` });
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: `user with id [${id}] has no followers.` });
             }
             res.status(200);
             res.send(results);

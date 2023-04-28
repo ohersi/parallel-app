@@ -9,18 +9,18 @@ import { memOrm } from "../../test-utils/init-db.setup";
 import { Channel } from "../../../entities/channel.entity";
 import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
-import GetChannelByIdUsecase from '../../../services/usecases/channel/getChannelById.usecase'
+import GetChannelBySlugUsecase from "../../../services/usecases/channel/getChannelBySlug.usecase";
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
 
-describe("GetChannelByIdUsecase", () => {
+describe("GetChannelBySlugUsecase", () => {
 
     const mockedChannelRepo = mockDeep<ChannelRepository>();
-    let service: GetChannelByIdUsecase;
+    let service: GetChannelBySlugUsecase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let backup: IBackup;
 
     beforeEach(() => {
-        service = new GetChannelByIdUsecase(mockedChannelRepo);
+        service = new GetChannelBySlugUsecase(mockedChannelRepo);
         // Restore im-mem db to original state
         backup.restore();
         mockReset(mockedChannelRepo);
@@ -45,19 +45,19 @@ describe("GetChannelByIdUsecase", () => {
         expect(service).toBeDefined();
     })
 
-    describe('When given a channel id,', () => {
+    describe('When given a channel slug,', () => {
 
         describe("and the channel does exist in the db,", () => {
 
             it("return a channel object from database.", async () => {
                 // GIVEN
-                const id = 1;
-
+                const getSlug = await orm.em.findOne(Channel, { id: 1 });
+                const slug = getSlug?.slug || 'title';
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.findOne(Channel, { slug: slug }, { populate: ['blocks']});
+                mockedChannelRepo.findBySlug.mockResolvedValue(getChannel);
 
-                const results = await service.execute(id);
+                const results = await service.execute(slug);
 
                 // THEN
                 expect(results).toEqual(getChannel);
@@ -68,13 +68,13 @@ describe("GetChannelByIdUsecase", () => {
 
             it("return null.", async () => {
                 // GIVEN
-                const id = -99;
+                const slug = '';
 
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.findOne(Channel, { slug: slug }, { populate: ['blocks']});
+                mockedChannelRepo.findBySlug.mockResolvedValue(getChannel);
 
-                const results = await service.execute(id);
+                const results = await service.execute(slug);
 
                 // THEN
                 expect(getChannel).toEqual(null);
@@ -86,13 +86,13 @@ describe("GetChannelByIdUsecase", () => {
 
             it("return the thrown error.", async () => {
                 // GIVEN
-                const id = -99;
+                const slug = '';
 
                 // WHEN
-                mockedChannelRepo.getChannelAndBlocks.mockRejectedValue(Error);
+                mockedChannelRepo.findBySlug.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute(id) }).rejects.toThrow(ChannelExeption);
+                expect(async () => { await service.execute(slug) }).rejects.toThrow(ChannelExeption);
             })
         })
 

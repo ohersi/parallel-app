@@ -1,7 +1,7 @@
 //Packages
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
-import { Application } from 'express';
+import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
@@ -12,6 +12,9 @@ import { start } from '../../../app';
 describe("GetChannelByIdController", () => {
     // Mocks
     const mockedUsecase = mockDeep<GetChannelByIdUsecase>();
+    const requestMock = mockDeep<Request>();
+    const responseMock = mockDeep<Response>();
+    const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
     let controller: GetChannelByIdController;
 
@@ -58,16 +61,30 @@ describe("GetChannelByIdController", () => {
             })
         })
 
-        describe("and the channel corresponding to the id is not found,", () => {
+        describe("and the channel corresponding to the id is NOT found,", () => {
 
-            it("return a status of 500.", async () => {
+            it("return a status of 404.", async () => {
                 // GIVEN
-                const id = -99;
+                const id = -999;
                 // WHEN
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
-                expect(results.status).toEqual(500);
+                expect(results.status).toEqual(404);
+            })
+        })
+
+        describe("and the database throws an error,", () => {
+
+            it("return a status of 500.", async () => {
+              // GIVEN
+
+                // WHEN
+                mockedUsecase.execute.mockRejectedValue(Error);
+                await controller.getChannelByID(requestMock, responseMock, nextMock);
+
+                // THEN
+                expect(responseMock.status).toBeCalledWith(500);
             })
         });
 

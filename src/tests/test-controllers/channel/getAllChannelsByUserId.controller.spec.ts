@@ -60,12 +60,27 @@ describe("GetAllChannelsByUserIdController", () => {
 
             it("returns an array of all channels objects from that user and status code of 200.", async () => {
                 // GIVEN
-                const userID = 2;
+                const userID = 1;
                 // WHEN
-                const results = await request(app).get(`/api/v1/channels/user/${userID}`);
+                const results = await request(app).get(`/api/v1/users/${userID}/channels`);
+
 
                 // THEN
                 expect(results.status).toEqual(200);
+            })
+        })
+
+        describe("and the user corresponding to the id is NOT found,", () => {
+
+            it("returns status code of 404.", async () => {
+                // GIVEN
+                const userID = -999;
+
+                // WHEN
+                const results = await request(app).get(`/api/v1/users/${userID}/channels`);
+
+                // THEN
+                expect(results.status).toEqual(404);
             })
         })
 
@@ -73,7 +88,7 @@ describe("GetAllChannelsByUserIdController", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
-                
+
                 // WHEN
                 mockedUsecase.execute.mockRejectedValue(Error);
                 await controller.getAllChannelsByUserID(requestMock, responseMock, nextMock);

@@ -31,8 +31,8 @@ export default class GetAllChannelsByUserIdController {
             // const results = await cache('users', this.usecase.execute);
 
             if (Array.isArray(results) && !results.length) {
-                res.status(500);
-                res.send({ error: { status: 500 }, message: 'No channels found with that id' });
+                res.status(404);
+                res.send({ error: { status: 404 }, message: 'No channels found with that id' });
             }
             else {
                 res.status(200);

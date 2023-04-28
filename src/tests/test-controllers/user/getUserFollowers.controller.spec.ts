@@ -1,7 +1,7 @@
 //Packages
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
-import { Application } from 'express';
+import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
@@ -12,6 +12,9 @@ import { start } from '../../../app'
 describe("GetUserFollowersController", () => {
     // Mocks
     const mockedUsecase = mockDeep<GetUserFollowersUsecase>();
+    const requestMock = mockDeep<Request>();
+    const responseMock = mockDeep<Response>();
+    const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
     let controller: GetUserFollowersController;
 
@@ -61,7 +64,7 @@ describe("GetUserFollowersController", () => {
 
         describe("and the user corresponding to the id is not found", () => {
 
-            it("return a status of 500", async () => {
+            it("return a status of 404.", async () => {
                 // GIVEN
                 const id = -99;
 
@@ -69,9 +72,24 @@ describe("GetUserFollowersController", () => {
                 const results = await request(app).get(`/api/v1/users/${id}/followers`);
 
                 // THEN
-                expect(results.status).toEqual(500);
+                expect(results.status).toEqual(404);
             })
         });
 
+        describe("and the database throws an error,", () => {
+
+            it("return a status of 500.", async () => {
+                // GIVEN
+                const id = -99;
+
+                // WHEN
+                mockedUsecase.execute.mockRejectedValue(Error);
+                await controller.getUserFollowers(requestMock, responseMock, nextMock);
+
+                // THEN
+                expect(responseMock.status).toBeCalledWith(500);
+            })
+        })
     });
+
 });

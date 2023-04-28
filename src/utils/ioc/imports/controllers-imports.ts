@@ -46,6 +46,9 @@ export * from '../../../controllers/channel/getAllChannels.controller';
 import '../../../controllers/channel/getChannelById.controller';
 export * from '../../../controllers/channel/getChannelById.controller';
 
+import '../../../controllers/channel/getChannelBySlug.controller';
+export * from '../../../controllers/channel/getChannelBySlug.controller';
+
 import '../../../controllers/channel/getAllChannelsByUserId.controller';
 export * from '../../../controllers/channel/getAllChannelsByUserId.controller';
 

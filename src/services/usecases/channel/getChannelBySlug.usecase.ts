@@ -8,14 +8,13 @@ import ChannelRepository from "../../../repositories/channel.repository";
 import { TYPES } from "../../../utils/types";
 import ChannelException from "../../../utils/exceptions/channel.exception";
 
-
 //** USE CASE */
-// GIVEN: -
-// WHEN: find all channels in database
-// THEN: return channels
+// GIVEN: a slug string
+// WHEN: find channel matching the slug in database
+// THEN: return channel
 
-@provide(TYPES.GET_CHANNEL_BY_ID_USECASE)
-export default class GetChannelByIdUsecase {
+@provide(TYPES.GET_CHANNEL_BY_SLUG_USECASE)
+export default class GetChannelBySlugUsecase {
 
     private channelRepository: ChannelRepository;
 
@@ -23,9 +22,9 @@ export default class GetChannelByIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number): Promise<Loaded<Channel, "blocks"> | null> => {
+    public execute = async (slug: string): Promise<Loaded<Channel, "blocks"> | null> => {
         try {
-            const channel = await this.channelRepository.getChannelAndBlocks(id);
+            const channel = await this.channelRepository.findBySlug(slug);
             return channel;
         }
         catch (err: any) {

@@ -25,9 +25,12 @@ export default class GetAllChannelsController {
         : Promise<Response | void> {
         try {
             const results = await cache('channels', this.usecase.execute);
+            if (Array.isArray(results) && !results.length) {
+                res.status(404);
+                res.send({ error: { status: 404 }, message: 'No channels found.' });
+            }
             res.status(200);
             res.send(results);
-
         }
         catch (err: any) {
             res.status(500);

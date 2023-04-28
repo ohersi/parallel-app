@@ -34,6 +34,7 @@ export enum TYPES_ENUM {
   DELETE_CHANNEL_USECASE = 'DeleteChannelUsecase',
   GET_ALL_CHANNELS_USECASE = 'GetAllChannelsUsecase',
   GET_CHANNEL_BY_ID_USECASE = 'GetChannelByIdUsecase',
+  GET_CHANNEL_BY_SLUG_USECASE = 'GetChannelBySlugUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
   //**----- BLOCK -----**//
   CREATE_BLOCK_USECASE = 'CreateBlockUsecase',

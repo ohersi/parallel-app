@@ -47,9 +47,11 @@ describe("DeleteUserUsecase", () => {
         users = orm.em.getRepository<User>(User);
         // Create user to delete
         const newUser = new User(
+            'first-name',
             testUser.first_name,
             testUser.last_name,
             testUser.email,
+            'firstName lastName',
             testUser.password,
             testUser.avatar_url,
             TYPES_ENUM.USER

@@ -54,14 +54,14 @@ describe("GetBlockByIdUsecase", () => {
                 const blockID = -99;
 
                 // WHEN
-                const getBlock = await orm.em.find(Block, { id: blockID }, { populate: ['channels'] });
+                const getBlock = await orm.em.findOne(Block, { id: blockID }, { populate: ['channels'] });
                 mockedBlockRepo.getBlockAndItsChannels.mockResolvedValue(getBlock);
 
                 const results = await service.execute(blockID);
 
                 // THEN
-                expect(getBlock).toEqual([]);
-                expect(results).toEqual([]);
+                expect(getBlock).toEqual(null);
+                expect(results).toEqual(null);
             })
         })
 
@@ -72,7 +72,7 @@ describe("GetBlockByIdUsecase", () => {
                 const blockID = 1;
 
                 // WHEN
-                const getBlock = await orm.em.find(Block, { id: blockID }, { populate: ['channels'] });
+                const getBlock = await orm.em.findOne(Block, { id: blockID }, { populate: ['channels'] });
                 mockedBlockRepo.getBlockAndItsChannels.mockResolvedValue(getBlock);
 
                 const results = await service.execute(blockID);

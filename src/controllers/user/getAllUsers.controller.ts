@@ -27,6 +27,10 @@ export default class GetAllUsersController {
         : Promise<Response | void> {
         try {
             const results = await cache('users', this.usecase.execute);
+            if (Array.isArray(results) && !results.length) {
+                res.status(404);
+                res.send({ error: { status: 404 }, message: 'No users found.' });
+            }
             res.status(200);
             res.send(results);
         }

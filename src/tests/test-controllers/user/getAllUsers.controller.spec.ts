@@ -81,6 +81,20 @@ describe("GetAllUsersController", () => {
 
         describe("and not users are found,", () => {
 
+            it("return a status of 404.", async () => {
+                // GIVEN
+
+                // WHEN
+                mockCache.mockResolvedValue([]);
+                const results = await request(app).get("/api/v1/users/");
+
+                // // THEN
+                expect(results.status).toEqual(404);
+            })
+        });
+
+        describe("and the database throws an error,", () => {
+
             it("return a status of 500.", async () => {
                 // GIVEN
 
@@ -92,6 +106,5 @@ describe("GetAllUsersController", () => {
                 expect(results.status).toEqual(500);
             })
         });
-
     });
 });

@@ -10,9 +10,9 @@ import BaseRepository from './base.repository';
 @Entity({ customRepository: () => Block })
 export default class BlockRepository extends BaseRepository<Block> implements IRepository<Block>  {
 
-    async getBlockAndItsChannels(id: number): Promise<Loaded<Block, "channels">[]> {
+    async getBlockAndItsChannels(id: number): Promise<Loaded<Block, "channels"> | null> {
         try {
-            const res = await this.find({ id: id }, { populate: ['channels']});
+            const res = await this.findOne({ id: id }, { populate: ['channels']});
             return res;
         } 
         catch (error: any) {

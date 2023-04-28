@@ -107,7 +107,7 @@ describe("AddConnectionController", () => {
                     await controller.addConnection(requestMock, responseMock, nextMock);
 
                     // THEN
-                    expect(responseMock.status).toBeCalledWith(500);
+                    expect(responseMock.status).toBeCalledWith(404);
                     expect(responseMock.send).toBeCalledWith(objectContainsKey('error'));
                 })
             })

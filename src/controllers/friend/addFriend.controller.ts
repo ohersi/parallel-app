@@ -25,8 +25,8 @@ export default class AddFriendController {
         try {
             const { user } = req.query;
             if (!user) {
-                res.status(500);
-                return res.send({ error: { status: 500 }, message: "Missing user to follow." });
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: "Missing user to follow." });
             }
             const followID = parseInt(user.toString());
             const userID = req.session.user?.id!;

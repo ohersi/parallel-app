@@ -28,14 +28,12 @@ export default class GetChannelByIdController {
         try {
             const channelID = parseInt(req.params.id);
             const results = await this.usecase.execute(channelID);
-            if (Array.isArray(results) && !results.length) {
-                res.status(500);
-                res.send({ error: { status: 500 }, message: 'No channels found with that id' });
+            if (!results) {
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: 'No channels found with that id.' });
             }
-            else {
-                res.status(200);
-                res.send(results);
-            }
+            res.status(200);
+            res.send(results);
         }
         catch (err: any) {
             res.status(500);
