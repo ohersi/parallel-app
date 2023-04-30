@@ -123,7 +123,7 @@ describe("RemoveConnectionUsecase", () => {
                                 mockedBlockRepo.findByID.mockResolvedValue(foundBlock);
 
                                 // Set mocked result to be newly created block
-                                mockedConnectionRepo.save.mockRejectedValue(Error);
+                                mockedConnectionRepo.delete.mockRejectedValue(Error);
 
                                 // THEN
                                 expect(async () => await service.execute(blockID, userID, channelID)).rejects.toThrow(Error);

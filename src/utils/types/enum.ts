@@ -53,6 +53,6 @@ export enum TYPES_ENUM {
   REMOVE_FRIEND_USECASE = 'RemoveFriendUsecase',
   //**----- FOLLOW -----**//
   FOLLOW_CHANNEL_USECASE = 'FollowChannelUsecase',
-  REMOVE_CHANNEL_USECASE = 'RemoveChannelUsecase',
+  UNFOLLOW_CHANNEL_USECASE = 'RemoveChannelUsecase',
 
 }

@@ -95,3 +95,6 @@ export * from '../../../controllers/friend/removeFriend.controller';
 // FOLLOW CONTROLLERS //
 import '../../../controllers/follow/followChannel.controller';
 export * from '../../../controllers/follow/followChannel.controller';
+
+import '../../../controllers/follow/unfollowChannel.controller';
+export * from '../../../controllers/follow/unfollowChannel.controller';
