@@ -12,6 +12,7 @@ export enum TYPES_ENUM {
   BLOCK_REPOSITORY = 'BlockRepository',
   CONNECTION_REPOSITORY = 'ConnectionRepository',
   FRIEND_REPOSITORY = 'FriendRepository',
+  FOLLOW_REPOSITORY = 'FollowRepository',
 
   // Services
   USER_SERVICE = 'UserService',
@@ -36,6 +37,7 @@ export enum TYPES_ENUM {
   GET_CHANNEL_BY_ID_USECASE = 'GetChannelByIdUsecase',
   GET_CHANNEL_BY_SLUG_USECASE = 'GetChannelBySlugUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
+  GET_CHANNEL_FOLLOWERS_USECASE = 'GetChannelFollowersUsecase',
   //**----- BLOCK -----**//
   CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
   UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
@@ -48,4 +50,8 @@ export enum TYPES_ENUM {
   //**----- FRIEND -----**//
   ADD_FRIEND_USECASE = 'AddFriendUsecase',
   REMOVE_FRIEND_USECASE = 'RemoveFriendUsecase',
+  //**----- FOLLOW -----**//
+  FOLLOW_CHANNEL_USECASE = 'FollowChannelUsecase',
+  REMOVE_CHANNEL_USECASE = 'RemoveChannelUsecase',
+
 }

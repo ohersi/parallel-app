@@ -7,6 +7,7 @@ import BaseEntity from './base.entity';
 import { User } from './user.entity';
 import { Block } from './block.entity';
 import { Connection } from './connection.entity';
+import { Follow } from './follow.entity';
 
 @Entity({ customRepository: () => ChannelRepository, tableName: 'channels' })
 export class Channel implements BaseEntity, IChannel {
@@ -30,6 +31,9 @@ export class Channel implements BaseEntity, IChannel {
 
     @ManyToMany({ entity: () => Block, pivotEntity: () => Connection })
     blocks = new Collection<Block>(this)
+
+    @ManyToMany({ entity: () => User, pivotEntity: () => Follow })
+    users_following = new Collection<User>(this)
 
     @Property()
     date_created!: Date;

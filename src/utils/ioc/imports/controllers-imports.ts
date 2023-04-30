@@ -52,6 +52,9 @@ export * from '../../../controllers/channel/getChannelBySlug.controller';
 import '../../../controllers/channel/getAllChannelsByUserId.controller';
 export * from '../../../controllers/channel/getAllChannelsByUserId.controller';
 
+import '../../../controllers/channel/getChannelFollowers.controller';
+export * from '../../../controllers/channel/getChannelFollowers.controller';
+
 
 // BLOCK CONTROLLERS //
 import '../../../controllers/block/createBlock.controller';
@@ -84,3 +87,8 @@ export * from '../../../controllers/friend/addFriend.controller';
 
 import '../../../controllers/friend/removeFriend.controller';
 export * from '../../../controllers/friend/removeFriend.controller';
+
+
+// FOLLOW CONTROLLERS //
+import '../../../controllers/follow/followChannel.controller';
+export * from '../../../controllers/follow/followChannel.controller';

@@ -11,6 +11,7 @@ import { Channel } from '../../entities/channel.entity';
 import { Block } from '../../entities/block.entity';
 import { Connection as Connections } from '../../entities/connection.entity';
 import { Friend } from '../../entities/friend.entity';
+import { Follow } from '../../entities/follow.entity';
 
 // Classes w/ @controller need to be imported one unique time then it can be declared
 // Bulk import only  works if the module w/ all the imports is invoked
@@ -49,6 +50,7 @@ export const bindings = new AsyncContainerModule(async (bind): Promise<void> => 
         bindEntityToRepository(bind, TYPES.BLOCK_REPOSITORY, connection, Block);
         bindEntityToRepository(bind, TYPES.CONNECTION_REPOSITORY, connection, Connections);
         bindEntityToRepository(bind, TYPES.FRIEND_REPOSITORY, connection, Friend);
+        bindEntityToRepository(bind, TYPES.FOLLOW_REPOSITORY, connection, Follow);
     }
 
 });
