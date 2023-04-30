@@ -55,6 +55,9 @@ export * from '../../../controllers/channel/getAllChannelsByUserId.controller';
 import '../../../controllers/channel/getChannelFollowers.controller';
 export * from '../../../controllers/channel/getChannelFollowers.controller';
 
+import '../../../controllers/channel/getAllChannelsUserFollows.controller';
+export * from '../../../controllers/channel/getAllChannelsUserFollows.controller';
+
 
 // BLOCK CONTROLLERS //
 import '../../../controllers/block/createBlock.controller';

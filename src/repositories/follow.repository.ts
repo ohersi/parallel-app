@@ -29,4 +29,14 @@ export default class FollowRepository extends BaseRepository<Follow> implements 
             throw new Error(error);
         }
     }
+
+    async findAllChannelsUserFollows(user_id: number): Promise<Loaded<Follow, "followed_channel">[]> {
+        try {
+            const res = this.find({user: user_id }, { populate: ['followed_channel']});
+            return res;
+        } 
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
 };

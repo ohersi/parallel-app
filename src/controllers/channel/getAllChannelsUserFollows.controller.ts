@@ -1,22 +1,22 @@
 // Packages
 import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
-import { inject } from 'inversify'
+import { inject } from 'inversify';
 // Imports
-import GetUserFriendsUsecase from '../../services/usecases/user/getUserFriends.usecase';
+import GetAllChannelsUserFollowsUsecase from '../../services/usecases/channel/getAllChannelsUserFollows.usecase';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
-export default class GetUserFriendsController {
+export default class GetAllChannelsUserFollowsController {
 
-    private readonly usecase: GetUserFriendsUsecase;
+    private readonly usecase: GetAllChannelsUserFollowsUsecase;
 
-    constructor(@inject(TYPES.GET_USER_FRIENDS_USECASE) getUserFriendUsecase: GetUserFriendsUsecase) {
-        this.usecase = getUserFriendUsecase;
+    constructor(@inject(TYPES.GET_ALL_CHANNELS_USER_FOLLOWS_USECASE) getAllChannelsUserFollowsUsecase: GetAllChannelsUserFollowsUsecase) {
+        this.usecase = getAllChannelsUserFollowsUsecase;
     }
 
-    @httpGet('/:id/friends')
-    public async getUserFriends(
+    @httpGet('/:id/following')
+    public async getAllChannelsUserFollows(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -24,10 +24,10 @@ export default class GetUserFriendsController {
         try {
             const id = parseInt(req.params.id);
             const results = await this.usecase.execute(id);
-
+            
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `user with id [${id}] following 0 others.`});
+                return res.send({ error: { status: 404 }, message: `User not following any channels.` });
             }
             res.status(200);
             res.send(results);

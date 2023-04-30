@@ -38,6 +38,7 @@ export enum TYPES_ENUM {
   GET_CHANNEL_BY_SLUG_USECASE = 'GetChannelBySlugUsecase',
   GET_ALL_CHANNELS_BY_USER_ID_USECASE = 'GetAllChannelsByUserIdUsecase',
   GET_CHANNEL_FOLLOWERS_USECASE = 'GetChannelFollowersUsecase',
+  GET_ALL_CHANNELS_USER_FOLLOWS_USECASE = 'GetAllChannelsUserFollowsUsecase',
   //**----- BLOCK -----**//
   CREATE_BLOCK_USECASE = 'CreateBlockUsecase',
   UPDATE_BLOCK_USECASE = 'UpdateBlockUsecase',
