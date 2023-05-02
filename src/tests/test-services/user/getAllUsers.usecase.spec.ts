@@ -11,6 +11,7 @@ import { generateItems } from "../../test-utils/generate-items.setup";
 import UserRepository from "../../../repositories/user.repository";
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
 import UserException from "../../../utils/exceptions/user.expection";
+import PageResults from "../../../resources/pagination/pageResults";
 
 describe("GetAllUsersUseCase", () => {
 
@@ -51,17 +52,18 @@ describe("GetAllUsersUseCase", () => {
 
             it("return all users in db.", async () => {
                 // GIVEN
-
+                const last_id = 1;
+                const limit = 10;
                 // WHEN
                 //** Instead of mocking results, FAKE the database using in-mem db to actually simulate the prod db call  */
-                const getAllUsers = await orm.em.find(User, {});
-                mockedUserRepo.getAll.mockResolvedValue(getAllUsers);
+                const getAllUsers = await orm.em.findAndCount(User, {});
+                mockedUserRepo.findAllByLastID.mockResolvedValue(getAllUsers);
 
-                const results = await service.execute();
+                const results = await service.execute(last_id, limit);
 
                 // THEN
                 //** Expect results to contain an array with an object that has a key/value of id = 1 */
-                expect(results).toEqual(
+                expect(results.data).toEqual(
                     expect.arrayContaining([
                         expect.objectContaining({
                             id: 1
@@ -75,16 +77,18 @@ describe("GetAllUsersUseCase", () => {
 
             it("return empty array.", async () => {
                 // GIVEN
+                const last_id = 1;
+                const limit = 10;
 
                 // WHEN
-                //TODO: Research deleting table rows
+                const count = await orm.em.count(User, {});
                 const getAllUsers = await orm.em.find(User, -999);
-                mockedUserRepo.getAll.mockResolvedValue(getAllUsers);
+                mockedUserRepo.findAllByLastID.mockResolvedValue([ getAllUsers, count ]);
 
-                const results = await service.execute();
+                const results = await service.execute(last_id, limit);
 
                 // THEN
-                expect(results).toEqual([]);
+                expect(results.data).toEqual([]);
             })
         })
 
@@ -92,12 +96,14 @@ describe("GetAllUsersUseCase", () => {
 
             it("return the thrown error.", async () => {
                 // GIVEN
+                const last_id = 1;
+                const limit = 10;
 
                 // WHEN
-                mockedUserRepo.getAll.mockRejectedValue(Error);
+                mockedUserRepo.findAllByLastID.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute() }).rejects.toThrow(UserException);
+                expect(async () => { await service.execute(last_id, limit) }).rejects.toThrow(UserException);
             })
         })
 

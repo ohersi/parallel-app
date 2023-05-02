@@ -41,7 +41,7 @@ export default class UserRepository extends BaseRepository<User> implements IRep
         }
     }
 
-    async findAllFromId(last_id: number, limit: number): Promise<[Loaded<User, never>[], number]> {
+    async findAllByLastID(last_id: number, limit: number): Promise<[Loaded<User, never>[], number]> {
         try {
             const count = await this.count({});
             const res = await this.find({id: { $gte: last_id }}, { limit: limit });

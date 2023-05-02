@@ -9,6 +9,7 @@ import GetAllUsersController from "../../../controllers/user/getAllUsers.control
 import GetAllUsersUseCase from "../../../services/usecases/user/getAllUsers.usecase";
 import { start } from '../../../app';
 import { cache } from "../../../resources/caching/cache";
+import PageResults from "../../../resources/pagination/pageResults";
 
 // Set authorization middlware to stub before app is generated
 jest.mock("../../../middleware/auth.middleware", () => ({
@@ -83,13 +84,15 @@ describe("GetAllUsersController", () => {
 
             it("return a status of 404.", async () => {
                 // GIVEN
-
+                const pageResults = { data: [] } as PageResults;
+                
                 // WHEN
-                mockCache.mockResolvedValue([]);
-                const results = await request(app).get("/api/v1/users/");
+                // mockCache.mockResolvedValue([]);
+                mockedGetAllUsersUseCase.execute.mockResolvedValue(pageResults);
+                await controller.getAllUsers(requestMock, responseMock, nextMock);
 
                 // // THEN
-                expect(results.status).toEqual(404);
+                expect(responseMock.status).toBeCalledWith(404);
             })
         });
 
@@ -99,11 +102,12 @@ describe("GetAllUsersController", () => {
                 // GIVEN
 
                 // WHEN
-                mockCache.mockRejectedValue(Error);
-                const results = await request(app).get("/api/v1/users/");
+                // mockCache.mockRejectedValue(Error);
+                mockedGetAllUsersUseCase.execute.mockRejectedValue(Error);
+                await controller.getAllUsers(requestMock, responseMock, nextMock);
 
                 // // THEN
-                expect(results.status).toEqual(500);
+                expect(responseMock.status).toBeCalledWith(500);
             })
         });
     });

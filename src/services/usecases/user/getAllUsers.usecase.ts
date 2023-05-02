@@ -25,10 +25,10 @@ export default class GetAllUsersUseCase {
 
     public execute = async (last_id: number, limit: number): Promise<PageResults> => {
         try {
-            const [allUsers, total] = await this.userRepository.findAllFromId(last_id, limit);
+            const [allUsers, total] = await this.userRepository.findAllByLastID(last_id, limit);
             // when next reaches last item should it be null or total ???
             let next = last_id + 1 > total ? null : last_id + 1;
-            
+
             const pageResults = new PageResults(
                 total,
                 next,
