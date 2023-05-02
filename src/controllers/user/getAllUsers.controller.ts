@@ -8,7 +8,7 @@ import { TYPES } from '../../utils/types';
 import { TYPES_ENUM } from '../../utils/types/enum';
 import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
 import { cache } from '../../resources/caching/cache';
-
+import { paginate } from '../../middleware/paginate.middlware';
 
 @controller(`/api/v1/users`)
 export default class GetAllUsersController {
@@ -19,17 +19,20 @@ export default class GetAllUsersController {
         this.usecase = getAllUsersUseCase;
     }
 
-    @httpGet('/', sessionAuth, roleAuth(TYPES_ENUM.ADMIN))
+    @httpGet('/', sessionAuth, roleAuth(TYPES_ENUM.ADMIN), paginate)
     public async getAllUsers(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const results = await cache('users', this.usecase.execute);
-            if (Array.isArray(results) && !results.length) {
+            const last_id = parseInt(req.query.last_id as string) || 0;
+            const limit = parseInt(req.query.limit as string);
+            // const results = await cache('users', this.usecase.execute);
+            const results = await this.usecase.execute(last_id, limit);
+            if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);
-                res.send({ error: { status: 404 }, message: 'No users found.' });
+                return res.send({ error: { status: 404 }, message: 'No users found.' });
             }
             res.status(200);
             res.send(results);

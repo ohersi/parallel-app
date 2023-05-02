@@ -7,7 +7,7 @@ import { TYPES } from "../../../utils/types";
 import { User } from "src/entities/user.entity";
 import { Loaded } from "@mikro-orm/core";
 import UserException from "../../../utils/exceptions/user.expection";
-
+import PageResults from "../../../resources/pagination/pageResults";
 
 //** USE CASE */
 // GIVEN: -
@@ -23,10 +23,18 @@ export default class GetAllUsersUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (): Promise<Loaded<User, never>[]> => {
+    public execute = async (last_id: number, limit: number): Promise<PageResults> => {
         try {
-            const allUsers = await this.userRepository.getAll();
-            return allUsers;
+            const [allUsers, total] = await this.userRepository.findAllFromId(last_id, limit);
+            // when next reaches last item should it be null or total ???
+            let next = last_id + 1 > total ? null : last_id + 1;
+            
+            const pageResults = new PageResults(
+                total,
+                next,
+                allUsers,
+            );
+            return pageResults;
         }
         catch (err: any) {
             throw new UserException(err.message);

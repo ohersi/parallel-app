@@ -35,7 +35,18 @@ export default class UserRepository extends BaseRepository<User> implements IRep
         try {
             const res = await this.find({ id: id }, { populate: ['friends'] });
             return res;
-        } 
+        }
+        catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
+
+    async findAllFromId(last_id: number, limit: number): Promise<[Loaded<User, never>[], number]> {
+        try {
+            const count = await this.count({});
+            const res = await this.find({id: { $gte: last_id }}, { limit: limit });
+            return [res, count];
+        }
         catch (error: any) {
             throw new Error(error.message);
         }
