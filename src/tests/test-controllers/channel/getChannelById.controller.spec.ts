@@ -8,6 +8,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import GetChannelByIdController from "../../../controllers/channel/getChannelById.controller";
 import GetChannelByIdUsecase from "../../../services/usecases/channel/getChannelById.usecase";
 import { start } from '../../../app';
+import PageResults from "../../../resources/pagination/pageResults";
 
 describe("GetChannelByIdController", () => {
     // Mocks
@@ -53,6 +54,7 @@ describe("GetChannelByIdController", () => {
             it("return a channel object and status of 200.", async () => {
                 // GIVEN
                 const id = 1;
+
                 // WHEN
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
@@ -66,11 +68,14 @@ describe("GetChannelByIdController", () => {
             it("return a status of 404.", async () => {
                 // GIVEN
                 const id = -999;
+                const pageResults = { data: [] } as PageResults;
+                
                 // WHEN
-                const results = await request(app).get(`/api/v1/channels/${id}`);
+                mockedUsecase.execute.mockResolvedValue(pageResults);
+                await controller.getChannelByID(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(404);
+                expect(responseMock.status).toBeCalledWith(404);
             })
         })
 

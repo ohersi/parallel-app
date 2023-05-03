@@ -1,18 +1,17 @@
 // Packages
 import { inject } from "inversify";
-import { Loaded } from "@mikro-orm/core";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import { Channel } from "../../../entities/channel.entity";
 import ChannelRepository from "../../../repositories/channel.repository";
 import { TYPES } from "../../../utils/types";
 import ChannelException from "../../../utils/exceptions/channel.exception";
-
+import ChannelDTO from "../../../dto/channel.dto";
+import PageResults from "../../../resources/pagination/pageResults";
 
 //** USE CASE */
-// GIVEN: -
-// WHEN: find all channels in database
-// THEN: return channels
+// GIVEN: channel id
+// WHEN: channel w/ that id database
+// THEN: return PageResults w/ channel data
 
 @provide(TYPES.GET_CHANNEL_BY_ID_USECASE)
 export default class GetChannelByIdUsecase {
@@ -23,10 +22,29 @@ export default class GetChannelByIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number): Promise<Loaded<Channel, "blocks"> | null> => {
+    public execute = async (id: number, last_id: number, limit: number): Promise<PageResults> => {
         try {
-            const channel = await this.channelRepository.getChannelAndBlocks(id);
-            return channel;
+            const [channel, items, count ] = await this.channelRepository.getChannelAndBlocks(id, last_id, limit);
+
+            const total = count || 0;
+            let next = last_id + 1 > total ? null : last_id + 1;
+
+            const channelDTO = new ChannelDTO(
+                channel?.id,
+                channel?.title,
+                channel?.description,
+                channel?.slug,
+                channel?.date_created,
+                channel?.date_updated,
+                items
+            );
+            const pageResults = new PageResults(
+                total,
+                next,
+                channelDTO
+            );
+
+            return pageResults;
         }
         catch (err: any) {
             throw new ChannelException(err.message);

@@ -11,6 +11,7 @@ import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
 import GetChannelByIdUsecase from '../../../services/usecases/channel/getChannelById.usecase'
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
+import PageResults from "../../../resources/pagination/pageResults";
 
 describe("GetChannelByIdUsecase", () => {
 
@@ -49,36 +50,46 @@ describe("GetChannelByIdUsecase", () => {
 
         describe("and the channel does exist in the db,", () => {
 
-            it("return a channel object from database.", async () => {
+            it("return a PageResults object with channel object.", async () => {
                 // GIVEN
                 const id = 1;
+                const last_id = 1;
+                const limit = 10;
 
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.findOne(Channel, { id: id });
+                const blocks = await getChannel?.blocks.init();
+                const count = blocks?.count();
+                const items = blocks?.getItems(); 
+                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue([getChannel, items, count]);
 
-                const results = await service.execute(id);
+                const results = await service.execute(id, last_id, limit);
 
                 // THEN
-                expect(results).toEqual(getChannel);
+                expect(results).toBeInstanceOf(PageResults);
             })
         })
 
         describe("and the channel does NOT exist in the db,", () => {
 
-            it("return null.", async () => {
+            it("return a PageResults object with channel object with null channel object data.", async () => {
                 // GIVEN
                 const id = -99;
+                const last_id = 1;
+                const limit = 10;
 
                 // WHEN
-                const getChannel = await orm.em.findOne(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue(getChannel);
+                const getChannel = await orm.em.findOne(Channel, { id: id });
+                const blocks = await getChannel?.blocks.init();
+                const count = blocks?.count();
+                const items = blocks?.getItems();  
+                mockedChannelRepo.getChannelAndBlocks.mockResolvedValue([getChannel, items, count]);
 
-                const results = await service.execute(id);
+                const results = await service.execute(id, last_id, limit);
 
                 // THEN
                 expect(getChannel).toEqual(null);
-                expect(results).toEqual(null);
+                expect(results.data.title).toBeUndefined();
             })
         })
 
@@ -87,12 +98,14 @@ describe("GetChannelByIdUsecase", () => {
             it("return the thrown error.", async () => {
                 // GIVEN
                 const id = -99;
+                const last_id = 1;
+                const limit = 10;
 
                 // WHEN
                 mockedChannelRepo.getChannelAndBlocks.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute(id) }).rejects.toThrow(ChannelExeption);
+                expect(async () => { await service.execute(id, last_id, limit) }).rejects.toThrow(ChannelExeption);
             })
         })
 

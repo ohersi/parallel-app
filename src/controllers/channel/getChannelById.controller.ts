@@ -8,6 +8,7 @@ import { TYPES } from '../../utils/types';
 import { TYPES_ENUM } from '../../utils/types/enum';
 import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
 import { cache } from '../../resources/caching/cache';
+import { paginate } from '../../middleware/paginate.middlware';
 
 
 @controller(`/api/v1/channels`)
@@ -19,7 +20,7 @@ export default class GetChannelByIdController {
         this.usecase = getChannelByIdUsecase;
     }
 
-    @httpGet('/:id')
+    @httpGet('/:id', paginate)
     public async getChannelByID(
         @request() req: Request,
         @response() res: Response,
@@ -27,10 +28,13 @@ export default class GetChannelByIdController {
         : Promise<Response | void> {
         try {
             const channelID = parseInt(req.params.id);
-            const results = await this.usecase.execute(channelID);
-            if (!results) {
+            const last_id = parseInt(req.query.last_id as string) || 0;
+            const limit = parseInt(req.query.limit as string);
+
+            const results = await this.usecase.execute(channelID, last_id, limit);
+            if (!results.data.title) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: 'No channels found with that id.' });
+                return res.send({ error: { status: 404 }, message: `No channels found with that [${channelID}].` });
             }
             res.status(200);
             res.send(results);
