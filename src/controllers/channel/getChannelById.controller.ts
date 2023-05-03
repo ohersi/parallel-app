@@ -4,11 +4,9 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import GetChannelByIdUsecase from '../../services/usecases/channel/getChannelById.usecase';
-import { TYPES } from '../../utils/types';
-import { TYPES_ENUM } from '../../utils/types/enum';
-import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
-import { cache } from '../../resources/caching/cache';
+import { decodeLastID } from '../../resources/helper/text-manipulation';
 import { paginate } from '../../middleware/paginate.middlware';
+import { TYPES } from '../../utils/types';
 
 
 @controller(`/api/v1/channels`)
@@ -28,7 +26,7 @@ export default class GetChannelByIdController {
         : Promise<Response | void> {
         try {
             const channelID = parseInt(req.params.id);
-            const last_id = parseInt(req.query.last_id as string) || 0;
+            const last_id = decodeLastID(req.query.last_id as string);
             const limit = parseInt(req.query.limit as string);
 
             const results = await this.usecase.execute(channelID, last_id, limit);

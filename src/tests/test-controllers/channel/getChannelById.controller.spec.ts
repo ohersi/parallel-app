@@ -68,14 +68,12 @@ describe("GetChannelByIdController", () => {
             it("return a status of 404.", async () => {
                 // GIVEN
                 const id = -999;
-                const pageResults = { data: [] } as PageResults;
-                
+
                 // WHEN
-                mockedUsecase.execute.mockResolvedValue(pageResults);
-                await controller.getChannelByID(requestMock, responseMock, nextMock);
+                const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(404);
+                expect(results.status).toEqual(404);
             })
         })
 

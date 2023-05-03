@@ -4,8 +4,9 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import getChannelBySlugUsecase from '../../services/usecases/channel/getChannelBySlug.usecase';
+import { convertToSlug, decodeLastID } from '../../resources/helper/text-manipulation';
+import { paginate } from '../../middleware/paginate.middlware';
 import { TYPES } from '../../utils/types';
-import { convertToSlug } from '../../resources/helper/text-manipulation';
 
 
 @controller(`/api/v1/channels`)
@@ -17,7 +18,7 @@ export default class GetChannelBySlugController {
         this.usecase = getChannelBySlugUsecase;
     }
 
-    @httpGet('/title/:slug')
+    @httpGet('/title/:slug', paginate)
     public async getChannelBySlug(
         @request() req: Request,
         @response() res: Response,
@@ -25,8 +26,11 @@ export default class GetChannelBySlugController {
         : Promise<Response | void> {
         try {
             const channelSlug = convertToSlug(req.params.slug);
-            const results = await this.usecase.execute(channelSlug);
-            if (!results) {
+            const last_id = decodeLastID(req.query.last_id as string);
+            const limit = parseInt(req.query.limit as string);
+
+            const results = await this.usecase.execute(channelSlug, last_id, limit);
+            if (!results.data.title) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `Channel with title ${channelSlug} was not found.` });
             }

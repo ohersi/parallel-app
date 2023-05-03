@@ -11,10 +11,25 @@ import BaseRepository from './base.repository';
 @Entity({ customRepository: () => Channel })
 export default class ChannelRepository extends BaseRepository<Channel> implements IRepository<Channel>  {
 
-    async findBySlug(slug: string): Promise<Loaded<Channel, "blocks"> | null> {
+    async findBySlug(slug: string, last_id: string, limit: number): Promise<[
+        Loaded<Channel, never> | null,
+        Loaded<Loaded<Block, never>, never>[] | undefined,
+        number | undefined
+    ]> {
         try {
-            const res = await this.findOne({ slug: slug }, { populate: ['blocks'] });
-            return res;
+            const channel = await this.findOne({ slug: slug });
+            // Initalize channel blocks and get total amount
+            const blocks = await channel?.blocks.init();
+            const count = blocks?.count();
+            // Paginate populated items
+            const items = await blocks?.matching({
+                // Get all blocks with timestamp less than last_id timestamp
+                where: { date_updated: { $lt: new Date(last_id) } },
+                limit: limit,
+                orderBy: { date_updated: QueryOrder.DESC }
+            });
+
+            return [channel, items, count];
         }
         catch (error: any) {
             throw new Error(error);
@@ -37,7 +52,7 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
 
             const channels = await this.find({ user: userID });
             let res: any[] = [];
-            
+
             for (const channel of channels) {
                 // Initalize channel blocks and get total amount
                 const init = await channel?.blocks.init();
@@ -47,7 +62,7 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
                     limit: limit,
                     orderBy: { date_updated: QueryOrder.DESC }
                 });
-                res.push( { channel, blocks, total_blocks } );
+                res.push({ channel, blocks, total_blocks });
             }
 
             return res;
@@ -57,7 +72,7 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
         }
     };
 
-    async getChannelAndBlocks(channelID: number, last_id: number, limit: number): Promise<[
+    async getChannelAndBlocks(channelID: number, last_id: string, limit: number): Promise<[
         Loaded<Channel, never> | null,
         Loaded<Loaded<Block, never>, never>[] | undefined,
         number | undefined
@@ -69,7 +84,7 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
             const count = blocks?.count();
             // Paginate populated items
             const items = await blocks?.matching({
-                where: { id: { $gte: last_id } },
+                where: { date_updated: { $lt: new Date(last_id) } },
                 limit: limit,
                 orderBy: { date_updated: QueryOrder.DESC }
             });

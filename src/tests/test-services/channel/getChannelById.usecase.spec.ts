@@ -53,7 +53,7 @@ describe("GetChannelByIdUsecase", () => {
             it("return a PageResults object with channel object.", async () => {
                 // GIVEN
                 const id = 1;
-                const last_id = 1;
+                const last_id = new Date().toISOString();
                 const limit = 10;
 
                 // WHEN
@@ -75,7 +75,7 @@ describe("GetChannelByIdUsecase", () => {
             it("return a PageResults object with channel object with null channel object data.", async () => {
                 // GIVEN
                 const id = -99;
-                const last_id = 1;
+                const last_id = new Date().toISOString();
                 const limit = 10;
 
                 // WHEN
@@ -98,7 +98,7 @@ describe("GetChannelByIdUsecase", () => {
             it("return the thrown error.", async () => {
                 // GIVEN
                 const id = -99;
-                const last_id = 1;
+                const last_id = new Date().toISOString();
                 const limit = 10;
 
                 // WHEN

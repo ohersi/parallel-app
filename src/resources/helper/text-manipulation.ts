@@ -56,3 +56,18 @@ export const checkSlug = async (newSlug: string, previousSlug: string, repo: any
     }
     return trimmed;
 }
+
+export const decodeLastID = (last_id: string) => {
+
+    let convertedID: string;
+
+    if (!last_id) {
+        convertedID = new Date().toISOString();
+    }
+    else {
+        const decoded: string = Buffer.from(last_id, 'base64').toString('utf8');
+        convertedID = decoded;
+    }
+    
+    return convertedID;
+}

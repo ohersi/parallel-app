@@ -52,7 +52,7 @@ describe("GetChannelBySlugController", () => {
                 const id = 1;
                 let channel = await request(app).get(`/api/v1/channels/${id}`);
                 let obj = JSON.parse(channel.text);
-                let slug = obj.slug;
+                let slug = obj.data.slug;
                 // WHEN
                 const results = await request(app).get(`/api/v1/channels/title/${slug}`);
                 // THEN
@@ -60,7 +60,7 @@ describe("GetChannelBySlugController", () => {
             })
         })
 
-        describe("and the channel corresponding to the slug is not found,", () => {
+        describe("and the channel corresponding to the slug is NOT found,", () => {
 
             it("return a status of 404.", async () => {
                 // GIVEN

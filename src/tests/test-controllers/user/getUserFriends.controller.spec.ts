@@ -8,6 +8,7 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import GetUserFriendsController from "../../../controllers/user/getUserFriends.controller";
 import GetUserFriendsUsecase from "../../../services/usecases/user/getUserFriends.usecase";
 import { start } from '../../../app'
+import { Friend } from "../../../entities/friend.entity";
 
 describe("GetUserFriendsController", () => {
     // Mocks
@@ -53,26 +54,29 @@ describe("GetUserFriendsController", () => {
             it("returns a friends object and status of 200", async () => {
                 // GIVEN
                 const id = 1;
-
+                const friendsList = [{ }] as Friend[];
+                
                 // WHEN
-                const results = await request(app).get(`/api/v1/users/${id}/following`);
+                mockedUsecase.execute.mockResolvedValue(friendsList);
+                await controller.getUserFriends(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(200);
+                expect(responseMock.status).toBeCalledWith(200);
             })
         });
 
         describe("and the user corresponding to the id is not found", () => {
 
             it("return a status of 404.", async () => {
-                // GIVEN
-                const id = -99;
+                 // GIVEN
+                 const id = 1;
 
-                // WHEN
-                const results = await request(app).get(`/api/v1/users/${id}/following`);
-
-                // THEN
-                expect(results.status).toEqual(404);
+                 // WHEN
+                 mockedUsecase.execute.mockResolvedValue([]);
+                 await controller.getUserFriends(requestMock, responseMock, nextMock);
+ 
+                 // THEN
+                 expect(responseMock.status).toBeCalledWith(404);
             })
         });
 

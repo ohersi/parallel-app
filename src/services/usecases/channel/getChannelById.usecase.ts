@@ -1,12 +1,14 @@
 // Packages
+import { Loaded } from "@mikro-orm/core";
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import ChannelRepository from "../../../repositories/channel.repository";
-import { TYPES } from "../../../utils/types";
-import ChannelException from "../../../utils/exceptions/channel.exception";
+import { Block } from "../../../entities/block.entity";
 import ChannelDTO from "../../../dto/channel.dto";
+import ChannelRepository from "../../../repositories/channel.repository";
+import ChannelException from "../../../utils/exceptions/channel.exception";
 import PageResults from "../../../resources/pagination/pageResults";
+import { TYPES } from "../../../utils/types";
 
 //** USE CASE */
 // GIVEN: channel id
@@ -22,12 +24,12 @@ export default class GetChannelByIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number, last_id: number, limit: number): Promise<PageResults> => {
+    public execute = async (id: number, last_id: string, limit: number): Promise<PageResults> => {
         try {
             const [channel, items, count ] = await this.channelRepository.getChannelAndBlocks(id, last_id, limit);
-
             const total = count || 0;
-            let next = last_id + 1 > total ? null : last_id + 1;
+            let block: Loaded<Block, never>;
+            let encoded;
 
             const channelDTO = new ChannelDTO(
                 channel?.id,
@@ -38,9 +40,16 @@ export default class GetChannelByIdUsecase {
                 channel?.date_updated,
                 items
             );
+
+            if (channelDTO.blocks) {
+                block = channelDTO.blocks[channelDTO?.blocks.length - 1];
+                const date = block.date_updated.toISOString();
+                encoded = Buffer.from(date, 'utf8').toString('base64');
+            }
+
             const pageResults = new PageResults(
                 total,
-                next,
+                encoded,
                 channelDTO
             );
 

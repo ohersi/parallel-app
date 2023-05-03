@@ -1,12 +1,12 @@
 export default class PageResults {
 
     total!: number;
-    next!: number | null;
+    last_id!: number | string | null | undefined;
     data!: any;
 
-    constructor(total: number, next: number | null, data: any) {
+    constructor(total: number, last_id: number | string | null | undefined, data: any) {
         this.total = total;
-        this.next = next;
+        this.last_id = last_id;
         this.data = data;
     }
 }
