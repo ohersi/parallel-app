@@ -3,9 +3,9 @@ import { Entity, Loaded, QueryOrder } from '@mikro-orm/core';
 import { injectable } from 'inversify'
 // Imports
 import { Channel } from '../entities/channel.entity';
+import { Block } from '../entities/block.entity';
 import IRepository from './interfaces/repository.interface';
 import BaseRepository from './base.repository';
-import { Block } from 'src/entities/block.entity';
 
 @injectable()
 @Entity({ customRepository: () => Channel })
@@ -32,15 +32,24 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
     };
 
     // Get all channels tied to user (order by most recently updated)
-    async getAllByUserID(id: number): Promise<Loaded<Channel, "blocks">[]> {
+    async getAllByUserID(userID: number, limit: number): Promise<any[]> {
         try {
-            const res = await this.find(
-                { user: id },
-                {
-                    orderBy: { date_updated: QueryOrder.DESC, blocks: { date_created: QueryOrder.DESC } },
-                    populate: ['blocks']
-                }
-            );
+
+            const channels = await this.find({ user: userID });
+            let res: any[] = [];
+            
+            for (const channel of channels) {
+                // Initalize channel blocks and get total amount
+                const init = await channel?.blocks.init();
+                const total_blocks = init?.count();
+                // Paginate populated items
+                const blocks = await init?.matching({
+                    limit: limit,
+                    orderBy: { date_updated: QueryOrder.DESC }
+                });
+                res.push( { channel, blocks, total_blocks } );
+            }
+
             return res;
         }
         catch (error: any) {

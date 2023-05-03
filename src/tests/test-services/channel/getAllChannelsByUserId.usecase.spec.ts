@@ -52,23 +52,24 @@ describe("GetAllChannelsByUserIdUsecase", () => {
             it("return all channels by that user in the db.", async () => {
                 // GIVEN
                 const id = 1;
+                const limit = 10;
+
+                const arr: any[] = []; 
 
                 // WHEN
                 //** Instead of mocking results, FAKE the database using in-mem db to actually simulate the prod db call  */
-                const getUserChannels = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getAllByUserID.mockResolvedValue(getUserChannels);
+                const getUserChannels = await orm.em.find(Channel, { user: id });
+                for (const channel of getUserChannels) {
+                    const init = await channel?.blocks.init();
+                    const blocks = init?.getItems(); 
+                    arr.push({ channel, blocks });
+                }
+                mockedChannelRepo.getAllByUserID.mockResolvedValue(arr);
 
-                const results = await service.execute(id);
+                const results = await service.execute(id, limit);
 
                 // THEN
-                //** Expect results to contain an array with an object that has a key/value of id = 1 */
-                expect(results).toEqual(
-                    expect.arrayContaining([
-                        expect.objectContaining({
-                            id: 1
-                        })
-                    ])
-                );
+                expect(results).toEqual(arr);
             })
         })
 
@@ -77,14 +78,19 @@ describe("GetAllChannelsByUserIdUsecase", () => {
             it("return an empty array.", async () => {
                 // GIVEN
                 const id = -99;
+                const limit = 10;
+
+                const arr: any[] = [];
 
                 // WHEN
-                const getUserChannels = await orm.em.find(Channel, { user: id }, { populate: ['blocks']});
-                mockedChannelRepo.getAllByUserID.mockResolvedValue(getUserChannels);
+                const getUserChannels = await orm.em.find(Channel, { user: id });
+                
+                mockedChannelRepo.getAllByUserID.mockResolvedValue(arr);
 
-                const results = await service.execute(id);
+                const results = await service.execute(id, limit);
 
                 // THEN
+                expect(getUserChannels).toEqual([]);
                 expect(results).toEqual([]);
             })
         })
@@ -94,12 +100,13 @@ describe("GetAllChannelsByUserIdUsecase", () => {
             it("return the thrown error.", async () => {
                 // GIVEN
                 const id = -99;
+                const limit = 10;
 
                 // WHEN
                 mockedChannelRepo.getAllByUserID.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute(id) }).rejects.toThrow(ChannelExeption);
+                expect(async () => { await service.execute(id, limit) }).rejects.toThrow(ChannelExeption);
             })
         })
 

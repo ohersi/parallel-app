@@ -8,6 +8,7 @@ import { TYPES } from '../../utils/types';
 import { TYPES_ENUM } from '../../utils/types/enum';
 import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
 import { cache } from '../../resources/caching/cache';
+import { paginate } from '../../middleware/paginate.middlware';
 
 
 @controller(`/api/v1/users`)
@@ -19,20 +20,22 @@ export default class GetAllChannelsByUserIdController {
         this.usecase = getAllChannelsByUserID;
     }
 
-    @httpGet('/:id/channels')
+    @httpGet('/:id/channels', paginate)
     public async getAllChannelsByUserID(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const userID = parseInt(req.params.id)
-            const results = await this.usecase.execute(userID);
+            const userID = parseInt(req.params.id);
+            const limit = parseInt(req.query.limit as string);
+
+            const results = await this.usecase.execute(userID, limit);
             // const results = await cache('users', this.usecase.execute);
 
-            if (Array.isArray(results) && !results.length) {
+            if (!results.length) {
                 res.status(404);
-                res.send({ error: { status: 404 }, message: 'No channels found with that id' });
+                res.send({ error: { status: 404 }, message: `User with id [${userID}] has no channels.` });
             }
             else {
                 res.status(200);

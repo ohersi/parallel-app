@@ -4,10 +4,9 @@ import { provide } from "inversify-binding-decorators";
 // Imports
 import ChannelRepository from "../../../repositories/channel.repository";
 import { TYPES } from "../../../utils/types";
-import { Channel } from "../../../entities/channel.entity";
-import { Loaded } from "@mikro-orm/core";
 import ChannelException from "../../../utils/exceptions/channel.exception";
-
+import ChannelDTO from "../../../dto/channel.dto";
+import PageResults from "../../../resources/pagination/pageResults";
 
 //** USE CASE */
 // GIVEN: A user id
@@ -23,10 +22,13 @@ export default class GetAllChannelsByUserIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (userID: number): Promise<Loaded<Channel, "blocks">[]> => {
+    public execute = async (userID: number,limit: number): Promise<any[]> => {
         try {
-            const allUserChannels = await this.channelRepository.getAllByUserID(userID);
-            return allUserChannels;
+            const userChannels  = await this.channelRepository.getAllByUserID(userID, limit);
+            userChannels.forEach(( channel: any ) => {
+                delete channel.channel['blocks'];
+            });
+            return userChannels;
         }
         catch (err: any) {
             throw new ChannelException(err.message);
