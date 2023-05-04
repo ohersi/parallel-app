@@ -56,7 +56,7 @@ describe("UnFollowChannelController", () => {
 
                     it("return a status of 200.", async () => {
                         // GIVEN
-                        const channelID = 1;
+                        requestMock.params.id = '1';
                         const userID = 1;
 
                         // WHEN
@@ -71,7 +71,7 @@ describe("UnFollowChannelController", () => {
 
                     it("return a status of 500.", async () => {
                         // GIVEN
-                        const channelID = 1;
+                        requestMock.params.id = '1';
                         const userID = 1;
 
                         // WHEN
@@ -87,11 +87,10 @@ describe("UnFollowChannelController", () => {
 
             describe("and request query does NOT contain a channel id,", () => {
 
-                it("send an status of 500.", async () => {
+                it("send an status of 404.", async () => {
                     // GIVEN
                     const userID = 1;
-
-                    requestMock.query = {};
+                    requestMock.params.id = '';
 
                     // WHEN
                     await controller.unfollowChannel(requestMock, responseMock, nextMock);
@@ -108,8 +107,9 @@ describe("UnFollowChannelController", () => {
             it("return a status of 401.", async () => {
                 // GIVEN
                 const channelID = 1;
+
                 // WHEN
-                const results = await request(app).delete(`/api/v1/users/unfollow?channel=${channelID}`);
+                const results = await request(app).delete(`/api/v1/users/unfollow/channel/${channelID}`);
 
                 // THEN
                 expect(results.status).toEqual(401);

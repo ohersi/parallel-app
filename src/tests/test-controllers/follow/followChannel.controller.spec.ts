@@ -56,7 +56,7 @@ describe("FollowChannelController", () => {
 
                     it("return a status of 200.", async () => {
                         // GIVEN
-                        const channelID = 1;
+                        requestMock.params.id = '1';
                         const userID = 1;
 
                         // WHEN
@@ -71,7 +71,7 @@ describe("FollowChannelController", () => {
 
                     it("return a status of 500.", async () => {
                         // GIVEN
-                        const channelID = 1;
+                        requestMock.params.id = '1';
                         const userID = 1;
 
                         // WHEN
@@ -87,11 +87,10 @@ describe("FollowChannelController", () => {
 
             describe("and request query does NOT contain a channel id,", () => {
 
-                it("send an status of 500.", async () => {
+                it("send an status of 404.", async () => {
                     // GIVEN
                     const userID = 1;
-
-                    requestMock.query = {};
+                    requestMock.params.id = '';
 
                     // WHEN
                     await controller.followChannel(requestMock, responseMock, nextMock);
@@ -108,8 +107,9 @@ describe("FollowChannelController", () => {
             it("return a status of 401.", async () => {
                 // GIVEN
                 const channelID = 1;
+
                 // WHEN
-                const results = await request(app).post(`/api/v1/users/follow?channel=${channelID}`);
+                const results = await request(app).post(`/api/v1/users/follow/channel/${channelID}`);
 
                 // THEN
                 expect(results.status).toEqual(401);

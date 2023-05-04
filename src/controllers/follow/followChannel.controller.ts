@@ -16,22 +16,23 @@ export default class FollowChannelController {
         this.usecase = followChannelUsecase;
     }
 
-    @httpPost('/follow/', sessionAuth)
+    @httpPost('/follow/channel/:id', sessionAuth)
     public async followChannel(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const { channel } = req.query;
-            if (!channel) {
+            const followID = parseInt(req.params.id);
+
+            if (!followID) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing channel to follow." });
             }
-            const followID = parseInt(channel.toString());
-            const userID = req.session.user?.id!;
 
+            const userID = req.session.user?.id!;
             const results = await this.usecase.execute(userID, followID);
+
             res.status(200);
             res.send({ message: `Following channel with id [${followID}].` });
         }

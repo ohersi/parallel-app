@@ -57,7 +57,7 @@ describe("AddFriendController", () => {
                     it("return a status of 200.", async () => {
                         // GIVEN
                         const userID = 1;
-                        const followID = 2;
+                        requestMock.params.id = '1';
 
                         // WHEN
                         mockedUsecase.execute.mockResolvedValue();
@@ -73,7 +73,7 @@ describe("AddFriendController", () => {
                     it("return a status of 500.", async () => {
                         // GIVEN
                         const userID = 1;
-                        const followID = 2;
+                        requestMock.params.id = '1';
 
                         // WHEN
                         mockedUsecase.execute.mockRejectedValue(Error);
@@ -91,9 +91,7 @@ describe("AddFriendController", () => {
                 it("send an status of 500.", async () => {
                     // GIVEN
                     const userID = 1;
-                    const followID = 2;
-
-                    requestMock.query = {};
+                    requestMock.params.id = '';
 
                     // WHEN
                     await controller.addFriend(requestMock, responseMock, nextMock);
@@ -109,11 +107,10 @@ describe("AddFriendController", () => {
 
             it("return a status of 401.", async () => {
                 // GIVEN
-                const userID = 1;
                 const followID = 2;
 
                 // WHEN
-                const results = await request(app).post(`/api/v1/users/follow?user=${followID}`);
+                const results = await request(app).post(`/api/v1/users/follow/user/${followID}`);
 
                 // THEN
                 expect(results.status).toEqual(401);

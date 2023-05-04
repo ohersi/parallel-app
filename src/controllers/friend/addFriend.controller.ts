@@ -16,21 +16,21 @@ export default class AddFriendController {
         this.usecase = addFriendUsecase;
     }
 
-    @httpPost('/follow', sessionAuth)
+    @httpPost('/follow/user/:id', sessionAuth)
     public async addFriend(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const { user } = req.query;
-            if (!user) {
+            const followID = parseInt(req.params.id);
+
+            if (!followID) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing user to follow." });
             }
-            const followID = parseInt(user.toString());
+            
             const userID = req.session.user?.id!;
-
             const results = await this.usecase.execute(userID, followID);
 
             res.status(200);

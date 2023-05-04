@@ -16,24 +16,25 @@ export default class UnFollowChannelController {
         this.usecase = unfollowChannelUsecase;
     }
 
-    @httpDelete('/unfollow/', sessionAuth)
+    @httpDelete('/unfollow/channel/:id', sessionAuth)
     public async unfollowChannel(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const { channel } = req.query;
-            if (!channel) {
+            const unfollowID = parseInt(req.params.id);
+
+            if (!unfollowID) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing channel to unfollow." });
             }
-            const followID = parseInt(channel.toString());
+            
             const userID = req.session.user?.id!;
+            const results = await this.usecase.execute(userID, unfollowID);
 
-            const results = await this.usecase.execute(userID, followID);
             res.status(200);
-            res.send({ message: `Channel with id [${followID}] has been unfollowed.` });
+            res.send({ message: `Channel with id [${unfollowID}] has been unfollowed.` });
         }
         catch (err: any) {
             res.status(500);
