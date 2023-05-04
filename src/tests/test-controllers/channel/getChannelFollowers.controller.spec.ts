@@ -9,6 +9,7 @@ import GetChannelFollowersController from "../../../controllers/channel/getChann
 import GetChannelFollowersUsecase from "../../../services/usecases/channel/getChannelFollowers.usecase";
 import { start } from '../../../app';
 import { cache } from "../../../resources/caching/cache";
+import { Follow } from "../../../entities/follow.entity";
 
 // Mock redis caching middleware
 jest.mock("../../../resources/caching/cache", () => ({
@@ -61,12 +62,14 @@ describe("GetChannelFollowersController", () => {
             it("returns an array of all channels followers objects and status code of 200.", async () => {
                 // GIVEN
                 const id = 1;
-                
+                const results = [{}] as Follow[];
+
                 // WHEN
-                const results = await request(app).get(`/api/v1/channels/${id}/followers`);
+                mockedUsecase.execute.mockResolvedValue(results);
+                await controller.getChannelFollowers(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(200);
+                expect(responseMock.status).toBeCalledWith(200);
             })
         })
 
@@ -74,14 +77,15 @@ describe("GetChannelFollowersController", () => {
 
             it("return status code of 404.", async () => {
                 // GIVEN
-                const id = -999;
+                const id = 1;
+                const results = [] as Follow[];
 
                 // WHEN
-                mockCache.mockResolvedValue([]);
-                const results = await request(app).get(`/api/v1/channels/${id}/followers`);
+                mockedUsecase.execute.mockResolvedValue(results);
+                await controller.getChannelFollowers(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(404);
+                expect(responseMock.status).toBeCalledWith(404);
             })
         })
 
@@ -92,7 +96,7 @@ describe("GetChannelFollowersController", () => {
                 const id = 1;
 
                 // WHEN
-                mockCache.mockRejectedValue(Error);
+                mockedUsecase.execute.mockRejectedValue(Error);
                 await controller.getChannelFollowers(requestMock, responseMock, nextMock);
 
                 // THEN
