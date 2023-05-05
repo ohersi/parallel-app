@@ -41,7 +41,7 @@ export default class GetChannelByIdUsecase {
                 items
             );
 
-            if (channelDTO.blocks) {
+            if (channelDTO.blocks?.length) {
                 block = channelDTO.blocks[channelDTO?.blocks.length - 1];
                 const date = block.date_updated.toISOString();
                 encoded = Buffer.from(date, 'utf8').toString('base64');

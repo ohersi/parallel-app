@@ -24,8 +24,9 @@ export default class GetAllChannelsUserFollowsController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
+            const cacheTimespan = '15mins';
             
-            const results: any = await cache(`user:${id}:channels:following`, () => this.usecase.execute(id));
+            const results: any = await cache(`user:${id}:channels:following`, () => this.usecase.execute(id), cacheTimespan);
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);

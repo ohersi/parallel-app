@@ -4,8 +4,8 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import GetChannelFollowersUsecase from '../../services/usecases/channel/getChannelFollowers.usecase';
-import { TYPES } from '../../utils/types';
 import { cache } from '../../resources/caching/cache';
+import { TYPES } from '../../utils/types';
 
 
 @controller(`/api/v1/channels`)
@@ -25,8 +25,9 @@ export default class GetChannelFollowersController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
+            const cacheTimespan = '15mins';
             
-            const results: any = await cache(`channel:${id}:users:followers`, () => this.usecase.execute(id));
+            const results: any = await cache(`channel:${id}:users:followers`, () => this.usecase.execute(id), cacheTimespan);
             
             if (Array.isArray(results) && !results.length) {
                 res.status(404);

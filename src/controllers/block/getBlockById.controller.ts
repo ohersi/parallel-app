@@ -4,6 +4,7 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import GetBlockByIdUsecase from '../../services/usecases/block/getBlockByID.usecase';
+import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/blocks`)
@@ -22,11 +23,14 @@ export default class GetBlockByIdController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const id = parseInt(req.params.id)
-            const results = await this.usecase.execute(id);
+            const id = parseInt(req.params.id);
+            const cacheTimespan = '15mins';
+
+            const results = await cache(`block:${id}`, () => this.usecase.execute(id), cacheTimespan);
+
             if (!results) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: 'No blocks found with that id' });
+                return res.send({ error: { status: 404 }, message: `No blocks found with that id [${id}]`});
             }
             res.status(200);
             res.send(results)

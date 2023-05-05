@@ -6,7 +6,6 @@ import { inject } from 'inversify';
 import GetChannelByIdUsecase from '../../services/usecases/channel/getChannelById.usecase';
 import { decodeLastID } from '../../resources/helper/text-manipulation';
 import { paginate } from '../../middleware/paginate.middlware';
-import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 
@@ -30,9 +29,9 @@ export default class GetChannelByIdController {
             const last_id = decodeLastID(req.query.last_id as string);
             const limit = parseInt(req.query.limit as string);
 
-            const results: any = await cache(`channel:${channelID}:limit=${limit}:last_id=${last_id}`, () => this.usecase.execute(channelID, last_id, limit));
+            const results =  await this.usecase.execute(channelID, last_id, limit)
             
-            if (!results.data.length) {
+            if (!results) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `No channels found with that [${channelID}].` });
             }

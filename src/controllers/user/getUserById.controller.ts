@@ -24,8 +24,9 @@ export default class GetUserByIdController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
+            const cacheTimespan = '15mins';
 
-            const results: any = await cache(`user:${id}`, () => this.usecase.execute(id));
+            const results: any = await cache(`user:${id}`, () => this.usecase.execute(id), cacheTimespan);
 
             res.status(200);
             res.send(results);

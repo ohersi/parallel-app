@@ -4,11 +4,10 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import GetAllUsersUseCase from '../../services/usecases/user/getAllUsers.usecase';
-import { TYPES } from '../../utils/types';
-import { TYPES_ENUM } from '../../utils/types/enum';
 import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
-import { cache } from '../../resources/caching/cache';
 import { paginate } from '../../middleware/paginate.middlware';
+import { TYPES_ENUM } from '../../utils/types/enum';
+import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
 export default class GetAllUsersController {
@@ -29,7 +28,7 @@ export default class GetAllUsersController {
             const last_id = parseInt(req.query.last_id as string) || 0;
             const limit = parseInt(req.query.limit as string);
 
-            const results: any  = await cache(`users:limit=${last_id}:last_id=${limit}`, () => this.usecase.execute(last_id, limit));
+            const results  = await this.usecase.execute(last_id, limit);
 
             if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);

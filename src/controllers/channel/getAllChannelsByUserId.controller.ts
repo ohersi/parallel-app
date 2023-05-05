@@ -10,7 +10,6 @@ import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
 import { cache } from '../../resources/caching/cache';
 import { paginate } from '../../middleware/paginate.middlware';
 
-
 @controller(`/api/v1/users`)
 export default class GetAllChannelsByUserIdController {
 
@@ -29,8 +28,9 @@ export default class GetAllChannelsByUserIdController {
         try {
             const userID = parseInt(req.params.id);
             const limit = parseInt(req.query.limit as string);
+            const cacheTimespan = '15mins';
             
-            const results: any = await cache(`user:${userID}:channels:limit=${limit}`, () => this.usecase.execute(userID, limit));
+            const results: any = await cache(`user:${userID}:channels:limit=${limit}`, () => this.usecase.execute(userID, limit), cacheTimespan);
 
             if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);

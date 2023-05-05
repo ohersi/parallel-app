@@ -1,10 +1,11 @@
 import { redisContainer } from "../../app";
+import { convertTime } from "../helper/convert-time";
 
-
-// TODO: Check if there is fresh data, and return that. Otherwise return stored redis cache data
-export const cache = async (key: string, callback: Function) => {
+export const cache = async (key: string, callback: Function, duration: string) => {
 
     const redisClient = redisContainer.redis;
+    
+    const convertedTime = convertTime(duration);
 
     return new Promise((resolve, reject) => {
         redisClient.get(key, async (error, data) => {
@@ -14,7 +15,7 @@ export const cache = async (key: string, callback: Function) => {
 
             try {
                 const results = await callback();
-                redisClient.setex(key, 1000, JSON.stringify(results));
+                redisClient.setex(key, convertedTime, JSON.stringify(results));
                 resolve(results);
             }
             catch (err: any) {

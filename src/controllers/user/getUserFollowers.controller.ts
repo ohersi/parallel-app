@@ -24,8 +24,9 @@ export default class GetUserFollowersController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
+            const cacheTimespan = '15mins';
 
-            const results = await cache(`user:${id}:followers`, () => this.usecase.execute(id));
+            const results = await cache(`user:${id}:followers`, () => this.usecase.execute(id), cacheTimespan);
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
