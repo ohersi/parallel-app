@@ -6,6 +6,7 @@ import { inject } from 'inversify';
 import getChannelBySlugUsecase from '../../services/usecases/channel/getChannelBySlug.usecase';
 import { convertToSlug, decodeLastID } from '../../resources/helper/text-manipulation';
 import { paginate } from '../../middleware/paginate.middlware';
+import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 
@@ -29,8 +30,9 @@ export default class GetChannelBySlugController {
             const last_id = decodeLastID(req.query.last_id as string);
             const limit = parseInt(req.query.limit as string);
 
-            const results = await this.usecase.execute(channelSlug, last_id, limit);
-            if (!results.data.title) {
+            const results: any = await cache(`channel:${channelSlug}:limit=${limit}:last_id=${last_id}`, () => this.usecase.execute(channelSlug, last_id, limit));
+
+            if (!results.data.length) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `Channel with title ${channelSlug} was not found.` });
             }

@@ -25,8 +25,8 @@ export default class GetChannelFollowersController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.usecase.execute(id);
-            // const results = await cache('channel_followers', () => this.usecase.execute(id));
+            
+            const results: any = await cache(`channel:${id}:users:followers`, () => this.usecase.execute(id));
             
             if (Array.isArray(results) && !results.length) {
                 res.status(404);

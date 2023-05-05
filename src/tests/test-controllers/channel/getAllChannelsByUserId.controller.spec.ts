@@ -9,12 +9,13 @@ import GetAllChannelsByUserIdController from "../../../controllers/channel/getAl
 import GetAllChannelsByUserIdUsecase from "../../../services/usecases/channel/getAllChannelsByUserId.usecase";
 import { start } from '../../../app';
 import { cache } from "../../../resources/caching/cache";
+import PageResults from "../../../resources/pagination/pageResults";
 
 // Mock redis caching middleware
-// jest.mock("../../../resources/caching/cache", () => ({
-//     cache: jest.fn()
-// }));
-// const mockCache = cache as jest.Mock;
+jest.mock("../../../resources/caching/cache", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
 
 
 describe("GetAllChannelsByUserIdController", () => {
@@ -61,14 +62,18 @@ describe("GetAllChannelsByUserIdController", () => {
             it("returns an array of all channels objects from that user and status code of 200.", async () => {
                 // GIVEN
                 const userID = 1;
-                const results = [{ data: userID }]
-
+                const arr = new PageResults(
+                    userID,
+                    undefined,
+                    [{ id: 1 }]
+                );
+                
                 // WHEN
-                mockedUsecase.execute.mockResolvedValue(results);
-                await controller.getAllChannelsByUserID(requestMock, responseMock, nextMock);
+                mockCache.mockResolvedValue(arr);
+                const results = await request(app).get(`/api/v1/users/${userID}/channels`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(200);
+                expect(results.status).toEqual(200);
             })
         })
 
@@ -77,8 +82,14 @@ describe("GetAllChannelsByUserIdController", () => {
             it("returns status code of 404.", async () => {
                 // GIVEN
                 const userID = -999;
+                const arr = new PageResults(
+                    0,
+                    undefined,
+                    []
+                );
 
                 // WHEN
+                mockCache.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/users/${userID}/channels`);
 
                 // THEN
@@ -93,7 +104,7 @@ describe("GetAllChannelsByUserIdController", () => {
                 const userID = 1;
 
                 // WHEN
-                mockedUsecase.execute.mockRejectedValue(Error);
+                mockCache.mockRejectedValue(Error);
                 await controller.getAllChannelsByUserID(requestMock, responseMock, nextMock);
 
                 // THEN

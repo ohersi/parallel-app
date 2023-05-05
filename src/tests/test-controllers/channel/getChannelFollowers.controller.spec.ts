@@ -62,14 +62,14 @@ describe("GetChannelFollowersController", () => {
             it("returns an array of all channels followers objects and status code of 200.", async () => {
                 // GIVEN
                 const id = 1;
-                const results = [{}] as Follow[];
+                const channels = [{}] as Follow[];
 
                 // WHEN
-                mockedUsecase.execute.mockResolvedValue(results);
-                await controller.getChannelFollowers(requestMock, responseMock, nextMock);
+                mockCache.mockResolvedValue(channels);
+                const results = await request(app).get(`/api/v1/channels/${id}/followers`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(200);
+                expect(results.status).toEqual(200);
             })
         })
 
@@ -78,14 +78,13 @@ describe("GetChannelFollowersController", () => {
             it("return status code of 404.", async () => {
                 // GIVEN
                 const id = 1;
-                const results = [] as Follow[];
 
                 // WHEN
-                mockedUsecase.execute.mockResolvedValue(results);
-                await controller.getChannelFollowers(requestMock, responseMock, nextMock);
+                mockCache.mockResolvedValue([]);
+                const results = await request(app).get(`/api/v1/channels/${id}/followers`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(404);
+                expect(results.status).toEqual(404);
             })
         })
 
@@ -96,11 +95,11 @@ describe("GetChannelFollowersController", () => {
                 const id = 1;
 
                 // WHEN
-                mockedUsecase.execute.mockRejectedValue(Error);
-                await controller.getChannelFollowers(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error);
+                const results = await request(app).get(`/api/v1/channels/${id}/followers`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(500);
+                expect(results.status).toEqual(500);
             })
         });
 

@@ -22,13 +22,18 @@ export default class GetAllChannelsByUserIdUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (userID: number,limit: number): Promise<any[]> => {
+    public execute = async (userID: number,limit: number): Promise<PageResults> => {
         try {
             const userChannels  = await this.channelRepository.getAllByUserID(userID, limit);
             userChannels.forEach(( channel: any ) => {
                 delete channel.channel['blocks'];
             });
-            return userChannels;
+            const pageResults = new PageResults(
+                userChannels.length,
+                undefined,
+                userChannels
+            )
+            return pageResults;
         }
         catch (err: any) {
             throw new ChannelException(err.message);

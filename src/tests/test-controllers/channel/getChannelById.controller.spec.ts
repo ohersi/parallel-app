@@ -7,8 +7,15 @@ import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import GetChannelByIdController from "../../../controllers/channel/getChannelById.controller";
 import GetChannelByIdUsecase from "../../../services/usecases/channel/getChannelById.usecase";
-import { start } from '../../../app';
 import PageResults from "../../../resources/pagination/pageResults";
+import { cache } from "../../../resources/caching/cache";
+import { start } from '../../../app';
+
+// Mock redis caching middleware
+jest.mock("../../../resources/caching/cache", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
 
 describe("GetChannelByIdController", () => {
     // Mocks
@@ -54,8 +61,14 @@ describe("GetChannelByIdController", () => {
             it("return a channel object and status of 200.", async () => {
                 // GIVEN
                 const id = 1;
+                const arr = new PageResults(
+                    id,
+                    undefined,
+                    [{ title: 'title' }]
+                );
 
                 // WHEN
+                mockCache.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
@@ -68,8 +81,14 @@ describe("GetChannelByIdController", () => {
             it("return a status of 404.", async () => {
                 // GIVEN
                 const id = -999;
+                const arr = new PageResults(
+                    id,
+                    undefined,
+                    []
+                );
 
                 // WHEN
+                mockCache.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
@@ -80,10 +99,10 @@ describe("GetChannelByIdController", () => {
         describe("and the database throws an error,", () => {
 
             it("return a status of 500.", async () => {
-              // GIVEN
+                // GIVEN
 
                 // WHEN
-                mockedUsecase.execute.mockRejectedValue(Error);
+                mockCache.mockRejectedValue(Error);
                 await controller.getChannelByID(requestMock, responseMock, nextMock);
 
                 // THEN

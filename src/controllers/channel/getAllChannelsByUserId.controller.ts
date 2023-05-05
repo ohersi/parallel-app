@@ -29,11 +29,10 @@ export default class GetAllChannelsByUserIdController {
         try {
             const userID = parseInt(req.params.id);
             const limit = parseInt(req.query.limit as string);
+            
+            const results: any = await cache(`user:${userID}:channels:limit=${limit}`, () => this.usecase.execute(userID, limit));
 
-            const results = await this.usecase.execute(userID, limit);
-            // const results = await cache('users', this.usecase.execute);
-
-            if (!results.length) {
+            if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);
                 res.send({ error: { status: 404 }, message: `User with id [${userID}] has no channels.` });
             }
