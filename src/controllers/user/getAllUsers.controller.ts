@@ -28,8 +28,9 @@ export default class GetAllUsersController {
         try {
             const last_id = parseInt(req.query.last_id as string) || 0;
             const limit = parseInt(req.query.limit as string);
-            // const results = await cache('users', this.usecase.execute);
-            const results = await this.usecase.execute(last_id, limit);
+
+            const results: any  = await cache(`users:limit=${last_id}:last_id=${limit}`, () => this.usecase.execute(last_id, limit));
+
             if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: 'No users found.' });

@@ -7,7 +7,15 @@ import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
 import GetUserFollowersController from "../../../controllers/user/getUserFollowers.controller";
 import GetUserFollowersUsecase from "../../../services/usecases/user/getUserFollowers.usecase";
-import { start } from '../../../app'
+import { cache } from "../../../resources/caching/cache";
+import { start } from '../../../app';
+import { Friend } from "../../../entities/friend.entity";
+
+// Mock redis caching middleware
+jest.mock("../../../resources/caching/cache", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
 
 describe("GetUserFollowersController", () => {
     // Mocks
@@ -53,8 +61,10 @@ describe("GetUserFollowersController", () => {
             it("returns a followers object and status of 200", async () => {
                 // GIVEN
                 const id = 1;
+                const followersList = [{}] as Friend[];
 
                 // WHEN
+                mockCache.mockResolvedValue(followersList);
                 const results = await request(app).get(`/api/v1/users/${id}/followers`);
 
                 // THEN
@@ -67,8 +77,10 @@ describe("GetUserFollowersController", () => {
             it("return a status of 404.", async () => {
                 // GIVEN
                 const id = -99;
+                const followersList = [] as Friend[];
 
                 // WHEN
+                mockCache.mockResolvedValue(followersList);
                 const results = await request(app).get(`/api/v1/users/${id}/followers`);
 
                 // THEN
@@ -83,11 +95,11 @@ describe("GetUserFollowersController", () => {
                 const id = -99;
 
                 // WHEN
-                mockedUsecase.execute.mockRejectedValue(Error);
-                await controller.getUserFollowers(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error);
+                const results = await request(app).get(`/api/v1/users/${id}/followers`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(500);
+                expect(results.status).toEqual(500);
             })
         })
     });

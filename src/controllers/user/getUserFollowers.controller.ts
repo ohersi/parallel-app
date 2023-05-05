@@ -4,6 +4,7 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify'
 // Imports
 import GetUserFollowersUsecase from '../../services/usecases/user/getUserFollowers.usecase';
+import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
@@ -23,8 +24,9 @@ export default class GetUserFollowersController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.usecase.execute(id);
-            
+
+            const results = await cache(`user:${id}:followers`, () => this.usecase.execute(id));
+
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `user with id [${id}] has no followers.` });

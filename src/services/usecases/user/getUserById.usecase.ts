@@ -26,7 +26,7 @@ export default class GetUserByIdUseCase {
         try {
             const user = await this.userRepository.findByID(id);
             if (!user) {
-                return null;
+                throw new UserException(`No user with id [${id}] found.`)
             };
             return user;
         }

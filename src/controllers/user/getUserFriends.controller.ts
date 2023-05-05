@@ -4,6 +4,7 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify'
 // Imports
 import GetUserFriendsUsecase from '../../services/usecases/user/getUserFriends.usecase';
+import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
@@ -23,7 +24,8 @@ export default class GetUserFriendsController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.usecase.execute(id);
+            
+            const results = await cache(`user:${id}:following`, () => this.usecase.execute(id));
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);

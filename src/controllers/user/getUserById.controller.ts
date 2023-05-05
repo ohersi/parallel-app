@@ -4,6 +4,7 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify'
 // Imports
 import GetUserByIdUseCase from '../../services/usecases/user/getUserById.usecase';
+import { cache } from '../../resources/caching/cache';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
@@ -23,15 +24,11 @@ export default class GetUserByIdController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const results = await this.usecase.execute(id);
-            if (!results) {
-                res.status(404);
-                res.send({ error: { status: 404 }, message: 'No users found with that id' });
-            }
-            else {
-                res.status(200);
-                res.send(results)
-            }
+
+            const results: any = await cache(`user:${id}`, () => this.usecase.execute(id));
+
+            res.status(200);
+            res.send(results);
         }
         catch (err: any) {
             res.status(500);

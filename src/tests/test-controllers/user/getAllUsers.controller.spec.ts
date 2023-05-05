@@ -71,8 +71,14 @@ describe("GetAllUsersController", () => {
 
             it("returns an array of all user objects and status code of 200.", async () => {
                 // GIVEN
+                const users = new PageResults(
+                    0,
+                    undefined,
+                    [{ id: 1 }]
+                );
 
                 // WHEN
+                mockCache.mockResolvedValue(users);
                 const results = await request(app).get("/api/v1/users/");
 
                 // THEN
@@ -84,30 +90,36 @@ describe("GetAllUsersController", () => {
 
             it("return a status of 404.", async () => {
                 // GIVEN
-                const pageResults = { data: [] } as PageResults;
+                const users = new PageResults(
+                    0,
+                    undefined,
+                    []
+                );
                 
                 // WHEN
-                // mockCache.mockResolvedValue([]);
-                mockedGetAllUsersUseCase.execute.mockResolvedValue(pageResults);
-                await controller.getAllUsers(requestMock, responseMock, nextMock);
+                mockCache.mockResolvedValue(users)
+                const results = await request(app).get("/api/v1/users/");
 
                 // // THEN
-                expect(responseMock.status).toBeCalledWith(404);
+                expect(results.status).toEqual(404);
             })
         });
 
         describe("and the database throws an error,", () => {
 
             it("return a status of 500.", async () => {
-                // GIVEN
-
+                const users = new PageResults(
+                    0,
+                    undefined,
+                    [{ id: 1 }]
+                );
+                
                 // WHEN
-                // mockCache.mockRejectedValue(Error);
-                mockedGetAllUsersUseCase.execute.mockRejectedValue(Error);
-                await controller.getAllUsers(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error)
+                const results = await request(app).get("/api/v1/users/");
 
                 // // THEN
-                expect(responseMock.status).toBeCalledWith(500);
+                expect(results.status).toEqual(500);
             })
         });
     });

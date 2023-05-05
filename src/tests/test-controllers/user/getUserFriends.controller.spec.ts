@@ -5,10 +5,17 @@ import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
+import { Friend } from "../../../entities/friend.entity";
 import GetUserFriendsController from "../../../controllers/user/getUserFriends.controller";
 import GetUserFriendsUsecase from "../../../services/usecases/user/getUserFriends.usecase";
+import { cache } from "../../../resources/caching/cache";
 import { start } from '../../../app'
-import { Friend } from "../../../entities/friend.entity";
+
+// Mock redis caching middleware
+jest.mock("../../../resources/caching/cache", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
 
 describe("GetUserFriendsController", () => {
     // Mocks
@@ -57,26 +64,27 @@ describe("GetUserFriendsController", () => {
                 const friendsList = [{ }] as Friend[];
                 
                 // WHEN
-                mockedUsecase.execute.mockResolvedValue(friendsList);
-                await controller.getUserFriends(requestMock, responseMock, nextMock);
+                mockCache.mockResolvedValue(friendsList);
+                const results = await request(app).get(`/api/v1/users/${id}/friends`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(200);
+                expect(results.status).toEqual(200);
             })
         });
 
         describe("and the user corresponding to the id is not found", () => {
 
             it("return a status of 404.", async () => {
-                 // GIVEN
-                 const id = 1;
+                // GIVEN
+                const id = -99;
+                const friendsList = [] as Friend[];
+                
+                // WHEN
+                mockCache.mockResolvedValue(friendsList);
+                const results = await request(app).get(`/api/v1/users/${id}/friends`);
 
-                 // WHEN
-                 mockedUsecase.execute.mockResolvedValue([]);
-                 await controller.getUserFriends(requestMock, responseMock, nextMock);
- 
-                 // THEN
-                 expect(responseMock.status).toBeCalledWith(404);
+                // THEN
+                expect(results.status).toEqual(404);
             })
         });
 
@@ -84,14 +92,14 @@ describe("GetUserFriendsController", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
-                const id = -99;
-
+                const id = 1;
+                
                 // WHEN
-                mockedUsecase.execute.mockRejectedValue(Error);
-                await controller.getUserFriends(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error);
+                const results = await request(app).get(`/api/v1/users/${id}/friends`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(500);
+                expect(results.status).toEqual(500);
             })
         })
 

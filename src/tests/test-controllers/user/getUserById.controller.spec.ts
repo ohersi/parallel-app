@@ -7,7 +7,14 @@ import { cleanUpMetadata, next } from "inversify-express-utils";
 // Imports
 import GetUserByIdController from "../../../controllers/user/getUserById.controller";
 import GetUserByIdUseCase from "../../../services/usecases/user/getUserById.usecase";
+import { cache } from "../../../resources/caching/cache";
 import { start } from '../../../app'
+
+// Mock redis caching middleware
+jest.mock("../../../resources/caching/cache", () => ({
+    cache: jest.fn()
+}));
+const mockCache = cache as jest.Mock;
 
 describe("getUserByIdController", () => {
     // Mocks
@@ -53,8 +60,10 @@ describe("getUserByIdController", () => {
             it("returns a user object and status of 200", async () => {
                 // GIVEN
                 const id = 1;
+                const user = { id: id };
 
                 // WHEN
+                mockCache.mockResolvedValue(user);
                 const results = await request(app).get(`/api/v1/users/${id}`);
 
                 // THEN
@@ -65,15 +74,17 @@ describe("getUserByIdController", () => {
 
         describe("and the user corresponding to the id is not found", () => {
 
-            it("return a status of 404", async () => {
+            it("return a status of 500", async () => {
                 // GIVEN
                 const id = -99;
+                const user = {};
 
                 // WHEN
+                mockCache.mockRejectedValue(Error);
                 const results = await request(app).get(`/api/v1/users/${id}`);
 
                 // THEN
-                expect(results.status).toEqual(404);
+                expect(results.status).toEqual(500);
             })
         });
 
@@ -84,11 +95,11 @@ describe("getUserByIdController", () => {
                 const id = -99;
 
                 // WHEN
-                mockedGetUserByIDUseCase.execute.mockRejectedValue(Error);
-               await controller.getUserByID(requestMock, responseMock, nextMock);
+                mockCache.mockRejectedValue(Error);
+                const results = await request(app).get(`/api/v1/users/${id}`);
 
                 // THEN
-                expect(responseMock.status).toBeCalledWith(500);
+                expect(results.status).toEqual(500);
             })
         });
 
