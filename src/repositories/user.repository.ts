@@ -51,4 +51,19 @@ export default class UserRepository extends BaseRepository<User> implements IRep
             throw new Error(error.message);
         }
     }
+
+    async searchUsersMatchingName(name: string): Promise<Loaded<User, never>[]> {
+        try {
+            const res = await this.find(
+                // Regex search
+                { full_name: { $re: '(?i)^.*'+name+'.*$' } },
+                // Full text search
+                // { searchableTitle: { $fulltext: name } },
+            );
+            return res;
+        } 
+        catch (error: any) {
+            throw new Error(error.message);
+        }
+    }
 }

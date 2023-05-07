@@ -20,6 +20,9 @@ export * from '../../../controllers/user/getUserFriends.controller';
 import '../../../controllers/user/getUserFollowers.controller';
 export * from '../../../controllers/user/getUserFollowers.controller';
 
+import '../../../controllers/user/searchUserByName.controller';
+export * from '../../../controllers/user/searchUserByName.controller';
+
 import '../../../controllers/user/loginUser.controller';
 export * from '../../../controllers/user/loginUser.controller';
 
@@ -57,6 +60,9 @@ export * from '../../../controllers/channel/getChannelFollowers.controller';
 
 import '../../../controllers/channel/getAllChannelsUserFollows.controller';
 export * from '../../../controllers/channel/getAllChannelsUserFollows.controller';
+
+import '../../../controllers/channel/searchChannelByTitle.controller';
+export * from '../../../controllers/channel/searchChannelByTitle.controller';
 
 
 // BLOCK CONTROLLERS //

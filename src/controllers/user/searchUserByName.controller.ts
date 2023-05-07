@@ -3,36 +3,36 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import SearchBlockByTitleUsecase from '../../services/usecases/block/searchBlockByTitle.usecase';
+import SearchUserByNameUsecase from '../../services/usecases/user/searchUserByName.usecase';
 import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/search`)
-export default class SearchBlockByTitleController {
+export default class SearchUserByNameController {
 
-    private readonly usecase: SearchBlockByTitleUsecase;
+    private readonly usecase: SearchUserByNameUsecase;
 
-    constructor(@inject(TYPES.SEARCH_BLOCK_BY_TITLE_USECASE) searchBlockByTitleUsecase: SearchBlockByTitleUsecase) {
-        this.usecase = searchBlockByTitleUsecase;
+    constructor(@inject(TYPES.SEARCH_USER_BY_NAME_USECASE) searchUserByNameUsecase: SearchUserByNameUsecase) {
+        this.usecase = searchUserByNameUsecase;
     }
 
-    @httpGet('/blocks')
-    public async searchBlockByTitle(
+    @httpGet('/users')
+    public async searchUserByName(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const title = req.query.title as string;
-            if (!title) {
+            const name = req.query.name as string;
+            if (!name) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `Missing title to search for.`});
+                return res.send({ error: { status: 404 }, message: `Missing name to search for.` });
             }
 
-            const results = await this.usecase.execute(title);
+            const results = await this.usecase.execute(name);
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `No blocks found with that that title: ${title}`});
+                return res.send({ error: { status: 404 }, message: `No users found with that that name: ${name}` });
             }
             res.status(200);
             res.send(results);
@@ -42,4 +42,5 @@ export default class SearchBlockByTitleController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
+
 }

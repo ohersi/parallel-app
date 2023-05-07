@@ -6,24 +6,24 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import { IBackup } from 'pg-mem';
 // Imports
 import { memOrm } from "../../test-utils/init-db.setup";
-import { Block } from "../../../entities/block.entity";
+import { Channel } from "../../../entities/channel.entity";
 import { generateItems } from "../../test-utils/generate-items.setup";
-import BlockRepository from "../../../repositories/block.repository";
-import SearchBlockByTitleUsecase from "../../../services/usecases/block/searchBlockByTitle.usecase";
-import BlockException from "../../../utils/exceptions/block.exception";
+import ChannelRepository from '../../../repositories/channel.repository';
+import SearchChannelByTitleUsecase from "../../../services/usecases/channel/searchChannelByTitle.usecase";
+import ChannelExeption from '../../../utils/exceptions/channel.exception';
 
-describe("SearchBlockByTitleUsecase", () => {
+describe("SearchChannelByTitleUsecase", () => {
 
-    const mockedBlockRepo = mockDeep<BlockRepository>();
-    let service: SearchBlockByTitleUsecase;
+    const mockedChannelRepo = mockDeep<ChannelRepository>();
+    let service: SearchChannelByTitleUsecase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let backup: IBackup;
 
     beforeEach(() => {
-        service = new SearchBlockByTitleUsecase(mockedBlockRepo);
+        service = new SearchChannelByTitleUsecase(mockedChannelRepo);
         // Restore im-mem db to original state
         backup.restore();
-        mockReset(mockedBlockRepo);
+        mockReset(mockedChannelRepo);
         cleanUpMetadata();
     })
 
@@ -45,39 +45,39 @@ describe("SearchBlockByTitleUsecase", () => {
         expect(service).toBeDefined();
     })
 
-    describe('When given a block title,', () => {
+    describe('When given a channel title,', () => {
 
-        describe("and block/s matching portion or all of the given title does NOT exist in the db,", () => {
+        describe("and channel/s matching portion or all of the given title does NOT exist in the db,", () => {
 
             it("return null.", async () => {
                 // GIVEN
                 const title = "NOTFOUND";
-                const blocks = [] as Block[];
+                const channels = [] as Channel[];
 
                 // WHEN
-                mockedBlockRepo.searchBlocksMatchingTitle.mockResolvedValue(blocks);
+                mockedChannelRepo.searchChannelsMatchingTitle.mockResolvedValue(channels);
 
                 const results = await service.execute(title);
 
                 // THEN
-                expect(results).toEqual(blocks);
+                expect(results).toEqual(channels);
             })
         })
 
-        describe("and block/s matching portion or all of the given title does exist in the db,", () => {
+        describe("and channel/s matching portion or all of the given title does exist in the db,", () => {
 
-            it("return array of block object/s from database.", async () => {
+            it("return array of channel object/s from database.", async () => {
                 // GIVEN
                 const title = "title";
-                const blocks = [ { title: "title "}] as Block[];
+                const channels = [ { title: "title "}] as Channel[];
 
                 // WHEN
-                mockedBlockRepo.searchBlocksMatchingTitle.mockResolvedValue(blocks);
+                mockedChannelRepo.searchChannelsMatchingTitle.mockResolvedValue(channels);
 
                 const results = await service.execute(title);
 
                 // THEN
-                expect(results).toEqual(blocks);
+                expect(results).toEqual(channels);
             })
         })
 
@@ -88,10 +88,10 @@ describe("SearchBlockByTitleUsecase", () => {
                 const title = "title";
 
                 // WHEN
-                mockedBlockRepo.searchBlocksMatchingTitle.mockRejectedValue(Error);
+                mockedChannelRepo.searchChannelsMatchingTitle.mockRejectedValue(Error);
 
                 // THEN
-                expect(async () => { await service.execute(title) }).rejects.toThrow(BlockException);
+                expect(async () => { await service.execute(title) }).rejects.toThrow(ChannelExeption);
             })
         })
 

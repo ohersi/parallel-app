@@ -95,4 +95,20 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
             throw new Error(error);
         }
     }
+
+    async searchChannelsMatchingTitle(title: string): Promise<Loaded<Channel, never>[]> {
+        try {
+            const res = await this.find(
+                // Regex search
+                { title: { $re: '(?i)^.*'+title+'.*$' } },
+                // Full text search
+                // { searchableTitle: { $fulltext: title } },
+                { orderBy: { date_updated: QueryOrder.DESC } }
+            );
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
 }

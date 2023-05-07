@@ -5,21 +5,11 @@ import { Application, NextFunction, Request, Response } from 'express';
 import request from "supertest";
 import { cleanUpMetadata } from "inversify-express-utils";
 // Imports
-import { Block } from "../../../entities/block.entity";
-import SearchBlockByTitleController from "../../../controllers/block/searchBlockByTitle.controller";
-import SearchBlockByTitleUsecase from "../../../services/usecases/block/searchBlockByTitle.usecase";
+import { User } from "../../../entities/user.entity";
+import SearchUserByNameController from "../../../controllers/user/searchUserByName.controller";
+import SearchUserByNameUsecase from "../../../services/usecases/user/searchUserByName.usecase";
 import { start } from '../../../app';
 import { cache } from "../../../resources/caching/cache";
-
-// Set authorization middlware to stub before app is generated
-jest.mock("../../../middleware/auth.middleware", () => ({
-    sessionAuth: (req: Request, res: Response, next: NextFunction) => {
-        next();
-    },
-    roleAuth: (role: string) => (req: Request, res: Response, next: NextFunction) => {
-        next();
-    }
-}));
 
 // Mock redis caching middleware
 jest.mock("../../../resources/caching/cache", () => ({
@@ -28,14 +18,14 @@ jest.mock("../../../resources/caching/cache", () => ({
 const mockCache = cache as jest.Mock;
 
 
-describe("SearchBlockByTitleController", () => {
+describe("SearchUserByNameController", () => {
     // Mocks
-    const mockedUsecase = mockDeep<SearchBlockByTitleUsecase>();
+    const mockedUsecase = mockDeep<SearchUserByNameUsecase>();
     const requestMock = mockDeep<Request>();
     const responseMock = mockDeep<Response>();
     const nextMock = mockDeep<NextFunction>();
     // System Under Test (sut)
-    let controller: SearchBlockByTitleController;
+    let controller: SearchUserByNameController;
 
     // Supertest setup
     let app: Application;
@@ -47,7 +37,7 @@ describe("SearchBlockByTitleController", () => {
     })
 
     beforeEach(() => {
-        controller = new SearchBlockByTitleController(mockedUsecase);
+        controller = new SearchUserByNameController(mockedUsecase);
         mockReset(mockedUsecase);
         // Inversify clean up existing metadata
         cleanUpMetadata();
@@ -65,32 +55,32 @@ describe("SearchBlockByTitleController", () => {
         expect(controller).toBeDefined();
     })
 
-    describe("When search for a block by title,", () => {
+    describe("When search for a user by name,", () => {
 
-        describe("and block/s title/s matching a portion or all of the given title are/is found,", () => {
+        describe("and user/s name matching a portion or all of the given name are/is found,", () => {
 
-            it("returns a array of block object/s and status code of 200.", async () => {
-                // GIVEN
-                const title = "title";
-                const block = [{ title: title }] as Block[];
-
-                // // WHEN
-                mockedUsecase.execute.mockResolvedValue(block);
-                await controller.searchBlockByTitle(requestMock, responseMock, nextMock);
-
-                // THEN
-                expect(responseMock.status).toBeCalledWith(200);
+            it("returns a array of user object/s and status code of 200.", async () => {
+                 // GIVEN
+                 const name = "Full Name";
+                 const users = [{ full_name: name }] as User[];
+ 
+                 // // WHEN
+                 mockedUsecase.execute.mockResolvedValue(users);
+                 await controller.searchUserByName(requestMock, responseMock, nextMock);
+ 
+                 // THEN
+                 expect(responseMock.status).toBeCalledWith(200);
             })
         })
 
-        describe("and no block/s matching portion or all of given title are/is found,", () => {
+        describe("and no users/s matching portion or all of given name are/is found,", () => {
 
             it("return a status of 404.", async () => {
                 // GIVEN
-                const title = 'NOTFOUND';
+                const name = "Full Name";
 
                 // WHEN
-                const results = await request(app).get(`/api/v1/search/blocks?title=${title}`);
+                const results = await request(app).get(`/api/v1/search/users?name=${name}`);
 
                 // // THEN
                 expect(results.status).toEqual(404);
@@ -101,11 +91,11 @@ describe("SearchBlockByTitleController", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
-                const title = 'title';
+                const name = "Full Name";
 
                 // WHEN
                 mockedUsecase.execute.mockRejectedValue(Error);
-                await controller.searchBlockByTitle(requestMock, responseMock, nextMock);
+                await controller.searchUserByName(requestMock, responseMock, nextMock);
 
                 // // THEN
                 expect(responseMock.status).toBeCalledWith(500);

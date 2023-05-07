@@ -69,7 +69,7 @@ describe("GetAllChannelsByUserIdUsecase", () => {
                 const results = await service.execute(id, limit);
 
                 // THEN
-                expect(results).toEqual(arr);
+                expect(results.data).toEqual(arr);
             })
         })
 
@@ -91,7 +91,7 @@ describe("GetAllChannelsByUserIdUsecase", () => {
 
                 // THEN
                 expect(getUserChannels).toEqual([]);
-                expect(results).toEqual([]);
+                expect(results.data).toEqual([]);
             })
         })
 

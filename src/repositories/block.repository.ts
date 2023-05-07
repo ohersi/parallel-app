@@ -20,7 +20,7 @@ export default class BlockRepository extends BaseRepository<Block> implements IR
         }
     }
 
-    async searchBlocksMatchingTitle(title: string) {
+    async searchBlocksMatchingTitle(title: string): Promise<Loaded<Block, never>[]> {
         try {
             const res = await this.find(
                 // Regex search

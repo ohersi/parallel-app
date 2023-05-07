@@ -73,11 +73,10 @@ describe("GetUserByIdUseCase", () => {
                 // WHEN
                 const getUser = await orm.em.findOne(User, id);
                 mockedUserRepo.findByID.mockResolvedValue(getUser);
-
-                const results = await service.execute(id);
+                
                 // THEN
                 expect(getUser).toEqual(null);
-                expect(results).toEqual(null);
+                expect(async () => { await service.execute(id) }).rejects.toThrowError(UserException);
             })
         })
 
