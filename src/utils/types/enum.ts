@@ -45,6 +45,7 @@ export enum TYPES_ENUM {
   DELETE_BLOCK_USECASE = 'DeleteBlockUsecase',
   GET_BLOCK_BY_ID_USECASE = 'GetBlockByIdUsecase',
   GET_ALL_BLOCKS_USECASE = 'GetAllBlocksUsecase',
+  SEARCH_BLOCK_BY_TITLE_USECASE = 'SearchBlockByTitleUsecase',
   //**----- CONNECTION -----**//
   ADD_CONNECTION_USECASE = 'AddConnectionUsecase',
   REMOVE_CONNECTION_USECASE = 'RemoveConnectionUsecase',

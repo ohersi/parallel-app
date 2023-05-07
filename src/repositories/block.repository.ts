@@ -12,9 +12,25 @@ export default class BlockRepository extends BaseRepository<Block> implements IR
 
     async getBlockAndItsChannels(id: number): Promise<Loaded<Block, "channels"> | null> {
         try {
-            const res = await this.findOne({ id: id }, { populate: ['channels']});
+            const res = await this.findOne({ id: id }, { populate: ['channels'] });
             return res;
-        } 
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async searchBlocksMatchingTitle(title: string) {
+        try {
+            const res = await this.find(
+                // Regex search
+                { title: { $re: '(?i)^.*'+title+'.*$'} },
+                // Full text search
+                // { searchableTitle: { $fulltext: title } },
+                { orderBy: { date_updated: QueryOrder.DESC } }
+            );
+            return res;
+        }
         catch (error: any) {
             throw new Error(error);
         }

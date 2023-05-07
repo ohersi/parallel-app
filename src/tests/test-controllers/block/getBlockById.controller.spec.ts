@@ -17,7 +17,7 @@ jest.mock("../../../resources/caching/cache", () => ({
 }));
 const mockCache = cache as jest.Mock;
 
-describe("GetChannelByIdController", () => {
+describe("GetBlockByIdController", () => {
     // Mocks
     const mockedUsecase = mockDeep<GetBlockByIdUsecase>();
     const requestMock = mockDeep<Request>();
