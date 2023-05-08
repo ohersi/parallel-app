@@ -47,8 +47,15 @@ export const start = async (port: Number) => {
         app.use(helmet());
 
         // Initalize CORS
-        //TODO: Set approved sites
-        // app.use(cors());
+        //TODO: Replace w/ approved site/s (array's require Origin header, one origin does not)
+        const allowedOrigins = [`localhost:${port}`];  
+        
+        const options: cors.CorsOptions = {
+            origin: allowedOrigins,
+            optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+        };
+        app.options('*', cors(options));
+        app.use(cors(options));
 
         // Check for secret key & setup session
         if (!process.env.SECRET_KEY) throw new Error("SECRET_KEY env variable is missing");
