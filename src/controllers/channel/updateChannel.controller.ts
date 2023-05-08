@@ -6,6 +6,7 @@ import { inject } from 'inversify';
 import UpdateChannelUsecase from '../../services/usecases/channel/updateChannel.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
 import channelValidation from '../../resources/validations/channel.validation';
+import { moderate } from '../../middleware/moderation.middleware';
 import { sessionAuth } from '../../middleware/auth.middleware';
 import ChannelDTO from '../../dto/channel.dto';
 import { TYPES } from '../../utils/types';
@@ -20,7 +21,7 @@ export default class UpdateChannelController {
         this.usecase = updateChannelUsecase;
     }
 
-    @httpPut('/:id/update', validationMiddleware(channelValidation.update), sessionAuth)
+    @httpPut('/:id/update', validationMiddleware(channelValidation.update), sessionAuth, moderate)
     public async updateChannel(
         @request() req: Request,
         @response() res: Response,

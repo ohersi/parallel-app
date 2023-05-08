@@ -6,7 +6,8 @@ import { inject } from 'inversify';
 import BlockDTO from '../../dto/block.dto';
 import UpdateBlockUsecase from '../../services/usecases/block/updateBlock.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
-import blockValidadtion from '../../resources/validations/block.validation';
+import blockValidation from '../../resources/validations/block.validation';
+import { moderate } from '../../middleware/moderation.middleware';
 import { sessionAuth } from '../../middleware/auth.middleware';
 import { TYPES } from '../../utils/types';
 
@@ -20,7 +21,7 @@ export default class UpdateBlockController {
         this.usecase = updateBlockUsecase;
     }
 
-    @httpPut('/:id/update', validationMiddleware(blockValidadtion.update), sessionAuth)
+    @httpPut('/:id/update', validationMiddleware(blockValidation.update), sessionAuth, moderate)
     public async updateBlock(
         @request() req: Request,
         @response() res: Response,

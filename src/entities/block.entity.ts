@@ -1,11 +1,11 @@
 // Packages
 import { Collection, Entity, EntityRepositoryType, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
-import IBlock from './interfaces/block.entity.interface';
 import BaseEntity from './base.entity';
 import { User } from './user.entity';
-import BlockRepository from '../repositories/block.repository';
 import { Channel } from './channel.entity';
+import IBlock from './interfaces/block.entity.interface';
+import BlockRepository from '../repositories/block.repository';
 
 @Entity({ customRepository: () => BlockRepository, tableName: 'blocks' })
 export class Block implements BaseEntity, IBlock {

@@ -6,6 +6,7 @@ import { inject } from 'inversify';
 import CreateChannelUsecase from '../../services/usecases/channel/createChannel.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
 import channelValidation from '../../resources/validations/channel.validation';
+import { moderate } from '../../middleware/moderation.middleware';
 import { sessionAuth } from '../../middleware/auth.middleware';
 import { TYPES } from '../../utils/types';
 
@@ -19,7 +20,7 @@ export default class CreateChannelController {
         this.usecase = createChannelUsecase;
     }
 
-    @httpPost('/', sessionAuth, validationMiddleware(channelValidation.create))
+    @httpPost('/', sessionAuth, validationMiddleware(channelValidation.create), moderate)
     public async createChannel(
         @request() req: Request,
         @response() res: Response,

@@ -6,6 +6,7 @@ import { inject } from 'inversify'
 import UpdateUserUsecase from '../../services/usecases/user/updateUser.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
 import userValidation from '../../resources/validations/user.validation';
+import { moderate } from '../../middleware/moderation.middleware';
 import { sessionAuth } from '../../middleware/auth.middleware';
 import { TYPES } from '../../utils/types';
 import UserDTO from '../../dto/user.dto';
@@ -19,7 +20,7 @@ export default class UpdateUserController {
         this.usecase = updateUserUsecase;
     }
 
-    @httpPut('/update', validationMiddleware(userValidation.update), sessionAuth)
+    @httpPut('/update', validationMiddleware(userValidation.update), sessionAuth, moderate)
     public async updateUser(
         @request() req: Request,
         @response() res: Response,

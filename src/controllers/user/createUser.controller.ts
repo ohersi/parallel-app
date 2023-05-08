@@ -7,8 +7,9 @@ import nodemailer from 'nodemailer';
 import CreateUserUseCase from "../../services/usecases/user/createUser.usecase";
 import validationMiddleware from '../../middleware/validation.middleware';
 import userValidation from '../../resources/validations/user.validation';
-import { TYPES } from '../../utils/types';
+import { moderate } from '../../middleware/moderation.middleware';
 import { mailer } from '../../resources/mailing/mailer';
+import { TYPES } from '../../utils/types';
 
 @controller(`/api/v1/users`)
 export default class CreateUserController {
@@ -19,7 +20,7 @@ export default class CreateUserController {
         this.usecase = createUserUsecase;
     }
 
-    @httpPost('/', validationMiddleware(userValidation.create))
+    @httpPost('/', validationMiddleware(userValidation.create), moderate)
     public async createUser(
         @request() req: Request,
         @response() res: Response,

@@ -5,7 +5,8 @@ import { inject } from 'inversify';
 // Imports
 import CreateBlockUsecase from '../../services/usecases/block/createBlock.usecase';
 import validationMiddleware from '../../middleware/validation.middleware';
-import blockValidadtion from '../../resources/validations/block.validation';
+import blockValidation from '../../resources/validations/block.validation';
+import { moderate } from '../../middleware/moderation.middleware';
 import { sessionAuth } from '../../middleware/auth.middleware';
 import { TYPES } from '../../utils/types';
 
@@ -19,7 +20,7 @@ export default class CreateBlockController {
         this.usecase = createBlockUsecase;
     }
 
-    @httpPost('/:id/add', sessionAuth, validationMiddleware(blockValidadtion.create))
+    @httpPost('/:id/add', sessionAuth, validationMiddleware(blockValidation.create), moderate)
     public async createBlock(
         @request() req: Request,
         @response() res: Response,
