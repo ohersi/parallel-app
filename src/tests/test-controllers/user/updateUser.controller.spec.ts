@@ -10,6 +10,13 @@ import UpdateUserUsecase from "../../../services/usecases/user/updateUser.usecas
 import UserDTO from "../../../dto/user.dto";
 import { start } from "../../../app";
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
+
 // Controller is lean, only directs to usecase
 // Test is concerned with HTTP request and responses
 describe("UpdateUserController", () => {

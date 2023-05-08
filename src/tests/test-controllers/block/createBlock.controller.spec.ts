@@ -9,9 +9,15 @@ import CreateBlockController from "../../../controllers/block/createBlock.contro
 import CreateBlockUsecase from "../../../services/usecases/block/createBlock.usecase";
 import validationMiddleware from "../../../middleware/validation.middleware";
 import blockValidation from "../../../resources/validations/block.validation";
-import { start } from '../../../app';
 import { Block } from "../../../entities/block.entity";
+import { start } from '../../../app';
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
 
 describe("CreateBlockController", () => {
     // Mocks

@@ -10,6 +10,12 @@ import UpdateChannelUsecase from "../../../services/usecases/channel/updateChann
 import ChannelDTO from "../../../dto/channel.dto";
 import { start } from '../../../app';
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
 
 describe("UpdateChannelController", () => {
     // Mocks

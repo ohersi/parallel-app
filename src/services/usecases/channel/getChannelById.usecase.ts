@@ -26,18 +26,23 @@ export default class GetChannelByIdUsecase {
 
     public execute = async (id: number, last_id: string, limit: number): Promise<PageResults> => {
         try {
-            const [channel, items, count ] = await this.channelRepository.getChannelAndBlocks(id, last_id, limit);
+            const [channel, items, count] = await this.channelRepository.getChannelAndBlocks(id, last_id, limit);
+
+            if (!channel) {
+                return new PageResults(0, null, null);
+            }
+
             const total = count || 0;
             let block: Loaded<Block, never>;
             let encoded;
 
             const channelDTO = new ChannelDTO(
-                channel?.id,
-                channel?.title,
-                channel?.description,
-                channel?.slug,
-                channel?.date_created,
-                channel?.date_updated,
+                channel.id,
+                channel.title,
+                channel.description,
+                channel.slug,
+                channel.date_created,
+                channel.date_updated,
                 items
             );
 

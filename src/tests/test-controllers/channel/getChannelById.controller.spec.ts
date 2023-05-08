@@ -68,7 +68,7 @@ describe("GetChannelByIdController", () => {
                 );
 
                 // WHEN
-                mockCache.mockResolvedValue(arr);
+                // mockedUsecase.execute.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
@@ -88,7 +88,6 @@ describe("GetChannelByIdController", () => {
                 );
 
                 // WHEN
-                mockCache.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/channels/${id}`);
 
                 // THEN
@@ -102,7 +101,7 @@ describe("GetChannelByIdController", () => {
                 // GIVEN
 
                 // WHEN
-                mockCache.mockRejectedValue(Error);
+                mockedUsecase.execute.mockRejectedValue(Error);
                 await controller.getChannelByID(requestMock, responseMock, nextMock);
 
                 // THEN

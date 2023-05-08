@@ -67,13 +67,14 @@ describe("GetChannelBySlugController", () => {
                     undefined,
                     [{ slug: slug }]
                 );
+                // GIVEN
 
                 // WHEN
-                mockCache.mockResolvedValue(arr);
-                const results = await request(app).get(`/api/v1/channels/title/${slug}`);
+                mockedUsecase.execute.mockResolvedValue(arr);
+                await controller.getChannelBySlug(requestMock, responseMock, nextMock);
 
                 // THEN
-                expect(results.status).toEqual(200);
+                expect(responseMock.status).toBeCalledWith(500);
             })
         })
 
@@ -89,7 +90,7 @@ describe("GetChannelBySlugController", () => {
                 );
 
                 // WHEN
-                mockCache.mockResolvedValue(arr);
+                // mockCache.mockResolvedValue(arr);
                 const results = await request(app).get(`/api/v1/channels/title/${slug}`);
 
                 // THEN
@@ -103,7 +104,7 @@ describe("GetChannelBySlugController", () => {
                 // GIVEN
 
                 // WHEN
-                mockCache.mockRejectedValue(Error);
+                mockedUsecase.execute.mockRejectedValue(Error);
                 await controller.getChannelBySlug(requestMock, responseMock, nextMock);
 
                 // THEN

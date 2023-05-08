@@ -10,6 +10,13 @@ import validationMiddleware from "../../../middleware/validation.middleware";
 import userValidation from "../../../resources/validations/user.validation";
 import { mailer } from "../../../resources/mailing/mailer";
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
+
 // Mock redis caching middleware
 jest.mock("../../../resources/mailing/mailer", () => ({
     mailer: jest.fn()

@@ -11,6 +11,12 @@ import validationMiddleware from "../../../middleware/validation.middleware";
 import channelValidation from "../../../resources/validations/channel.validation";
 import { start } from '../../../app';
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
 
 describe("CreateChannelController", () => {
     // Mocks

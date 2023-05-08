@@ -10,6 +10,12 @@ import UpdateBlockUsecase from "../../../services/usecases/block/updateBlock.use
 import BlockDTO from "../../../dto/block.dto";
 import { start } from '../../../app';
 
+// Set moderate middleware to stub before app is generated
+jest.mock("../../../middleware/moderation.middleware", () => ({
+    moderate: (req: Request, res: Response, next: NextFunction) => {
+        next();
+    },
+}));
 
 describe("UpdateBlockController", () => {
     // Mocks

@@ -89,7 +89,7 @@ describe("GetChannelByIdUsecase", () => {
 
                 // THEN
                 expect(getChannel).toEqual(null);
-                expect(results.data.title).toBeUndefined();
+                expect(results.data).toBeNull();
             })
         })
 

@@ -78,7 +78,6 @@ describe("GetAllUsersController", () => {
                 );
 
                 // WHEN
-                mockCache.mockResolvedValue(users);
                 const results = await request(app).get("/api/v1/users/");
 
                 // THEN
@@ -95,13 +94,13 @@ describe("GetAllUsersController", () => {
                     undefined,
                     []
                 );
-                
+
                 // WHEN
-                mockCache.mockResolvedValue(users)
-                const results = await request(app).get("/api/v1/users/");
+                mockedGetAllUsersUseCase.execute.mockResolvedValue(users);
+                await controller.getAllUsers(requestMock, responseMock, nextMock)
 
                 // // THEN
-                expect(results.status).toEqual(404);
+                expect(responseMock.status).toBeCalledWith(404);
             })
         });
 
@@ -113,13 +112,13 @@ describe("GetAllUsersController", () => {
                     undefined,
                     [{ id: 1 }]
                 );
-                
+
                 // WHEN
-                mockCache.mockRejectedValue(Error)
-                const results = await request(app).get("/api/v1/users/");
+                mockedGetAllUsersUseCase.execute.mockRejectedValue(Error);
+                await controller.getAllUsers(requestMock, responseMock, nextMock)
 
                 // // THEN
-                expect(results.status).toEqual(500);
+                expect(responseMock.status).toBeCalledWith(500);
             })
         });
     });

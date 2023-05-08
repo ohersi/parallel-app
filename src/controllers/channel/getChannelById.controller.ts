@@ -29,9 +29,9 @@ export default class GetChannelByIdController {
             const last_id = decodeLastID(req.query.last_id as string);
             const limit = parseInt(req.query.limit as string);
 
-            const results =  await this.usecase.execute(channelID, last_id, limit)
+            const results =  await this.usecase.execute(channelID, last_id, limit);
             
-            if (!results) {
+            if (!results.data) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `No channels found with that [${channelID}].` });
             }
