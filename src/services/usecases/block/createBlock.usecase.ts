@@ -2,12 +2,12 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import BlockRepository from "../../../repositories/block.repository";
-import ChannelRepository from "../../../repositories/channel.repository";
-import ConnectionRepository from "../../../repositories/connection.repository";
-import { Block } from "../../../entities/block.entity";
-import { Connection } from "../../../entities/connection.entity";
-import { TYPES } from "../../../utils/types";
+import BlockRepository from "@/repositories/block.repository";
+import ChannelRepository from "@/repositories/channel.repository";
+import ConnectionRepository from "@/repositories/connection.repository";
+import { Block } from "@/entities/block.entity";
+import { Connection } from "@/entities/connection.entity";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: block object has has all fields

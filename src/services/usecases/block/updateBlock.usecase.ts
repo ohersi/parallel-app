@@ -2,10 +2,10 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import BlockRepository from "../../../repositories/block.repository";
-import BlockException from "../../../utils/exceptions/block.exception";
-import BlockDTO from "../../../dto/block.dto";
-import { TYPES } from "../../../utils/types";
+import BlockRepository from "@/repositories/block.repository";
+import BlockException from "@/utils/exceptions/block.exception";
+import BlockDTO from "@/dto/block.dto";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: block object has has all fields

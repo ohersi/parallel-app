@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetBlockByIdUsecase from '../../services/usecases/block/getBlockByID.usecase';
-import { cache } from '../../resources/caching/cache';
-import { TYPES } from '../../utils/types';
+import GetBlockByIdUsecase from '@/services/usecases/block/getBlockByID.usecase';
+import { cache } from '@/resources/caching/cache';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/blocks`)
 export default class GetBlockByIdController {

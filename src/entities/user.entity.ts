@@ -1,13 +1,12 @@
 // Packages
 import { Collection, Entity, EntityRepositoryType, Enum, ManyToMany, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
-import UserRepository from '../repositories/user.repository';
-import BaseEntity from './base.entity';
-import IUser from './interfaces/user.entity.interface';
-import { TYPES_ENUM } from '../utils/types/enum';
-import { Friend } from './friend.entity';
-import { Channel } from './channel.entity';
-import { Follow } from './follow.entity';
+import { Channel } from '@/entities/channel.entity';
+import { Friend } from '@/entities/friend.entity';
+import BaseEntity from '@/entities/base.entity';
+import IUser from '@/entities/interfaces/user.entity.interface';
+import UserRepository from '@/repositories/user.repository';
+import { TYPES_ENUM } from '@/utils/types/enum';
 
 @Entity({ customRepository: () => UserRepository, tableName: 'users' })
 export class User implements BaseEntity, IUser {

@@ -2,8 +2,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpGet } from 'inversify-express-utils'
 // Imports
-import ConfirmUserTokenUseCase from '../../services/usecases/user/confirmUserToken.usecase';
-import { TYPES } from '../../utils/types';
+import ConfirmUserTokenUseCase from '@/services/usecases/user/confirmUserToken.usecase';
+import { TYPES } from '@/utils/types';
 import { inject } from 'inversify';
 
 @controller(`/api/v1/registration`)

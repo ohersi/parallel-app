@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpDelete } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import UnFollowChannelUsecase from '../../services/usecases/follow/unfollowChannel.usecase';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import UnFollowChannelUsecase from '@/services/usecases/follow/unfollowChannel.usecase';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class UnFollowChannelController {

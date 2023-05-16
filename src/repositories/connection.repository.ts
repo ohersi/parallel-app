@@ -1,11 +1,10 @@
 // Packages
-import { Entity, Loaded, QueryOrder, wrap } from '@mikro-orm/core';
-import { injectable } from 'inversify'
+import { Entity, Loaded } from '@mikro-orm/core';
+import { injectable } from 'inversify';
 // Imports
-import { Connection } from '../entities/connection.entity';
-import IRepository from './interfaces/repository.interface';
-import BaseRepository from './base.repository';
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { Connection } from '@/entities/connection.entity';
+import IRepository from '@/repositories/interfaces/repository.interface';
+import BaseRepository from '@/repositories/base.repository';
 
 @injectable()
 @Entity({ customRepository: () => Connection })

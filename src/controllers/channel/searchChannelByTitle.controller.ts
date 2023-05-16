@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import SearchChannelByTitleUsecase from '../../services/usecases/channel/searchChannelByTitle.usecase';
-import { TYPES } from '../../utils/types';
-import { cache } from '../../resources/caching/cache';
+import SearchChannelByTitleUsecase from '@/services/usecases/channel/searchChannelByTitle.usecase';
+import { TYPES } from '@/utils/types';
+import { cache } from '@/resources/caching/cache';
 
 
 @controller(`/api/v1/search`)

@@ -1,10 +1,10 @@
 // Packages
 import { Entity, EntityRepositoryType, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
-import { User } from './user.entity';
-import { Channel } from './channel.entity';
-import IFollow from './interfaces/follow.interface';
-import FollowRepository from '../repositories/follow.repository';
+import { User } from '@/entities/user.entity';
+import { Channel } from '@/entities/channel.entity';
+import IFollow from '@/entities/interfaces/follow.interface';
+import FollowRepository from '@/repositories/follow.repository';
 
 
 @Entity({ customRepository: () => FollowRepository, tableName: 'follows' })

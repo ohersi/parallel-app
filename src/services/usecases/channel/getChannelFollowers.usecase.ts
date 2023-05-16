@@ -3,11 +3,11 @@ import { inject } from "inversify";
 import { Loaded } from "@mikro-orm/core";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import { Follow } from "../../../entities/follow.entity";
-import FollowRepository from "../../../repositories/follow.repository";
-import ChannelRepository from "../../../repositories/channel.repository";
-import FollowException from "./../../../utils/exceptions/follow.exception";
-import { TYPES } from "../../../utils/types";
+import { Follow } from "@/entities/follow.entity";
+import FollowRepository from "@/repositories/follow.repository";
+import ChannelRepository from "@/repositories/channel.repository";
+import FollowException from "@/utils/exceptions/follow.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: channel id

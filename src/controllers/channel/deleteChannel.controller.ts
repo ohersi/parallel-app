@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpDelete, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import DeleteChannelUsecase from '../../services/usecases/channel/deleteChannel.usecase';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import DeleteChannelUsecase from '@/services/usecases/channel/deleteChannel.usecase';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 
 @controller(`/api/v1/channels`)

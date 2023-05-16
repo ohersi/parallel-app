@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import AddConnectionUsecase from '../../services/usecases/connection/addConnection.usecase';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import AddConnectionUsecase from '@/services/usecases/connection/addConnection.usecase';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 
 @controller(`/api/v1/blocks`)

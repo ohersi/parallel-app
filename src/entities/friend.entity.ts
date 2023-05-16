@@ -1,10 +1,10 @@
 // Packages
 import { Entity, EntityRepositoryType, ManyToOne, Property } from '@mikro-orm/core';
 // Imports
-import { User } from './user.entity';
-import BaseEntity from './base.entity';
-import IFriend from './interfaces/friend.interface';
-import FriendRepository from '../repositories/friend.repository';
+import { User } from '@/entities/user.entity';
+import BaseEntity from '@/entities/base.entity';
+import IFriend from '@/entities/interfaces/friend.interface';
+import FriendRepository from '@/repositories/friend.repository';
 
 @Entity({ customRepository: () => FriendRepository, tableName: 'friends' })
 export class Friend implements BaseEntity, IFriend {

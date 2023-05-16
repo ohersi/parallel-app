@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import GetUserFollowersUsecase from '../../services/usecases/user/getUserFollowers.usecase';
-import { cache } from '../../resources/caching/cache';
-import { TYPES } from '../../utils/types';
+import GetUserFollowersUsecase from '@/services/usecases/user/getUserFollowers.usecase';
+import { cache } from '@/resources/caching/cache';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class GetUserFollowersController {

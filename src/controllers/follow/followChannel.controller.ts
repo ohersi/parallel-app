@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import FollowChannelUsecase from '../../services/usecases/follow/followChannel.usecase';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import FollowChannelUsecase from '@/services/usecases/follow/followChannel.usecase';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class FollowChannelController {

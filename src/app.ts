@@ -1,5 +1,7 @@
 // Runtime Decorator Metadata Insertion - Needs to be at top of file
 import 'reflect-metadata';
+// Register path aliases - Needs to be at top of file
+import 'module-alias/register';
 // Packages
 import express, { Application, NextFunction } from 'express';
 import cors from 'cors';
@@ -12,9 +14,9 @@ import { Container } from 'inversify';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { Connection, IDatabaseDriver, MikroORM, RequestContext } from '@mikro-orm/core';
 // Imports
-import ErrorMiddleware from './middleware/error.middleware';
-import initContainer from './utils/ioc/di-container';
-import { TYPES } from './utils/types';
+import ErrorMiddleware from '@/middleware/error.middleware';
+import initContainer from '@/utils/ioc/di-container';
+import { TYPES } from '@/utils/types';
 
 export const redisContainer = {} as {
     redis: Redis

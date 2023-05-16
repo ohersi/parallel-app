@@ -3,6 +3,9 @@ export default {
   testEnvironment: "node",
   coverageProvider: 'v8',
   maxWorkers: 2,
+  moduleNameMapper: {
+    "@/(.*)": "<rootDir>/src/$1"
+  },
   testPathIgnorePatterns: ['/node_modules/'],
   transform: {},
   setupFilesAfterEnv: ["./src/tests/test-utils/jest.setup.ts"],

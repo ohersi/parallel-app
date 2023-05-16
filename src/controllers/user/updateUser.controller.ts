@@ -3,13 +3,13 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPut, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify'
 // Imports
-import UpdateUserUsecase from '../../services/usecases/user/updateUser.usecase';
-import validationMiddleware from '../../middleware/validation.middleware';
-import userValidation from '../../resources/validations/user.validation';
-import { moderate } from '../../middleware/moderation.middleware';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
-import UserDTO from '../../dto/user.dto';
+import UpdateUserUsecase from '@/services/usecases/user/updateUser.usecase';
+import validationMiddleware from '@/middleware/validation.middleware';
+import userValidation from '@/resources/validations/user.validation';
+import { moderate } from '@/middleware/moderation.middleware';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
+import UserDTO from '@/dto/user.dto';
 
 @controller(`/api/v1/users`)
 export default class UpdateUserController {

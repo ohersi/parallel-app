@@ -1,12 +1,12 @@
 // Packages
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
-// Imports
-import UserRepository from "../../../repositories/user.repository"
-import { TYPES } from "../../../utils/types";
-import UserException from "../../../utils/exceptions/user.expection";
-import { verifyToken } from "../../../resources/security/token";
 import { JwtPayload } from "jsonwebtoken";
+// Imports
+import UserRepository from "@/repositories/user.repository"
+import UserException from "@/utils/exceptions/user.expection";
+import { verifyToken } from "@/resources/security/token";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: a json web token

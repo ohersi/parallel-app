@@ -1,10 +1,10 @@
 // Packages
-import { Entity, Loaded, QueryOrder } from '@mikro-orm/core';
+import { Entity, Loaded } from '@mikro-orm/core';
 import { injectable } from 'inversify'
 // Imports
-import { User } from '../entities/user.entity';
-import IRepository from './interfaces/repository.interface';
-import BaseRepository from './base.repository';
+import { User } from '@/entities/user.entity';
+import IRepository from '@/repositories/interfaces/repository.interface';
+import BaseRepository from '@/repositories/base.repository';
 
 @injectable()
 @Entity({ customRepository: () => User })

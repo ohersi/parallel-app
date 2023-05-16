@@ -1,5 +1,5 @@
-import { Block } from "../block.entity";
-import { Channel } from "../channel.entity";
+import { Block } from "@/entities/block.entity";
+import { Channel } from "@/entities/channel.entity";
 
 export default interface IConnection {
     block: Block;

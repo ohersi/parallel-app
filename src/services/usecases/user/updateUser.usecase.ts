@@ -3,17 +3,16 @@
 //** WHEN I exercise the behavior under test aka Excerise/Act */
 //** THEN we expect the following changes aka Verify/Assert */
 
-
 // Packages
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import UserRepository from "../../../repositories/user.repository";
-import UserException from "../../../utils/exceptions/user.expection";
-import UserDTO from "../../../dto/user.dto";
-import { hash } from "../../../resources/security/encryption";
-import { TYPES } from "../../../utils/types";
-import { convertToSlug, concatNames } from "../../../resources/helper/text-manipulation";
+import UserDTO from "@/dto/user.dto";
+import UserRepository from "@/repositories/user.repository";
+import UserException from "@/utils/exceptions/user.expection";
+import { convertToSlug, concatNames } from "@/resources/helper/text-manipulation";
+import { hash } from "@/resources/security/encryption";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: user object has has all fields

@@ -3,11 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetAllUsersUseCase from '../../services/usecases/user/getAllUsers.usecase';
-import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
-import { paginate } from '../../middleware/paginate.middlware';
-import { TYPES_ENUM } from '../../utils/types/enum';
-import { TYPES } from '../../utils/types';
+import GetAllUsersUseCase from '@/services/usecases/user/getAllUsers.usecase';
+import { sessionAuth, roleAuth } from '@/middleware/auth.middleware';
+import { paginate } from '@/middleware/paginate.middlware';
+import { TYPES_ENUM } from '@/utils/types/enum';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class GetAllUsersController {

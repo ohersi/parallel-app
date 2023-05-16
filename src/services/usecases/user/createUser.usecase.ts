@@ -8,14 +8,14 @@ import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 import { nanoid } from 'nanoid';
 // Imports
-import UserRepository from "../../../repositories/user.repository";
-import UserException from "../../../utils/exceptions/user.expection";
-import { TYPES } from "../../../utils/types";
-import { TYPES_ENUM } from "../../../utils/types/enum";
-import { hash } from "../../../resources/security/encryption";
-import { User } from "../../../entities/user.entity";
-import { createToken } from "../../../resources/security/token";
-import { convertToSlug } from "../../../resources/helper/text-manipulation";
+import { User } from "@/entities/user.entity";
+import UserRepository from "@/repositories/user.repository";
+import UserException from "@/utils/exceptions/user.expection";
+import { hash } from "@/resources/security/encryption";
+import { createToken } from "@/resources/security/token";
+import { convertToSlug } from "@/resources/helper/text-manipulation";
+import { TYPES_ENUM } from "@/utils/types/enum";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: user object has has all fields

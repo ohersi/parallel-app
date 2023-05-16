@@ -2,11 +2,11 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import ChannelRepository from "../../../repositories/channel.repository";
-import ChannelException from "../../../utils/exceptions/channel.exception";
-import { Channel } from "../../../entities/channel.entity";
-import { TYPES } from "../../../utils/types";
-import { convertToSlug } from "../../../resources/helper/text-manipulation";
+import ChannelRepository from "@/repositories/channel.repository";
+import ChannelException from "@/utils/exceptions/channel.exception";
+import { Channel } from "@/entities/channel.entity";
+import { TYPES } from "@/utils/types";
+import { convertToSlug } from "@/resources/helper/text-manipulation";
 import { nanoid } from "nanoid";
 
 //** USE CASE */

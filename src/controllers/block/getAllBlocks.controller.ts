@@ -3,11 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetAllBlocksUsecase from '../../services/usecases/block/getAllBlocks.usecase';
-import { roleAuth, sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES_ENUM } from '../../utils/types/enum';
-import { TYPES } from '../../utils/types';
-import { cache } from '../../resources/caching/cache';
+import GetAllBlocksUsecase from '@/services/usecases/block/getAllBlocks.usecase';
+import { roleAuth, sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES_ENUM } from '@/utils/types/enum';
+import { TYPES } from '@/utils/types';
+import { cache } from '@/resources/caching/cache';
 
 @controller(`/api/v1/blocks`)
 export default class GetAllBlocksController {

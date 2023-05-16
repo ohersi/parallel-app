@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { TYPES_ENUM } from "../utils/types/enum";
+import { TYPES_ENUM } from "@/utils/types/enum";
 
 export const paginate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 

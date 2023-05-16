@@ -1,12 +1,12 @@
 // Packages
-import { inject } from "inversify";
 import { Loaded } from "@mikro-orm/core";
+import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import FriendRepository from "../../../repositories/friend.repository";
-import { TYPES } from "../../../utils/types";
-import { Friend } from "../../../entities/friend.entity";
-import FriendException from "../../../utils/exceptions/friend.exception";
+import { Friend } from "@/entities/friend.entity";
+import FriendRepository from "@/repositories/friend.repository";
+import FriendException from "@/utils/exceptions/friend.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: a user id

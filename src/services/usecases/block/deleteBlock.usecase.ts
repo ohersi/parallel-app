@@ -2,10 +2,10 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import BlockRepository from "../../../repositories/block.repository";
-import ConnectionRepository from "../../../repositories/connection.repository";
-import BlockException from "../../../utils/exceptions/block.exception";
-import { TYPES } from "../../../utils/types";
+import BlockRepository from "@/repositories/block.repository";
+import ConnectionRepository from "@/repositories/connection.repository";
+import BlockException from "@/utils/exceptions/block.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: a block id

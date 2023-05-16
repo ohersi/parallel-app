@@ -1,13 +1,12 @@
 // Packages
 import { inject } from "inversify";
-import { Loaded } from "@mikro-orm/core";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import FollowRepository from "../../../repositories/follow.repository";
-import UserRepository from "../../../repositories/user.repository";
-import ChannelRepository from "../../../repositories/channel.repository";
-import FollowException from "./../../../utils/exceptions/follow.exception";
-import { TYPES } from "../../../utils/types";
+import FollowRepository from "@/repositories/follow.repository";
+import UserRepository from "@/repositories/user.repository";
+import ChannelRepository from "@/repositories/channel.repository";
+import FollowException from "@/utils/exceptions/follow.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: id's from logged in user and channel to unfollow

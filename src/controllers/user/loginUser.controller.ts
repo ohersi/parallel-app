@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpPost } from 'inversify-express-utils';
 import { inject } from 'inversify';
 // Imports
-import LoginUserUseCase from '../../services/usecases/user/loginUser.usecase';
-import validationMiddleware from '../../middleware/validation.middleware';
-import userValidation from '../../resources/validations/user.validation';
-import { TYPES } from '../../utils/types';
+import LoginUserUseCase from '@/services/usecases/user/loginUser.usecase';
+import validationMiddleware from '@/middleware/validation.middleware';
+import userValidation from '@/resources/validations/user.validation';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class LoginUserController {

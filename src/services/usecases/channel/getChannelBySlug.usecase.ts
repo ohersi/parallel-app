@@ -3,12 +3,12 @@ import { Loaded } from "@mikro-orm/core";
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import { Block } from "../../../entities/block.entity";
-import ChannelDTO from "../../../dto/channel.dto";
-import ChannelRepository from "../../../repositories/channel.repository";
-import ChannelException from "../../../utils/exceptions/channel.exception";
-import PageResults from "../../../resources/pagination/pageResults";
-import { TYPES } from "../../../utils/types";
+import { Block } from "@/entities/block.entity";
+import ChannelDTO from "@/dto/channel.dto";
+import ChannelRepository from "@/repositories/channel.repository";
+import ChannelException from "@/utils/exceptions/channel.exception";
+import PageResults from "@/resources/pagination/pageResults";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: a slug string

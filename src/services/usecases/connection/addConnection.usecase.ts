@@ -3,13 +3,13 @@ import { inject } from "inversify";
 import { Loaded } from "@mikro-orm/core";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import { Block } from "../../../entities/block.entity";
-import { Connection } from "../../../entities/connection.entity";
-import BlockRepository from "../../../repositories/block.repository";
-import ChannelRepository from "../../../repositories/channel.repository";
-import ConnectionRepository from "../../../repositories/connection.repository";
-import ConnectionException from "../../../utils/exceptions/connection.exception";
-import { TYPES } from "../../../utils/types";
+import { Block } from "@/entities/block.entity";
+import { Connection } from "@/entities/connection.entity";
+import BlockRepository from "@/repositories/block.repository";
+import ChannelRepository from "@/repositories/channel.repository";
+import ConnectionRepository from "@/repositories/connection.repository";
+import ConnectionException from "@/utils/exceptions/connection.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: id's from channel, block & user

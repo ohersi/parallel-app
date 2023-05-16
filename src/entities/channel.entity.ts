@@ -1,13 +1,13 @@
 // Packages
-import { Collection, Entity, EntityRepositoryType, Enum, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, EntityRepositoryType, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
-import ChannelRepository from '../repositories/channel.repository';
-import IChannel from './interfaces/channel.entity.interface';
-import BaseEntity from './base.entity';
-import { User } from './user.entity';
-import { Block } from './block.entity';
-import { Connection } from './connection.entity';
-import { Follow } from './follow.entity';
+import { User } from '@/entities/user.entity';
+import { Block } from '@/entities/block.entity';
+import { Connection } from '@/entities/connection.entity';
+import { Follow } from '@/entities/follow.entity';
+import BaseEntity from '@/entities/base.entity';
+import IChannel from '@/entities/interfaces/channel.entity.interface';
+import ChannelRepository from '@/repositories/channel.repository';
 
 @Entity({ customRepository: () => ChannelRepository, tableName: 'channels' })
 export class Channel implements BaseEntity, IChannel {

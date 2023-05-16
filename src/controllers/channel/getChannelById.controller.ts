@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetChannelByIdUsecase from '../../services/usecases/channel/getChannelById.usecase';
-import { decodeLastID } from '../../resources/helper/text-manipulation';
-import { paginate } from '../../middleware/paginate.middlware';
-import { TYPES } from '../../utils/types';
+import GetChannelByIdUsecase from '@/services/usecases/channel/getChannelById.usecase';
+import { decodeLastID } from '@/resources/helper/text-manipulation';
+import { paginate } from '@/middleware/paginate.middlware';
+import { TYPES } from '@/utils/types';
 
 
 @controller(`/api/v1/channels`)

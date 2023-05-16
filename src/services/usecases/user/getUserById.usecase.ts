@@ -1,12 +1,12 @@
 // Packages
+import { Loaded } from "@mikro-orm/core";
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import UserRepository from "../../../repositories/user.repository"
-import { TYPES } from "../../../utils/types";
 import { User } from "src/entities/user.entity";
-import { Loaded } from "@mikro-orm/core";
-import UserException from "../../../utils/exceptions/user.expection";
+import UserRepository from "@/repositories/user.repository"
+import UserException from "@/utils/exceptions/user.expection";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: a user id

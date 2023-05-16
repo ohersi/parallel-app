@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import axios from "axios";
 import FormData from "form-data";
 // Imports
-import '../utils/env';
+import '@/utils/env';
 
 /*
     If response profanity matches array.length !== 0 then automatic flag

@@ -1,10 +1,10 @@
 // Packages
 import { Entity, EntityRepositoryType, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 // Imports
-import { Channel } from './channel.entity';
-import IConnection from './interfaces/connection.entity.interface';
-import { Block } from './block.entity';
-import ConnectionRepository from '../repositories/connection.repository';
+import { Block } from '@/entities/block.entity';
+import { Channel } from '@/entities/channel.entity';
+import IConnection from '@/entities/interfaces/connection.entity.interface';
+import ConnectionRepository from '@/repositories/connection.repository';
 
 @Entity({ customRepository: () => ConnectionRepository, tableName: 'connection' })
 export class Connection implements IConnection {

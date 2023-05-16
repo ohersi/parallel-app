@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetChannelFollowersUsecase from '../../services/usecases/channel/getChannelFollowers.usecase';
-import { cache } from '../../resources/caching/cache';
-import { TYPES } from '../../utils/types';
+import GetChannelFollowersUsecase from '@/services/usecases/channel/getChannelFollowers.usecase';
+import { cache } from '@/resources/caching/cache';
+import { TYPES } from '@/utils/types';
 
 
 @controller(`/api/v1/channels`)

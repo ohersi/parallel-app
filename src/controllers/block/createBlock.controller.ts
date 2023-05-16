@@ -3,12 +3,12 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpPost, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import CreateBlockUsecase from '../../services/usecases/block/createBlock.usecase';
-import validationMiddleware from '../../middleware/validation.middleware';
-import blockValidation from '../../resources/validations/block.validation';
-import { moderate } from '../../middleware/moderation.middleware';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import CreateBlockUsecase from '@/services/usecases/block/createBlock.usecase';
+import validationMiddleware from '@/middleware/validation.middleware';
+import blockValidation from '@/resources/validations/block.validation';
+import { moderate } from '@/middleware/moderation.middleware';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 
 @controller(`/api/v1/channels`)

@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpDelete } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import RemoveFriendUsecase from '../../services/usecases/friend/removeFriend.usecase';
-import { sessionAuth } from '../../middleware/auth.middleware';
-import { TYPES } from '../../utils/types';
+import RemoveFriendUsecase from '@/services/usecases/friend/removeFriend.usecase';
+import { sessionAuth } from '@/middleware/auth.middleware';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class RemoveFriendController {

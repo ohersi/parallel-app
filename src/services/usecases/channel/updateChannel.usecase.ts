@@ -2,11 +2,11 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import ChannelRepository from "../../../repositories/channel.repository";
-import ChannelException from "../../../utils/exceptions/channel.exception";
-import ChannelDTO from "../../../dto/channel.dto";
-import { TYPES } from "../../../utils/types";
-import { convertToSlug, checkSlug } from "../../../resources/helper/text-manipulation";
+import ChannelRepository from "@/repositories/channel.repository";
+import ChannelException from "@/utils/exceptions/channel.exception";
+import ChannelDTO from "@/dto/channel.dto";
+import { TYPES } from "@/utils/types";
+import { convertToSlug, checkSlug } from "@/resources/helper/text-manipulation";
 
 //** USE CASE */
 // GIVEN: channel object has has all fields

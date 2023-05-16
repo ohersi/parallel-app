@@ -1,5 +1,5 @@
-import { redisContainer } from "../../app";
-import { convertTime } from "../helper/convert-time";
+import { redisContainer } from "@/app";
+import { convertTime } from "@/resources/helper/convert-time";
 
 export const cache = async (key: string, callback: Function, duration: string) => {
 

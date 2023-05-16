@@ -3,8 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import SearchUserByNameUsecase from '../../services/usecases/user/searchUserByName.usecase';
-import { TYPES } from '../../utils/types';
+import SearchUserByNameUsecase from '@/services/usecases/user/searchUserByName.usecase';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/search`)
 export default class SearchUserByNameController {

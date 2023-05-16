@@ -2,10 +2,10 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import FriendRepository from "../../../repositories/friend.repository";
-import UserRepository from "../../../repositories/user.repository";
-import FriendException from "../../../utils/exceptions/friend.exception";
-import { TYPES } from "../../../utils/types";
+import FriendRepository from "@/repositories/friend.repository";
+import UserRepository from "@/repositories/user.repository";
+import FriendException from "@/utils/exceptions/friend.exception";
+import { TYPES } from "@/utils/types";
 
 //** USE CASE */
 // GIVEN: id's from logged in user and user to unfollow

@@ -4,12 +4,12 @@ import { controller, httpPost, request, response, next } from 'inversify-express
 import { inject } from 'inversify'
 import nodemailer from 'nodemailer';
 // Imports
-import CreateUserUseCase from "../../services/usecases/user/createUser.usecase";
-import validationMiddleware from '../../middleware/validation.middleware';
-import userValidation from '../../resources/validations/user.validation';
-import { moderate } from '../../middleware/moderation.middleware';
-import { mailer } from '../../resources/mailing/mailer';
-import { TYPES } from '../../utils/types';
+import CreateUserUseCase from "@/services/usecases/user/createUser.usecase";
+import validationMiddleware from '@/middleware/validation.middleware';
+import userValidation from '@/resources/validations/user.validation';
+import { moderate } from '@/middleware/moderation.middleware';
+import { mailer } from '@/resources/mailing/mailer';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class CreateUserController {

@@ -1,5 +1,5 @@
-import { Channel } from "../channel.entity";
-import { User } from "../user.entity";
+import { Channel } from "@/entities/channel.entity";
+import { User } from "@/entities/user.entity";
 
 export default interface IFollow {
     user: User;

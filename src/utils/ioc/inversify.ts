@@ -1,17 +1,17 @@
 // declare metadata by @controller annotation
-import * as controllers from '../ioc/imports/controllers-imports'
+import * as controllers from '@/utils/ioc/imports/controllers-imports';
 // Packages
 import { AsyncContainerModule, interfaces } from 'inversify';
 import { DatabaseClient } from "../orm/mikro-orm";
 import { Connection, GetRepository, IDatabaseDriver, MikroORM, EntityRepository } from '@mikro-orm/core';
 // Imports
-import { TYPES } from '../types'
-import { User } from '../../entities/user.entity';
-import { Channel } from '../../entities/channel.entity';
-import { Block } from '../../entities/block.entity';
-import { Connection as Connections } from '../../entities/connection.entity';
-import { Friend } from '../../entities/friend.entity';
-import { Follow } from '../../entities/follow.entity';
+import { TYPES } from '@/utils/types'
+import { User } from '@/entities/user.entity';
+import { Channel } from '@/entities/channel.entity';
+import { Block } from '@/entities/block.entity';
+import { Connection as Connections } from '@/entities/connection.entity';
+import { Friend } from '@/entities/friend.entity';
+import { Follow } from '@/entities/follow.entity';
 
 // Classes w/ @controller need to be imported one unique time then it can be declared
 // Bulk import only  works if the module w/ all the imports is invoked

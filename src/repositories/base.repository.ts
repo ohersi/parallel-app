@@ -1,10 +1,10 @@
 // Packages
 import { Loaded, QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/postgresql';
-import { injectable } from 'inversify'
+import { injectable } from 'inversify';
 // Imports
-import IRepository from './interfaces/repository.interface';
-import BaseEntity from 'src/entities/base.entity';
+import IRepository from '@/repositories/interfaces/repository.interface';
+import BaseEntity from '@/entities/base.entity';
 
 @injectable()
 export default class BaseRepository<T extends BaseEntity> extends EntityRepository<T> implements IRepository<T>  {

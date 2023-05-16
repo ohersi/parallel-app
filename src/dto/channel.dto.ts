@@ -1,5 +1,5 @@
 import { Loaded } from "@mikro-orm/core";
-import { Block } from "../entities/block.entity";
+import { Block } from "@/entities/block.entity";
 
 export default class ChannelDTO {
 

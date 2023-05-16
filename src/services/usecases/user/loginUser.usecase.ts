@@ -2,12 +2,12 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
-import UserRepository from "../../../repositories/user.repository"
-import { TYPES } from "../../../utils/types";
-import UserException from "../../../utils/exceptions/user.expection";
-import { decrypt } from "../../../resources/security/encryption";
-import UserDTO from "../../../dto/user.dto";
-import { createToken } from "../../../resources/security/token";
+import UserDTO from "@/dto/user.dto";
+import UserRepository from "@/repositories/user.repository"
+import UserException from "@/utils/exceptions/user.expection";
+import { createToken } from "@/resources/security/token";
+import { decrypt } from "@/resources/security/encryption";
+import { TYPES } from "@/utils/types";
 
 
 //** USE CASE */

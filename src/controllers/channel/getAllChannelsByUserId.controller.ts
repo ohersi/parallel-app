@@ -3,12 +3,12 @@ import { Request, Response, NextFunction } from 'express';
 import { controller, httpGet, request, response, next } from 'inversify-express-utils'
 import { inject } from 'inversify';
 // Imports
-import GetAllChannelsByUserIdUsecase from '../../services/usecases/channel/getAllChannelsByUserId.usecase';
-import { TYPES } from '../../utils/types';
-import { TYPES_ENUM } from '../../utils/types/enum';
-import { sessionAuth, roleAuth } from '../../middleware/auth.middleware';
-import { cache } from '../../resources/caching/cache';
-import { paginate } from '../../middleware/paginate.middlware';
+import GetAllChannelsByUserIdUsecase from '@/services/usecases/channel/getAllChannelsByUserId.usecase';
+import { TYPES } from '@/utils/types';
+import { TYPES_ENUM } from '@/utils/types/enum';
+import { sessionAuth, roleAuth } from '@/middleware/auth.middleware';
+import { cache } from '@/resources/caching/cache';
+import { paginate } from '@/middleware/paginate.middlware';
 
 @controller(`/api/v1/users`)
 export default class GetAllChannelsByUserIdController {
