@@ -25,7 +25,7 @@ describe("UpdateUserUsecase", () => {
         id: 1,
         first_name: "Test",
         last_name: "Testerson",
-        email: "1email@email.com",
+        email: "new1email@email.com",
         password: "password",
         avatar_url: "avatar"
     }
@@ -59,16 +59,17 @@ describe("UpdateUserUsecase", () => {
 
     describe('When updating a user,', () => {
 
-        describe("and user email is found in the db,", () => {
+        describe("and user id is found in the db,", () => {
 
             describe("and the user is successfully updated,", () => {
 
                 it("return a UserDTO.", async () => {
                     // GIVEN   
+                    const id = testUser.id;
                     const user = testUser as UserDTO;
                     // WHEN
-                    const foundUser = await orm.em.findOne(User, { email: testUser.email });
-                    mockedUserRepo.findByEmail.mockResolvedValue(foundUser);
+                    const foundUser = await orm.em.findOne(User, { id: testUser.id });
+                    mockedUserRepo.findByID.mockResolvedValue(foundUser);
 
                     if (foundUser) {
                         // Persist and flush to database
@@ -77,7 +78,7 @@ describe("UpdateUserUsecase", () => {
                         mockedUserRepo.update.mockResolvedValue(updatedUser);
                     }
 
-                    const results = await service.execute(user);
+                    const results = await service.execute(user, id);
 
                     // THEN
                     expect(results).toBeInstanceOf(UserDTO);
@@ -87,36 +88,37 @@ describe("UpdateUserUsecase", () => {
             describe("and the user cannot be updated to the database,", () => {
 
                 it("throw an Error from the db.", async () => {
-                    // GIVEN   
+                    // GIVEN
+                    const id = testUser.id;
                     const user = testUser as UserDTO;
 
                     // WHEN
-                    const foundUser = await orm.em.findOne(User, { email: testUser.email });
-                    mockedUserRepo.findByEmail.mockResolvedValue(foundUser);
+                    const foundUser = await orm.em.findOne(User, { id: testUser.id });
+                    mockedUserRepo.findByID.mockResolvedValue(foundUser);
                     // repo throws an error
                     mockedUserRepo.update.mockRejectedValue(Error);
 
                     // THEN
-                    expect(async () => await service.execute(user)).rejects.toThrow(UserException);
+                    expect(async () => await service.execute(user, id)).rejects.toThrow(UserException);
                 })
             })
         })
 
-        describe("and the user email is NOT found in the db,", () => {
+        describe("and the user id is NOT found in the db,", () => {
 
-            it("throw an Error stating email cannot be found.", async () => {
+            it("throw an Error stating id cannot be found.", async () => {
                 // GIVEN
-                const fakeEmail = "13o1n231on3@email.com"
+                const fakeID = -999;
 
                 // WHEN
                 // Check if user exists in db
-                const foundUser = await orm.em.findOne(User, { email: fakeEmail });
-                mockedUserRepo.findByEmail.mockResolvedValue(foundUser);
+                const foundUser = await orm.em.findOne(User, { id: fakeID });
+                mockedUserRepo.findByID.mockResolvedValue(foundUser);
 
 
                 // THEN
                 expect(foundUser).toEqual(null);
-                expect(async () => { await service.execute(testUser) }).rejects.toThrow(UserException);
+                expect(async () => { await service.execute(testUser, fakeID) }).rejects.toThrow(UserException);
             })
         });
 

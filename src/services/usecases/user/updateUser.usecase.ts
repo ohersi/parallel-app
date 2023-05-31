@@ -28,13 +28,22 @@ export default class UpdateUserUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (user: UserDTO): Promise<UserDTO> => {
+    public execute = async (user: UserDTO, id: number): Promise<UserDTO> => {
         try {
             // Find user
-            const foundUser = await this.userRepository.findByEmail(user.email!);
+            const foundUser = await this.userRepository.findByID(id);
             if (!foundUser) {
-                throw new UserException('No email found.');
+                throw new UserException(`No user matching id ${id} found.`);
             }
+            
+            // Check if updated email already exists 
+            if (user.email) {
+                const emailExists = await this.userRepository.findByEmail(user.email);
+                if (emailExists) {
+                    throw new UserException('Email already exists');
+                }
+            }
+
             if (user.password) {
                 user.password = await hash(user.password);
             }

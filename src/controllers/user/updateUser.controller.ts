@@ -27,8 +27,9 @@ export default class UpdateUserController {
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
+            const id = req.session.user?.id;
             const user = req.body as UserDTO;
-            const results = await this.usecase.execute(user);
+            const results = await this.usecase.execute(user, id!);
             res.status(200);
             res.send({ message: "User has been updated.", updated: results });
         }

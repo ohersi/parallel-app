@@ -50,13 +50,15 @@ export const start = async (port: Number) => {
 
         // Initalize CORS
         //TODO: Replace w/ approved site/s (array's require Origin header, one origin does not)
-        const allowedOrigins = [`localhost:${port}`];  
+        const allowedOrigins = "*";  
         
         const options: cors.CorsOptions = {
-            origin: allowedOrigins,
-            optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+            // TODO: Replace origin in production
+            origin: 'http://localhost:8080',
+            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+            credentials: true
         };
-        app.options('*', cors(options));
+        // app.options('*', cors(options));
         app.use(cors(options));
 
         // Check for secret key & setup session
@@ -68,7 +70,7 @@ export const start = async (port: Number) => {
             saveUninitialized: false,
             cookie: {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production' ? true : "auto",
+                // secure: process.env.NODE_ENV === 'production' ? true : "auto",
                 // sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax", 
                 maxAge: 60 * 60 * 1000 // Expires in 1hr
             }
