@@ -47,10 +47,6 @@ describe("GetChannelFollowersController", () => {
         jest.clearAllMocks();
     })
 
-    afterAll(() => {
-        //TODO: Close server --- server.close() or w/e
-    })
-
     it("should be defined", () => {
         expect(controller).toBeDefined();
     })

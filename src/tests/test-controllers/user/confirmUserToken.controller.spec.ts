@@ -35,14 +35,6 @@ describe("ConfirmUserTokenController", () => {
         jest.clearAllMocks();
     })
 
-    afterAll(() => {
-        //TODO: Close server --- server.close() or w/e
-    })
-
-    it("should be defined", () => {
-        expect(controller).toBeDefined();
-    })
-
     describe("When verifying json web token,", () => {
 
         describe("and token is not in request params,", () => {
