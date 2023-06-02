@@ -49,7 +49,7 @@ export class User implements BaseEntity, IUser {
     @Property()
     locked: boolean = false;
 
-    @Enum()
+    @Enum(() => TYPES_ENUM)
     role!: TYPES_ENUM;
 
     constructor(
