@@ -24,6 +24,7 @@ export enum TYPES_ENUM {
   UPDATE_USER_USECASE = 'UpdateUserUsecase',
   DELETE_USER_USECASE = 'DeleteUserUsecase',
   GET_USER_BY_ID_USECASE = 'GetUserByIdUsecase',
+  GET_USER_BY_SLUG_USECASE = 'GetUserBySlugUsecase',
   GET_ALL_USERS_USECASE = 'GetAllUsersUsecase',
   GET_USER_FRIENDS_USECASE = 'GetUserFriendsUsecase',
   GET_USER_FOLLOWERS_USECASE = 'GetUserFollowersUsecase',

@@ -31,10 +31,11 @@ export default class GetChannelBySlugController {
 
             const results = await this.usecase.execute(channelSlug, last_id, limit);
 
-            if (!results.data.length) {
+            if (!results) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: `Channel with title [ ${channelSlug} ] was not found.` });
             }
+
             res.status(200);
             res.send(results);
         }

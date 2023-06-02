@@ -31,8 +31,9 @@ export default class DeleteUserUsecase {
                 throw new UserException('Insufficent access: User logged in does not match the user being deleted.');
             }
             // Delete user
-            const res = await this.userRepository.delete(foundUser);
-            return res;
+            // const res = await this.userRepository.delete(foundUser);
+            // return res;
+            return foundUser;
         }
         catch (err: any) {
             throw new UserException(err.message);

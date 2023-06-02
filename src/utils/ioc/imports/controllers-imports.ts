@@ -11,6 +11,9 @@ export * from '@/controllers/user/deleteUser.controller';
 import '@/controllers/user/getUserById.controller';
 export * from '@/controllers/user/getUserById.controller';
 
+import '@/controllers/user/getUserBySlug.controller';
+export * from '@/controllers/user/getUserBySlug.controller';
+
 import '@/controllers/user/getAllUsers.controller';
 export * from '@/controllers/user/getAllUsers.controller';
 

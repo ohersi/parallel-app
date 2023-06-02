@@ -19,6 +19,16 @@ export default class UserRepository extends BaseRepository<User> implements IRep
         catch (error: any) {
             throw new Error(error.message);
         }
+    } 
+    
+    async findBySlug(slug: string): Promise<Loaded<User, never> | null> {
+        try {
+            const res = await this.findOne({ slug: slug });
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error.message);
+        }
     }
 
     async findByEmail(email: string): Promise<Loaded<User, never> | null> {
@@ -31,7 +41,7 @@ export default class UserRepository extends BaseRepository<User> implements IRep
         }
     };
 
-    async findAllFriends(id: number) {
+    async findAllFriends(id: number): Promise<Loaded<User, "friends">[]> {
         try {
             const res = await this.find({ id: id }, { populate: ['friends'] });
             return res;
@@ -44,7 +54,7 @@ export default class UserRepository extends BaseRepository<User> implements IRep
     async findAllByLastID(last_id: number, limit: number): Promise<[Loaded<User, never>[], number]> {
         try {
             const count = await this.count({});
-            const res = await this.find({id: { $gte: last_id }}, { limit: limit });
+            const res = await this.find({ id: { $gte: last_id } }, { limit: limit });
             return [res, count];
         }
         catch (error: any) {
@@ -56,12 +66,12 @@ export default class UserRepository extends BaseRepository<User> implements IRep
         try {
             const res = await this.find(
                 // Regex search
-                { full_name: { $re: '(?i)^.*'+name+'.*$' } },
+                { full_name: { $re: '(?i)^.*' + name + '.*$' } },
                 // Full text search
                 // { searchableTitle: { $fulltext: name } },
             );
             return res;
-        } 
+        }
         catch (error: any) {
             throw new Error(error.message);
         }

@@ -35,10 +35,7 @@ export default class LoginUserController {
             delete results['role'];
 
             res.status(200);
-            res.send([
-                results,
-                req.session
-            ]);
+            res.send(results);
 
         }
         catch (err: any) {
