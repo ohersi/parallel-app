@@ -30,7 +30,7 @@ export default class GetAllChannelsController {
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
-                res.send({ error: { status: 404 }, message: 'No channels found.' });
+                return res.send({ error: { status: 404 }, message: 'No channels found.' });
             }
             res.status(200);
             res.send(results);

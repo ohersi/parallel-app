@@ -34,7 +34,7 @@ export default class GetAllChannelsByUserIdController {
 
             if (Array.isArray(results.data) && !results.data.length) {
                 res.status(404);
-                res.send({ error: { status: 404 }, message: `User with id [${userID}] has no channels.` });
+                return res.send({ error: { status: 404 }, message: `User with id [${userID}] has no channels.` });
             }
             else {
                 res.status(200);

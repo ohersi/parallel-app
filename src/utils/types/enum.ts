@@ -28,6 +28,7 @@ export enum TYPES_ENUM {
   GET_ALL_USERS_USECASE = 'GetAllUsersUsecase',
   GET_USER_FRIENDS_USECASE = 'GetUserFriendsUsecase',
   GET_USER_FOLLOWERS_USECASE = 'GetUserFollowersUsecase',
+  GET_USER_FRIEND_CONNECTION_USECASE = 'GetUserFriendConnectionUsecase',
   SEARCH_USER_BY_NAME_USECASE = 'SearchUserByNameUsecase',
   LOGIN_USER_USECASE = 'LoginUser',
   CONFIRM_USER_TOKEN_USECASE = 'ConfirmUserTokenUseCase',

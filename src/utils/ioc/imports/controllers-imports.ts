@@ -23,6 +23,9 @@ export * from '@/controllers/user/getUserFriends.controller';
 import '@/controllers/user/getUserFollowers.controller';
 export * from '@/controllers/user/getUserFollowers.controller';
 
+import '@/controllers/user/getUserFriendConnection.controller';
+export * from '@/controllers/user/getUserFriendConnection.controller';
+
 import '@/controllers/user/searchUserByName.controller';
 export * from '@/controllers/user/searchUserByName.controller';
 
