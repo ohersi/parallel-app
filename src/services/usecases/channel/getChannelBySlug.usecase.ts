@@ -44,7 +44,8 @@ export default class GetChannelBySlugUsecase {
                 
                 const user = {
                     id: foundUser?.id,
-                    slug: foundUser?.slug
+                    slug: foundUser?.slug,
+                    full_name: foundUser?.full_name
                 };
 
                 const channelDTO = new ChannelDTO(

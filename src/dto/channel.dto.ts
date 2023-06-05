@@ -10,7 +10,7 @@ export default class ChannelDTO {
     date_created?: Date;
     date_updated?: Date;
     blocks?: Loaded<Block, never>[] | undefined;
-    user: any;
+    user?: any;
 
     constructor(
         id?: number,

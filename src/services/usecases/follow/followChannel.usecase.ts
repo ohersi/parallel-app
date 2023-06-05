@@ -53,10 +53,17 @@ export default class FollowChannelUsecase {
                 new Date()
             );
             // Connect user and channel in pivot table, persist and flush
-           const results =  await this.followRepository.save(newFollow);
+            const results = await this.followRepository.save(newFollow);
 
             // Add to collection
             loggedInUser.followed_channel.add(foundChannel);
+
+            /* TODO: Update channel follower_count
+            const newChannelFollowersCount =  {
+               follower_count: foundChannel.following_count + 1 
+             }
+             await this.channelRepository.update(newLoggedInUserCount);
+             */
 
             return results;
         }

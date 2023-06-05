@@ -50,34 +50,34 @@ describe("GetUserFriendsController", () => {
         expect(controller).toBeDefined();
     })
 
-    describe("When getting all users friends using user id,", () => {
+    describe("When getting all users friends using user slug,", () => {
 
-        describe("and the user corresponding to the given id is found", () => {
+        describe("and the user corresponding to the given slug is found", () => {
 
             it("returns a friends object and status of 200", async () => {
                 // GIVEN
-                const id = 1;
+                const slug = 'test-user';
                 const friendsList = [{ }] as Friend[];
                 
                 // WHEN
                 mockCache.mockResolvedValue(friendsList);
-                const results = await request(app).get(`/api/v1/users/${id}/friends`);
+                const results = await request(app).get(`/api/v1/users/${slug}/friends`);
 
                 // THEN
                 expect(results.status).toEqual(200);
             })
         });
 
-        describe("and the user corresponding to the id is not found", () => {
+        describe("and the user corresponding to the slug is not found", () => {
 
             it("return a status of 404.", async () => {
                 // GIVEN
-                const id = -99;
+                const slug = 'fake-user';
                 const friendsList = [] as Friend[];
                 
                 // WHEN
                 mockCache.mockResolvedValue(friendsList);
-                const results = await request(app).get(`/api/v1/users/${id}/friends`);
+                const results = await request(app).get(`/api/v1/users/${slug}/friends`);
 
                 // THEN
                 expect(results.status).toEqual(404);
@@ -88,11 +88,11 @@ describe("GetUserFriendsController", () => {
 
             it("return a status of 500.", async () => {
                 // GIVEN
-                const id = 1;
+                const slug = 'test-user';
                 
                 // WHEN
                 mockCache.mockRejectedValue(Error);
-                const results = await request(app).get(`/api/v1/users/${id}/friends`);
+                const results = await request(app).get(`/api/v1/users/${slug}/friends`);
 
                 // THEN
                 expect(results.status).toEqual(500);

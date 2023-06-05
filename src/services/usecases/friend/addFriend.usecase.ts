@@ -54,6 +54,13 @@ export default class AddFriendUsecase {
 
             // Add to collection
             loggedInUser.friends.add(followUser);
+
+            /* TODO: Update loggedInUser's following count and followedUser's follower count
+            const newLoggedInUserCount = loggedInUser.following_count + 1 
+            const newFollowedUsersCount = loggedInUser.follower_count + 1 
+             await this.userRepository.update(newLoggedInUserCount);
+             await this.userRepository.update(newFollowedUsersCount);
+             */
         }
         catch (err: any) {
             throw new FriendException(err.message);

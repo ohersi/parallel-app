@@ -16,21 +16,21 @@ export default class GetUserFriendsController {
         this.usecase = getUserFriendUsecase;
     }
 
-    @httpGet('/:id/friends')
+    @httpGet('/:slug/friends')
     public async getUserFriends(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const id = parseInt(req.params.id);
+            const slug = req.params.slug;
             const cacheTimespan = '15mins';
             
-            const results = await cache(`user:${id}:following`, () => this.usecase.execute(id), cacheTimespan);
+            const results = await cache(`user:${slug}:following`, () => this.usecase.execute(slug), cacheTimespan);
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `user with id [${id}] following 0 others.`});
+                return res.send({ error: { status: 404 }, message: `user with id [${slug}] following 0 others.`});
             }
             res.status(200);
             res.send(results);

@@ -9,6 +9,7 @@ import { memOrm } from "../../test-utils/init-db.setup";
 import { Channel } from "../../../entities/channel.entity";
 import { generateItems } from "../../test-utils/generate-items.setup";
 import ChannelRepository from '../../../repositories/channel.repository';
+import UserRepository from "../../../repositories/user.repository";
 import GetChannelBySlugUsecase from "../../../services/usecases/channel/getChannelBySlug.usecase";
 import ChannelExeption from '../../../utils/exceptions/channel.exception';
 import PageResults from "../../../resources/pagination/pageResults";
@@ -16,15 +17,17 @@ import PageResults from "../../../resources/pagination/pageResults";
 describe("GetChannelBySlugUsecase", () => {
 
     const mockedChannelRepo = mockDeep<ChannelRepository>();
+    const mockedUserRepo = mockDeep<UserRepository>();
     let service: GetChannelBySlugUsecase;
     let orm: MikroORM<IDatabaseDriver<Connection>>;
     let backup: IBackup;
 
     beforeEach(() => {
-        service = new GetChannelBySlugUsecase(mockedChannelRepo);
+        service = new GetChannelBySlugUsecase(mockedChannelRepo, mockedUserRepo);
         // Restore im-mem db to original state
         backup.restore();
         mockReset(mockedChannelRepo);
+        mockReset(mockedUserRepo);
         cleanUpMetadata();
     })
 
@@ -90,7 +93,7 @@ describe("GetChannelBySlugUsecase", () => {
 
                 // THEN
                 expect(getChannel).toEqual(null);
-                expect(results.data.title).toBeUndefined();
+                expect(results).toEqual(null);
             })
         })
 

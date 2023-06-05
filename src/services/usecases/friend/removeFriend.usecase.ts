@@ -54,6 +54,13 @@ export default class RemoveFriendUsecase {
 
             // Disconnect following and follower in pivot table, persist and flush;
             await this.friendRepository.delete(foundFriendConnection);
+
+            /* TODO: Update loggedInUser's following count and followedUser's follower count
+            const newLoggedInUserCount = { following_count: loggedInUser.following_count - 1 } 
+            const newFollowedUsersCount = { follower_count: loggedInUser.follower_count - 1 } 
+             await this.userRepository.update(newLoggedInUserCount);
+             await this.userRepository.update(newFollowedUsersCount);
+             */
         }
         catch (err: any) {
             throw new FriendException(err.message);
