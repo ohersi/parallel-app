@@ -32,6 +32,9 @@ export * from '@/controllers/user/searchUserByName.controller';
 import '@/controllers/user/loginUser.controller';
 export * from '@/controllers/user/loginUser.controller';
 
+import '@/controllers/user/logoutUser.controller';
+export * from '@/controllers/user/logoutUser.controller';
+
 import '@/controllers/user/confirmUserToken.controller';
 export * from '@/controllers/user/confirmUserToken.controller';
 
