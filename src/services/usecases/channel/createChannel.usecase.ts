@@ -1,13 +1,13 @@
 // Packages
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
+import { customAlphabet } from 'nanoid';
 // Imports
 import ChannelRepository from "@/repositories/channel.repository";
 import ChannelException from "@/utils/exceptions/channel.exception";
 import { Channel } from "@/entities/channel.entity";
 import { TYPES } from "@/utils/types";
 import { convertToSlug } from "@/resources/helper/text-manipulation";
-import { nanoid } from "nanoid";
 
 //** USE CASE */
 // GIVEN: channel object has has all fields
@@ -37,7 +37,8 @@ export default class CreateChannelUsecase {
             let slug = convertToSlug(body.title);
             const slugExists = await this.channelRepository.findOne({ slug: slug });
             if (slugExists) {
-                slug = slug.concat("-", nanoid(12));
+                const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
+                slug = slug.concat("-", nanoid());
             }
             // Create channel entity
             const newChannel = new Channel(

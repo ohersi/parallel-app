@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { customAlphabet } from 'nanoid';
 
 export const convertToSlug = (text: any) => {
     const results = text.toString()                   // Cast to string (optional)
@@ -52,7 +52,8 @@ export const checkSlug = async (newSlug: string, previousSlug: string, repo: any
     // Check if new slug exists
     const slugExists = repo.findOne({ slug: trimmed });
     if (slugExists) {
-        trimmed = trimmed.concat('-', nanoid(12)); // Create new slug w/ unique id
+        const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
+        trimmed = trimmed.concat('-', nanoid()); // Create new slug w/ unique id
     }
     return trimmed;
 }

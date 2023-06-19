@@ -3,7 +3,7 @@ import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 import { mockDeep } from "jest-mock-extended";
 import { mockReset } from "jest-mock-extended/lib/Mock";
 import { cleanUpMetadata } from "inversify-express-utils";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 // Imports
 import { memOrm } from "../../test-utils/init-db.setup";
 import { User } from "../../../entities/user.entity";
@@ -71,7 +71,8 @@ describe("CreateUserUseCase", () => {
                     // Check if slug already exists, if so add unique identifier at the end
                     const slugExists = await orm.em.findOne(User, { slug: slug });
                     if (slugExists) {
-                        slug = slug.concat("-", nanoid(12));
+                        const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
+                        slug = slug.concat("-", nanoid());
                     }
                     const newUser = new User(
                         slug,

@@ -6,7 +6,7 @@
 // Packages
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 // Imports
 import { User } from "@/entities/user.entity";
 import UserRepository from "@/repositories/user.repository";
@@ -45,7 +45,8 @@ export default class CreateUserUseCase {
             // Check if slug already exists, if so add unique identifier at the end
             const slugExists = await this.userRepository.findOne({ slug: slug });
             if (slugExists) {
-                slug = slug.concat("-", nanoid(12)); 
+                const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
+                slug = slug.concat("-", nanoid()); 
             }
             // Create user entity
             const newUser = new User(
