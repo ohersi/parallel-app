@@ -6,7 +6,7 @@ import { Friend } from "@/entities/friend.entity";
 import FriendRepository from "@/repositories/friend.repository";
 import UserRepository from "@/repositories/user.repository";
 import FriendException from "@/utils/exceptions/friend.exception";
-import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import AddToFeedUsecase from "@/services/usecases/feed/addToFeed.usecase";
 import { updateFollowers } from "@/resources/caching/cache";
 import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";

@@ -121,3 +121,8 @@ export * from '@/controllers/follow/followChannel.controller';
 
 import '@/controllers/follow/unfollowChannel.controller';
 export * from '@/controllers/follow/unfollowChannel.controller';
+
+
+// FEED CONTROLLERS //
+import '@/controllers/feed/getDefaultFeed.controller';
+export * from '@/controllers/feed/getDefaultFeed.controller';

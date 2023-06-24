@@ -6,7 +6,7 @@ import { customAlphabet } from 'nanoid';
 import { Channel } from "@/entities/channel.entity";
 import ChannelRepository from "@/repositories/channel.repository";
 import ChannelException from "@/utils/exceptions/channel.exception";
-import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import AddToFeedUsecase from "@/services/usecases/feed/addToFeed.usecase";
 import { convertToSlug } from "@/resources/helper/text-manipulation";
 import { TYPES } from "@/utils/types";
 import { ACTIVITY } from "@/utils/types/enum";

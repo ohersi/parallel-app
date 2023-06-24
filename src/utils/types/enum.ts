@@ -60,7 +60,8 @@ export enum TYPES_ENUM {
   //**----- FOLLOW -----**//
   FOLLOW_CHANNEL_USECASE = 'FollowChannelUsecase',
   UNFOLLOW_CHANNEL_USECASE = 'RemoveChannelUsecase',
-  //**----- ACTIVITY -----**//
+  //**----- FEED -----**//
+  GET_DEFAULT_FEED_USECASE = 'GetDefaultFeedUsecase',
   ADD_TO_FEED_USECASE = 'AddtoFeedUsecase',
 };
 

@@ -7,7 +7,7 @@ import FollowRepository from "@/repositories/follow.repository";
 import UserRepository from "@/repositories/user.repository";
 import ChannelRepository from "@/repositories/channel.repository";
 import FollowException from "@/utils/exceptions/follow.exception";
-import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import AddToFeedUsecase from "@/services/usecases/feed/addToFeed.usecase";
 import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
 

@@ -9,7 +9,7 @@ import BlockRepository from "@/repositories/block.repository";
 import ChannelRepository from "@/repositories/channel.repository";
 import ConnectionRepository from "@/repositories/connection.repository";
 import ConnectionException from "@/utils/exceptions/connection.exception";
-import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import AddToFeedUsecase from "@/services/usecases/feed/addToFeed.usecase";
 import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
 
