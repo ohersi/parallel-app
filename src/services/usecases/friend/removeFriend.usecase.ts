@@ -5,6 +5,7 @@ import { provide } from "inversify-binding-decorators";
 import FriendRepository from "@/repositories/friend.repository";
 import UserRepository from "@/repositories/user.repository";
 import FriendException from "@/utils/exceptions/friend.exception";
+import { updateFollowers } from "@/resources/caching/cache";
 import { TYPES } from "@/utils/types";
 
 //** USE CASE */
@@ -54,6 +55,9 @@ export default class RemoveFriendUsecase {
 
             // Disconnect following and follower in pivot table, persist and flush;
             await this.friendRepository.delete(foundFriendConnection);
+
+            // Update user (not the one logged in) followers redis cache
+            await updateFollowers(followUser.id, () => this.friendRepository.findAllFollowers(followUser.id))
 
             /* TODO: Update loggedInUser's following count and followedUser's follower count
             const newLoggedInUserCount = { following_count: loggedInUser.following_count - 1 } 

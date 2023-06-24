@@ -61,8 +61,6 @@ export default class CreateChannelUsecase {
             // Add to db, persists and flush
             const createdChannel = await this.channelRepository.save(newChannel);
 
-            // TODO: Update user followers redis cache
-
             // Redis fan out user feeds 
             await this.usecase.execute(
                 userID,

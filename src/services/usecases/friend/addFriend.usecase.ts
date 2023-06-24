@@ -7,6 +7,7 @@ import FriendRepository from "@/repositories/friend.repository";
 import UserRepository from "@/repositories/user.repository";
 import FriendException from "@/utils/exceptions/friend.exception";
 import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import { updateFollowers } from "@/resources/caching/cache";
 import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
 
@@ -62,7 +63,8 @@ export default class AddFriendUsecase {
             // Add to collection
             loggedInUser.friends.add(followUser);
 
-            // TODO: Update user followers redis cache
+            // Update user (not the one logged in) followers redis cache
+            await updateFollowers(followUser.id, () => this.friendRepository.findAllFollowers(followUser.id))
 
             // Redis fan out user feeds 
             await this.usecase.execute(

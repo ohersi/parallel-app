@@ -66,8 +66,6 @@ export default class FollowChannelUsecase {
             // Add to collection
             loggedInUser.followed_channel.add(foundChannel);
 
-            // TODO: Update user followers redis cache
-
             // Redis fan out user feeds 
             await this.usecase.execute(
                 loggedInUser.id,

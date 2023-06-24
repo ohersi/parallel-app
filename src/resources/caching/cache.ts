@@ -1,6 +1,5 @@
 import { redisContainer } from "@/app";
 import { convertTime } from "@/resources/helper/convert-time";
-import { resolve } from "path";
 
 export const cache = async (key: string, callback: Function, duration: string) => {
 
@@ -54,5 +53,28 @@ export const getFeed = async (userID: number) => {
             resolve(arr);
         })
     })
+};
 
+export const updateFollowers = (userID: number, callback: Function) => {
+
+    const redisClient = redisContainer.redis;
+
+    const key = `user:${userID}:followers`;
+    
+    return new Promise((resolve, reject) => {
+        redisClient.get(key, async (error, data) => {
+
+            if (error) reject(error.message);
+
+            try {
+                // Update follower cache / create if none exists
+                const results = await callback();
+                await redisClient.set(key, JSON.stringify(results));
+                resolve({ success: true });
+            }
+            catch (err: any) {
+                reject(err);
+            }
+        })
+    })
 }
