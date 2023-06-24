@@ -5,17 +5,15 @@ import { provide } from "inversify-binding-decorators";
 import { redisContainer } from "@/app";
 import { Friend } from "@/entities/friend.entity";
 import FriendRepository from "@/repositories/friend.repository";
-import IUser from "@/entities/interfaces/user.entity.interface";
-import IChannel from "@/entities/interfaces/channel.entity.interface";
 import { TYPES } from "@/utils/types";
 
 type ActivityData = {
-    userID: number,
-    timestamp: Date,
-    data_type: string,
-    action_type: string,
-    data: Partial<IUser | IChannel>
-};
+    userID: number
+    timestamp: Date
+    data_type: string
+    action_type: string
+    data: any
+}
 
 @provide(TYPES.ADD_TO_FEED_USECASE)
 export default class AddToFeedUsecase {
