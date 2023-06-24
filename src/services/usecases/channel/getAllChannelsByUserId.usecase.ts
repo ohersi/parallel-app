@@ -29,7 +29,7 @@ export default class GetAllChannelsByUserIdUsecase {
             });
             const pageResults = new PageResults(
                 userChannels.length,
-                undefined,
+                null,
                 userChannels
             )
             return pageResults;

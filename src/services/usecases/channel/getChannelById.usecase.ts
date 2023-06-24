@@ -34,7 +34,7 @@ export default class GetChannelByIdUsecase {
 
             const total = count || 0;
             let block: Loaded<Block, never>;
-            let encoded;
+            let encoded: string | null = null;
 
             const channelDTO = new ChannelDTO(
                 channel.id,

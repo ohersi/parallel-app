@@ -6,6 +6,8 @@ import { Friend } from "@/entities/friend.entity";
 import FriendRepository from "@/repositories/friend.repository";
 import UserRepository from "@/repositories/user.repository";
 import FriendException from "@/utils/exceptions/friend.exception";
+import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
 
 //** USE CASE */
@@ -18,13 +20,16 @@ export default class AddFriendUsecase {
 
     private friendRepository: FriendRepository;
     private userRepository: UserRepository;
+    private readonly usecase: AddToFeedUsecase;
 
     constructor(
         @inject(TYPES.FRIEND_REPOSITORY) friendRepository: FriendRepository,
         @inject(TYPES.USER_REPOSITORY) userRepository: UserRepository,
+        @inject(TYPES.ADD_TO_FEED_USECASE) addToFeedUsecase: AddToFeedUsecase
     ) {
         this.friendRepository = friendRepository;
         this.userRepository = userRepository;
+        this.usecase = addToFeedUsecase;
     }
 
     public execute = async (loggedInUserID: number, followID: number): Promise<void> => {
@@ -43,10 +48,12 @@ export default class AddFriendUsecase {
                 throw new FriendException('User logged cannot follow themselves.');
             }
             // Create friend entity
+            let timestamp = new Date();
+
             const newFriend = new Friend(
                 loggedInUser,
                 followUser,
-                new Date()
+                timestamp
             );
 
             // Connect following and follower in pivot table, persist and flush
@@ -54,6 +61,17 @@ export default class AddFriendUsecase {
 
             // Add to collection
             loggedInUser.friends.add(followUser);
+
+            // TODO: Update user followers redis cache
+
+            // Redis fan out user feeds 
+            await this.usecase.execute(
+                loggedInUser.id,
+                ACTIVITY.DATA.USER,
+                ACTIVITY.ACTION.FOLLOWED,
+                followUser,
+                timestamp
+            )
 
             /* TODO: Update loggedInUser's following count and followedUser's follower count
             const newLoggedInUserCount = loggedInUser.following_count + 1 

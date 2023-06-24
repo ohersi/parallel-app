@@ -60,5 +60,22 @@ export enum TYPES_ENUM {
   //**----- FOLLOW -----**//
   FOLLOW_CHANNEL_USECASE = 'FollowChannelUsecase',
   UNFOLLOW_CHANNEL_USECASE = 'RemoveChannelUsecase',
+  //**----- ACTIVITY -----**//
+  ADD_TO_FEED_USECASE = 'AddtoFeedUsecase',
+};
 
-}
+enum ACTION {
+  CREATED = 'Created',
+  FOLLOWED = 'Followed',
+  CONNECTED = 'Connected',
+};
+
+enum DATA {
+  CHANNEL = 'Channel',
+  USER = 'User',
+};
+
+export const ACTIVITY = {
+  DATA,
+  ACTION
+};

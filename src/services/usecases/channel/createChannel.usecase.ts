@@ -3,11 +3,13 @@ import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 import { customAlphabet } from 'nanoid';
 // Imports
+import { Channel } from "@/entities/channel.entity";
 import ChannelRepository from "@/repositories/channel.repository";
 import ChannelException from "@/utils/exceptions/channel.exception";
-import { Channel } from "@/entities/channel.entity";
-import { TYPES } from "@/utils/types";
+import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
 import { convertToSlug } from "@/resources/helper/text-manipulation";
+import { TYPES } from "@/utils/types";
+import { ACTIVITY } from "@/utils/types/enum";
 
 //** USE CASE */
 // GIVEN: channel object has has all fields
@@ -18,9 +20,14 @@ import { convertToSlug } from "@/resources/helper/text-manipulation";
 export default class CreateChannelUsecase {
 
     private channelRepository: ChannelRepository;
+    private readonly usecase: AddToFeedUsecase;
 
-    constructor(@inject(TYPES.CHANNEL_REPOSITORY) channelRepository: ChannelRepository) {
+    constructor(
+        @inject(TYPES.CHANNEL_REPOSITORY) channelRepository: ChannelRepository,
+        @inject(TYPES.ADD_TO_FEED_USECASE) addToFeedUsecase: AddToFeedUsecase
+    ) {
         this.channelRepository = channelRepository;
+        this.usecase = addToFeedUsecase;
     }
 
     public execute = async (body: any, userID: number) => {
@@ -41,16 +48,29 @@ export default class CreateChannelUsecase {
                 slug = slug.concat("-", nanoid());
             }
             // Create channel entity
+            let timestamp = new Date();
+
             const newChannel = new Channel(
                 userID,
                 body.title,
                 body.description,
                 slug,
-                new Date(),
-                new Date()
+                timestamp,
+                timestamp
             );
             // Add to db, persists and flush
             const createdChannel = await this.channelRepository.save(newChannel);
+
+            // TODO: Update user followers redis cache
+
+            // Redis fan out user feeds 
+            await this.usecase.execute(
+                userID,
+                ACTIVITY.DATA.CHANNEL,
+                ACTIVITY.ACTION.CREATED,
+                createdChannel,
+                timestamp
+            );
         }
         catch (err: any) {
             throw new ChannelException(err.message);

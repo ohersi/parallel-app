@@ -1,10 +1,11 @@
 import { redisContainer } from "@/app";
 import { convertTime } from "@/resources/helper/convert-time";
+import { resolve } from "path";
 
 export const cache = async (key: string, callback: Function, duration: string) => {
 
     const redisClient = redisContainer.redis;
-    
+
     const convertedTime = convertTime(duration);
 
     return new Promise((resolve, reject) => {
@@ -15,7 +16,7 @@ export const cache = async (key: string, callback: Function, duration: string) =
 
             try {
                 const results = await callback();
-                redisClient.setex(key, convertedTime, JSON.stringify(results));
+                redisClient.set(key, JSON.stringify(results), "EX", convertedTime);
                 resolve(results);
             }
             catch (err: any) {
@@ -24,3 +25,34 @@ export const cache = async (key: string, callback: Function, duration: string) =
         })
     })
 };
+
+export const getFeed = async (userID: number) => {
+
+    const redisClient = redisContainer.redis;
+
+    const key = `user:${userID}:feed`;
+
+    // Get user feed
+    let arr: any = [];
+
+    // const results = await redisClient.zrevrange(key, 0, -1);
+
+    // for (const res of results) {
+    //     arr.push(JSON.parse(res))
+    // }
+    // return arr;
+    return new Promise((resolve, reject) => {
+        redisClient.zrevrange(key, 0, -1, async (error, data) => {
+
+            if (error) reject(error.message);
+
+            if (data == undefined) return resolve(arr);
+
+            for (const res of data) {
+                arr.push(JSON.parse(res))
+            }
+            resolve(arr);
+        })
+    })
+
+}

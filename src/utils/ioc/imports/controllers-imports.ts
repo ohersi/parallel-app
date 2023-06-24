@@ -1,6 +1,6 @@
 // USER CONTROLLERS //
-import  '@/controllers/user/createUser.controller';
-export * from  '@/controllers/user/createUser.controller';
+import '@/controllers/user/createUser.controller';
+export * from '@/controllers/user/createUser.controller';
 
 import '@/controllers/user/updateUser.controller';
 export * from '@/controllers/user/updateUser.controller';
@@ -29,6 +29,9 @@ export * from '@/controllers/user/getUserFriendConnection.controller';
 import '@/controllers/user/getUserFollowConnection.controller';
 export * from '@/controllers/user/getUserFollowConnection.controller';
 
+import '@/controllers/user/getUserFeed.controller';
+export * from '@/controllers/user/getUserFeed.controller';
+
 import '@/controllers/user/searchUserByName.controller';
 export * from '@/controllers/user/searchUserByName.controller';
 
@@ -43,7 +46,6 @@ export * from '@/controllers/user/confirmUserToken.controller';
 
 import '@/controllers/user/sendUserTokenByEmail.controller';
 export * from '@/controllers/user/sendUserTokenByEmail.controller';
-
 
 // CHANNEL CONTROLLERS //
 import '@/controllers/channel/createChannel.controller';

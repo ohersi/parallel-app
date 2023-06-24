@@ -7,6 +7,8 @@ import FollowRepository from "@/repositories/follow.repository";
 import UserRepository from "@/repositories/user.repository";
 import ChannelRepository from "@/repositories/channel.repository";
 import FollowException from "@/utils/exceptions/follow.exception";
+import AddToFeedUsecase from "@/services/usecases/activity/addToFeed.usecase";
+import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
 
 //** USE CASE */
@@ -20,15 +22,18 @@ export default class FollowChannelUsecase {
     private followRepository: FollowRepository;
     private userRepository: UserRepository;
     private channelRepository: ChannelRepository;
+    private readonly usecase: AddToFeedUsecase;
 
     constructor(
         @inject(TYPES.FOLLOW_REPOSITORY) followRepository: FollowRepository,
         @inject(TYPES.USER_REPOSITORY) userRepository: UserRepository,
-        @inject(TYPES.CHANNEL_REPOSITORY) channelRepository: ChannelRepository
+        @inject(TYPES.CHANNEL_REPOSITORY) channelRepository: ChannelRepository,
+        @inject(TYPES.ADD_TO_FEED_USECASE) addToFeedUsecase: AddToFeedUsecase
     ) {
         this.followRepository = followRepository;
         this.userRepository = userRepository;
         this.channelRepository = channelRepository;
+        this.usecase = addToFeedUsecase;
     }
 
     public execute = async (loggedInUserID: number, channelID: number): Promise<Follow> => {
@@ -47,16 +52,30 @@ export default class FollowChannelUsecase {
                 throw new FollowException('User cannot follow their own channel.');
             }
             // Create follow entity
+            let timestamp = new Date();
+
             const newFollow = new Follow(
                 loggedInUser,
                 foundChannel,
-                new Date()
+                timestamp
             );
+
             // Connect user and channel in pivot table, persist and flush
             const results = await this.followRepository.save(newFollow);
 
             // Add to collection
             loggedInUser.followed_channel.add(foundChannel);
+
+            // TODO: Update user followers redis cache
+
+            // Redis fan out user feeds 
+            await this.usecase.execute(
+                loggedInUser.id,
+                ACTIVITY.DATA.CHANNEL,
+                ACTIVITY.ACTION.FOLLOWED,
+                foundChannel,
+                timestamp
+            );
 
             /* TODO: Update channel follower_count
             const newChannelFollowersCount =  {

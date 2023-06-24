@@ -36,7 +36,7 @@ export default class GetChannelBySlugUsecase {
             const [channel, items, count] = await this.channelRepository.findBySlug(slug, last_id, limit);
             const total = count || 0;
             let block: Loaded<Block, never>;
-            let encoded;
+            let encoded: string | null = null;
 
             if (channel) {
 
@@ -59,7 +59,7 @@ export default class GetChannelBySlugUsecase {
                     user
                 );
 
-                if (channelDTO.blocks?.length) {
+                if (channelDTO.blocks?.length && (channelDTO.blocks?.length > 1 && total > limit || limit == 1)) {
                     block = channelDTO.blocks[channelDTO?.blocks.length - 1];
                     const date = block.date_updated.toISOString();
                     encoded = Buffer.from(date, 'utf8').toString('base64');
