@@ -100,12 +100,30 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
         try {
             const res = await this.find(
                 // Regex search
-                { title: { $re: '(?i)^.*'+title+'.*$' } },
+                { title: { $re: '(?i)^.*' + title + '.*$' } },
                 // Full text search
                 // { searchableTitle: { $fulltext: title } },
                 { orderBy: { date_updated: QueryOrder.DESC } }
             );
             return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async getAllChannelsOffset(last_id: string, limit: number) {
+        try {
+            const qb = this.createQueryBuilder();
+
+            qb.select('*')
+                .where({ date_updated: { $lt: new Date(last_id) } })
+                .limit(limit)
+                .orderBy({ date_updated: QueryOrder.DESC });
+
+            const [channels, count] = await qb.getResultAndCount();
+
+            return { channels, count }
         }
         catch (error: any) {
             throw new Error(error);

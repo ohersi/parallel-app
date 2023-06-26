@@ -24,12 +24,30 @@ export default class BlockRepository extends BaseRepository<Block> implements IR
         try {
             const res = await this.find(
                 // Regex search
-                { title: { $re: '(?i)^.*'+title+'.*$'} },
+                { title: { $re: '(?i)^.*' + title + '.*$' } },
                 // Full text search
                 // { searchableTitle: { $fulltext: title } },
                 { orderBy: { date_updated: QueryOrder.DESC } }
             );
             return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async getAlBlocksOffset(last_id: string, limit: number) {
+        try {
+            const qb = this.createQueryBuilder();
+
+            qb.select('*')
+                .where({ date_updated: { $lt: new Date(last_id) } })
+                .limit(limit)
+                .orderBy({ date_updated: QueryOrder.DESC });
+
+            const [blocks, count] = await qb.getResultAndCount();
+
+            return { blocks, count }
         }
         catch (error: any) {
             throw new Error(error);

@@ -3,12 +3,15 @@ import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
 import { redisContainer } from "@/app";
+import { User } from "@/entities/user.entity";
 import { Friend } from "@/entities/friend.entity";
+import UserRepository from "@/repositories/user.repository";
 import FriendRepository from "@/repositories/friend.repository";
 import { TYPES } from "@/utils/types";
 
 type ActivityData = {
     userID: number
+    full_name: string | null
     timestamp: Date
     data_type: string
     action_type: string
@@ -19,11 +22,14 @@ type ActivityData = {
 export default class AddToFeedUsecase {
 
     private friendRepository: FriendRepository;
+    private userRepository: UserRepository;
 
     constructor(
         @inject(TYPES.FRIEND_REPOSITORY) friendRepository: FriendRepository,
+        @inject(TYPES.USER_REPOSITORY) userRepository: UserRepository,
     ) {
         this.friendRepository = friendRepository;
+        this.userRepository = userRepository;
     }
 
     /*
@@ -55,14 +61,6 @@ export default class AddToFeedUsecase {
 
         const redisClient = redisContainer.redis;
 
-        let redisObject: ActivityData = {
-            userID: userID,
-            timestamp: timestamp,
-            data_type: data_type,
-            action_type: action_type,
-            data: data
-        };
-
         try {
             let followers: Friend[] = [];
 
@@ -81,6 +79,18 @@ export default class AddToFeedUsecase {
                 followers = JSON.parse(cachedFollowers);
                 console.log('CACHE HIT')
             }
+
+            // Get user data
+            const user = await this.userRepository.findByID(userID);
+
+            let redisObject: ActivityData = {
+                userID: userID,
+                full_name: user ? user.full_name : null,
+                timestamp: timestamp,
+                data_type: data_type,
+                action_type: action_type,
+                data: data
+            };
 
             let ids: number[] = [];
             for (const follower of followers) {

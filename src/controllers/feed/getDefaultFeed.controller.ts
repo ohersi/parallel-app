@@ -4,8 +4,10 @@ import { controller, httpGet, request, response, next } from 'inversify-express-
 import { inject } from 'inversify';
 // Imports
 import GetDefaultFeedUsecase from '@/services/usecases/feed/getDefaultFeed.usecase';
-import { TYPES } from '@/utils/types';
 import { cache } from '@/resources/caching/cache';
+import { TYPES } from '@/utils/types';
+import { decodeLastID } from '@/resources/helper/text-manipulation';
+import { paginate } from '@/middleware/paginate.middlware';
 
 
 @controller(`/api/v1/feed`)
@@ -17,19 +19,21 @@ export default class GetDefaultFeedController {
         this.usecase = getDefaultFeedUsecase;
     }
 
-    @httpGet('/')
+    @httpGet('/', paginate)
     public async getDefaultFeed(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            // const cacheTimespan = '15mins';
-            // const results = await cache('channels', this.usecase.execute, cacheTimespan);
 
-            const results = await this.usecase.execute();
+            const channel_lastID = decodeLastID(req.query.channel_lastID as string);
+            const block_lastID = decodeLastID(req.query.block_lastID as string);
+            const limit = parseInt(req.query.limit as string);
 
-            if (Array.isArray(results) && !results.length) {
+            const results = await this.usecase.execute(channel_lastID, block_lastID, limit);
+
+            if (!results) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: 'Feed could not be generated.' });
             }
