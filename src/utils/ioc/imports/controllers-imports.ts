@@ -95,6 +95,9 @@ export * from '@/controllers/block/getBlockById.controller';
 import '@/controllers/block/getAllBlocks.controller';
 export * from '@/controllers/block/getAllBlocks.controller';
 
+import '@/controllers/block/getAllBlocksByUserId.controller';
+export * from '@/controllers/block/getAllBlocksByUserId.controller';
+
 import '@/controllers/block/searchBlockByTitle.controller';
 export * from '@/controllers/block/searchBlockByTitle.controller';
 

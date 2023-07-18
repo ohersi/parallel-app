@@ -10,6 +10,19 @@ import BaseRepository from '@/repositories/base.repository';
 @Entity({ customRepository: () => Block })
 export default class BlockRepository extends BaseRepository<Block> implements IRepository<Block>  {
 
+    async getAllByUserID(userID: number): Promise<Loaded<Block, never>[]> {
+        try {
+            const res = await this.find(
+                { user: userID },
+                { orderBy: { date_updated: QueryOrder.DESC } }
+            );
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
     async getBlockAndItsChannels(id: number): Promise<Loaded<Block, "channels"> | null> {
         try {
             const res = await this.findOne({ id: id }, { populate: ['channels'] });

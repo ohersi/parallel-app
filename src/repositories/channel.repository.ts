@@ -50,7 +50,10 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
     async getAllByUserID(userID: number, limit: number): Promise<any[]> {
         try {
 
-            const channels = await this.find({ user: userID });
+            const channels = await this.find(
+                { user: userID },
+                { orderBy: { date_updated: QueryOrder.DESC } }
+            );
             let res: any[] = [];
 
             for (const channel of channels) {
