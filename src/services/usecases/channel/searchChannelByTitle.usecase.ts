@@ -28,19 +28,28 @@ export default class SearchChannelByTitleUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (title: string) => {
+    public execute = async (title: string): Promise<Loaded<Channel>[]> => {
         try {
 
-            let arr: any[] = [];
+            let channelArr: Loaded<Channel>[] = [];
 
             const channels = await this.channelRepository.searchChannelsMatchingTitle(title);
 
-            for (let channel of channels) {
+            for (const channel of channels) {
                 const user = await this.userRepository.findOne(channel.user);
-                arr.push({ channel: channel, user: { slug: user?.slug, full_name: user?.full_name }});
+                let arr: any = channel;
+                let userInfo = {
+                    id: user?.id,
+                    slug: user?.slug,
+                    first_name: user?.first_name,
+                    last_name: user?.last_name,
+                    full_name: user?.full_name
+                };
+                arr.user = { ...arr.user, ...userInfo };
+                channelArr.push(arr);
             }
 
-            return arr;
+            return channelArr;
         }
         catch (err: any) {
             throw new ChannelException(err.message);
