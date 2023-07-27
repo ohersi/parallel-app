@@ -12,6 +12,7 @@ import ConnectionException from "@/utils/exceptions/connection.exception";
 import AddToFeedUsecase from "@/services/usecases/feed/addToFeed.usecase";
 import { ACTIVITY } from "@/utils/types/enum";
 import { TYPES } from "@/utils/types";
+import UserRepository from "@/repositories/user.repository";
 
 //** USE CASE */
 // GIVEN: id's from channel, block & user
@@ -24,17 +25,20 @@ export default class AddConnectionUsecase {
     private blockRepository: BlockRepository;
     private channelRepository: ChannelRepository;
     private connectionRepository: ConnectionRepository;
+    private userRepository: UserRepository;
     private readonly usecase: AddToFeedUsecase;
 
     constructor(
         @inject(TYPES.BLOCK_REPOSITORY) blockRepository: BlockRepository,
         @inject(TYPES.CHANNEL_REPOSITORY) channelRepository: ChannelRepository,
         @inject(TYPES.CONNECTION_REPOSITORY) connectionRepository: ConnectionRepository,
+        @inject(TYPES.USER_REPOSITORY) userRepository: UserRepository,
         @inject(TYPES.ADD_TO_FEED_USECASE) addToFeedUsecase: AddToFeedUsecase,
     ) {
         this.blockRepository = blockRepository;
         this.channelRepository = channelRepository;
         this.connectionRepository = connectionRepository;
+        this.userRepository = userRepository;
         this.usecase = addToFeedUsecase;
     }
 
@@ -64,12 +68,25 @@ export default class AddConnectionUsecase {
             // Add to collection
             foundBlock.channels.add(foundChannel);
 
+            // Add user info to channel obj
+            const user = await this.userRepository.findByID(foundChannel.user);
+            let updatedChannel: any;
+            updatedChannel = foundChannel;
+            let userInfo = {
+                id: user?.id,
+                slug: user?.slug,
+                first_name: user?.first_name,
+                last_name: user?.last_name,
+                full_name: user?.full_name
+            };
+            updatedChannel.user = { ...updatedChannel.user, ...userInfo };
+
             // Redis fan out user feeds 
             await this.usecase.execute(
-                foundChannel.user,
-                ACTIVITY.DATA.CHANNEL,
+                userID,
+                ACTIVITY.DATA.BLOCK,
                 ACTIVITY.ACTION.CONNECTED,
-                { block: foundBlock, channel: foundChannel },
+                { block: foundBlock, channel: updatedChannel },
                 timestamp
             );
 

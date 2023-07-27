@@ -1,8 +1,10 @@
 // Packages
+import { Loaded } from "@mikro-orm/core";
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
 import { Follow } from "@/entities/follow.entity";
+import { Channel } from "@/entities/channel.entity";
 import FollowRepository from "@/repositories/follow.repository";
 import UserRepository from "@/repositories/user.repository";
 import ChannelRepository from "@/repositories/channel.repository";
@@ -66,12 +68,25 @@ export default class FollowChannelUsecase {
             // Add to collection
             loggedInUser.followed_channel.add(foundChannel);
 
+            // Add user info to channel obj
+            const user = await this.userRepository.findByID(foundChannel.user);
+            let updatedChannel: any;
+            updatedChannel = foundChannel;
+            let userInfo = {
+                id: user?.id,
+                slug: user?.slug,
+                first_name: user?.first_name,
+                last_name: user?.last_name,
+                full_name: user?.full_name
+            };
+            updatedChannel.user = { ...updatedChannel.user, ...userInfo };
+
             // Redis fan out user feeds 
             await this.usecase.execute(
                 loggedInUser.id,
                 ACTIVITY.DATA.CHANNEL,
                 ACTIVITY.ACTION.FOLLOWED,
-                foundChannel,
+                updatedChannel,
                 timestamp
             );
 

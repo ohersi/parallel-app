@@ -10,8 +10,11 @@ import FriendRepository from "@/repositories/friend.repository";
 import { TYPES } from "@/utils/types";
 
 type ActivityData = {
-    userID: number
-    full_name: string | null
+    user: {
+        id: number,
+        full_name: string | null,
+        slug: string | null
+    }
     timestamp: Date
     data_type: string
     action_type: string
@@ -84,8 +87,11 @@ export default class AddToFeedUsecase {
             const user = await this.userRepository.findByID(userID);
 
             let redisObject: ActivityData = {
-                userID: userID,
-                full_name: user ? user.full_name : null,
+                user: {
+                    id: userID,
+                    full_name: user ? user.full_name : null,
+                    slug: user ? user.slug : null,
+                },
                 timestamp: timestamp,
                 data_type: data_type,
                 action_type: action_type,

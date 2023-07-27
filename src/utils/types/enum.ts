@@ -75,6 +75,7 @@ enum ACTION {
 enum DATA {
   CHANNEL = 'Channel',
   USER = 'User',
+  BLOCK = 'Block',
 };
 
 export const ACTIVITY = {
