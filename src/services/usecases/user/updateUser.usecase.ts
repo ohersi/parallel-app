@@ -67,6 +67,8 @@ export default class UpdateUserUsecase {
                 undefined,
                 updatedUser.avatar,
                 updatedUser.role,
+                updatedUser.enabled,
+                updatedUser.locked,
             )
         }
         catch (err: any) {

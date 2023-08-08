@@ -9,6 +9,8 @@ export default class UserDTO {
     password?: string;
     avatar_url?: string;
     role?: string;
+    enabled?: boolean;
+    locked?: boolean;
     token?: string;
 
     constructor(
@@ -21,6 +23,8 @@ export default class UserDTO {
         password?:string,
         avatar_url?: string,
         role?: string,
+        enabled?: boolean,
+        locked?: boolean,
         token?: string,
     ) {
         this.id = id;
@@ -32,6 +36,8 @@ export default class UserDTO {
         this.password = password;
         this.avatar_url = avatar_url;
         this.role = role;
+        this.enabled = enabled;
+        this.locked = locked;
         this.token = token;
     }
 }

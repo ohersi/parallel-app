@@ -44,6 +44,8 @@ export default class LoginUserUseCase {
                         undefined,
                         foundUser.avatar,
                         foundUser.role,
+                        foundUser.enabled,
+                        foundUser.locked,
                         refreshJWT
                     );
                 }
