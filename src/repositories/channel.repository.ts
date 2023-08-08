@@ -36,6 +36,16 @@ export default class ChannelRepository extends BaseRepository<Channel> implement
         }
     }
 
+    async findBySlugMini(slug: string): Promise<Loaded<Channel, never> | null> {
+        try {
+            const res = await this.findOne({ slug: slug });
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
     async findByUserIDAndTitle(id: number, title: string): Promise<Loaded<Channel, never> | null> {
         try {
             const res = await this.findOne({ user: id, title: title });

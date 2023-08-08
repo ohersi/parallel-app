@@ -28,10 +28,10 @@ export default class GetChannelFollowersUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (channelID: number): Promise<Loaded<Follow, "user">[]> => {
+    public execute = async (slug: string): Promise<Loaded<Follow, "user">[]> => {
         try {
             // Find channel
-            const foundChannel = await this.channelRepository.findByID(channelID);
+            const foundChannel = await this.channelRepository.findBySlugMini(slug);
             if (!foundChannel) {
                 throw new FollowException(`No channel found matching that id.`);
             }
