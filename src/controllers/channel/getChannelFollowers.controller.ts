@@ -29,9 +29,9 @@ export default class GetChannelFollowersController {
             
             const results: any = await cache(`channel:${slug}:users:followers`, () => this.usecase.execute(slug), cacheTimespan);
             
-            if (Array.isArray(results) && !results.length) {
+            if (!results) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `Channel has no followers.` });
+                return res.send({ error: { status: 404 }, message: `No channel was found with that slug.` });
             }
             res.status(200);
             res.send(results);
