@@ -1,5 +1,6 @@
 import { redisContainer } from "@/app";
 import { convertTime } from "@/resources/helper/convert-time";
+import { ActivityData } from "@/services/usecases/feed/addToFeed.usecase";
 
 export const cache = async (key: string, callback: Function, duration: string) => {
 
@@ -32,15 +33,9 @@ export const getFeed = async (userID: number) => {
     const key = `user:${userID}:feed`;
 
     // Get user feed
-    let arr: any = [];
+    let arr: any[] = [];
 
-    // const results = await redisClient.zrevrange(key, 0, -1);
-
-    // for (const res of results) {
-    //     arr.push(JSON.parse(res))
-    // }
-    // return arr;
-    return new Promise((resolve, reject) => {
+    return new Promise<ActivityData[] | any[]>((resolve, reject) => {
         redisClient.zrevrange(key, 0, -1, async (error, data) => {
 
             if (error) reject(error.message);
@@ -50,9 +45,20 @@ export const getFeed = async (userID: number) => {
             for (const res of data) {
                 arr.push(JSON.parse(res))
             }
-            resolve(arr);
+            resolve(arr as ActivityData[]);
         })
     })
+};
+
+export const update = async (type: string, id: number, data: any, duration: string) => {
+
+    const redisClient = redisContainer.redis;
+
+    const key = `${type}:${id}`;
+
+    const convertedTime = convertTime(duration);
+
+    redisClient.set(key, data, "EX", convertedTime);
 };
 
 export const updateFollowers = (userID: number, callback: Function) => {
@@ -60,7 +66,7 @@ export const updateFollowers = (userID: number, callback: Function) => {
     const redisClient = redisContainer.redis;
 
     const key = `user:${userID}:followers`;
-    
+
     return new Promise((resolve, reject) => {
         redisClient.get(key, async (error, data) => {
 

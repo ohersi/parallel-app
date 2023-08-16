@@ -9,6 +9,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import blockValidation from '@/resources/validations/block.validation';
 import { moderate } from '@/middleware/moderation.middleware';
 import { sessionAuth } from '@/middleware/auth.middleware';
+import { update } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
 
@@ -31,11 +32,15 @@ export default class UpdateBlockController {
             const blockID = parseInt(req.params.id);
             const userID = req.session.user?.id!;
             const block = req.body as BlockDTO;
-            
+            const cacheTimespan = '15mins';
+
             const results = await this.usecase.execute(blockID, userID, block);
 
+            // Update block cache
+            await update('block', results.id, results, cacheTimespan);
+
             res.status(200);
-            res.send({ message: "Block has been updated.", updated: results });
+            res.send("Block has been updated.");
         }
         catch (err: any) {
             res.status(500);

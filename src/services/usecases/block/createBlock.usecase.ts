@@ -48,7 +48,7 @@ export default class CreateBlockUsecase {
             }
             // Create block entity
             let timestamp = new Date();
-            
+
             const newBlock = new Block(
                 userID,
                 body.title,
@@ -72,12 +72,12 @@ export default class CreateBlockUsecase {
             // Add to collection
             newBlock.channels.add(foundChannel);
 
-             // Redis fan out user feeds 
-             await this.usecase.execute(
+            // Redis fan out user feeds 
+            await this.usecase.execute(
                 userID,
                 ACTIVITY.DATA.BLOCK,
                 ACTIVITY.ACTION.CONNECTED,
-                { block: newBlock, channel: foundChannel },
+                { block: { id: newBlock.id }, channel: { id: foundChannel.id } },
                 timestamp
             );
 

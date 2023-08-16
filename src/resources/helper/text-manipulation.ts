@@ -50,11 +50,13 @@ export const checkSlug = async (newSlug: string, previousSlug: string, repo: any
     }
 
     // Check if new slug exists
-    const slugExists = repo.findOne({ slug: trimmed });
+    const slugExists = await repo.findOne({ slug: trimmed });
+
     if (slugExists) {
         const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
         trimmed = trimmed.concat('-', nanoid()); // Create new slug w/ unique id
     }
+
     return trimmed;
 }
 

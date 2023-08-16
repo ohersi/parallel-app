@@ -9,11 +9,11 @@ import UserRepository from "@/repositories/user.repository";
 import FriendRepository from "@/repositories/friend.repository";
 import { TYPES } from "@/utils/types";
 
-type ActivityData = {
+export type ActivityData = {
     user: {
         id: number,
-        full_name: string | null,
-        slug: string | null
+        full_name?: string | null,
+        slug?: string | null
     }
     timestamp: Date
     data_type: string
@@ -83,14 +83,9 @@ export default class AddToFeedUsecase {
                 console.log('CACHE HIT')
             }
 
-            // Get user data
-            const user = await this.userRepository.findByID(userID);
-
             let redisObject: ActivityData = {
                 user: {
                     id: userID,
-                    full_name: user ? user.full_name : null,
-                    slug: user ? user.slug : null,
                 },
                 timestamp: timestamp,
                 data_type: data_type,

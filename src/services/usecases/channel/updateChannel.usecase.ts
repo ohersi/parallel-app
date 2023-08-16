@@ -2,6 +2,7 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
+import { Channel } from "@/entities/channel.entity";
 import ChannelRepository from "@/repositories/channel.repository";
 import ChannelException from "@/utils/exceptions/channel.exception";
 import ChannelDTO from "@/dto/channel.dto";
@@ -22,7 +23,7 @@ export default class UpdateChannelUsecase {
         this.channelRepository = channelRepository;
     }
 
-    public execute = async (id: number, userID: number, channel: ChannelDTO): Promise<ChannelDTO> => {
+    public execute = async (id: number, userID: number, channel: ChannelDTO): Promise<Channel> => {
         try {
             // Find channel
             const foundChannel = await this.channelRepository.findByID(id);
@@ -44,15 +45,7 @@ export default class UpdateChannelUsecase {
 
             const results = await this.channelRepository.update(foundChannel, channel);
 
-            // Return dto with updated channel info
-            return new ChannelDTO(
-                undefined,
-                results.title,
-                results.description,
-                results.slug,
-                results.date_created,
-                results.date_updated
-            );
+            return results;
         }
         catch (err: any) {
             throw new ChannelException(err.message);

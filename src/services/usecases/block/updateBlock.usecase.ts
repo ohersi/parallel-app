@@ -2,6 +2,7 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
+import { Block } from "@/entities/block.entity";
 import BlockRepository from "@/repositories/block.repository";
 import BlockException from "@/utils/exceptions/block.exception";
 import BlockDTO from "@/dto/block.dto";
@@ -21,7 +22,7 @@ export default class UpdateBlockUsecase {
         this.blockRepository = blockRepository;
     }
 
-    public execute = async (blockID: number, userID: number, block: BlockDTO) => {
+    public execute = async (blockID: number, userID: number, block: BlockDTO): Promise<Block> => {
         try {
             // Find block
             const foundBlock = await this.blockRepository.findByID(blockID);
@@ -36,16 +37,7 @@ export default class UpdateBlockUsecase {
 
             const results = await this.blockRepository.update(foundBlock, block);
 
-            // Return dto with updated block info
-            return new BlockDTO(
-                undefined,
-                results.title,
-                results.description,
-                results.source_url,
-                results.image_url,
-                results.date_created,
-                results.date_updated
-            );
+            return results;
         }
         catch (err: any) {
             throw new BlockException(err.message);

@@ -8,8 +8,9 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import userValidation from '@/resources/validations/user.validation';
 import { moderate } from '@/middleware/moderation.middleware';
 import { sessionAuth } from '@/middleware/auth.middleware';
-import { TYPES } from '@/utils/types';
+import { update } from '@/resources/caching/cache';
 import UserDTO from '@/dto/user.dto';
+import { TYPES } from '@/utils/types';
 
 @controller(`/api/v1/users`)
 export default class UpdateUserController {
@@ -29,9 +30,15 @@ export default class UpdateUserController {
         try {
             const id = req.session.user?.id;
             const user = req.body as UserDTO;
+            const cacheTimespan = '15mins';
+
             const results = await this.usecase.execute(user, id!);
+
+            // Update user cache
+            await update('user', results?.id!, results, cacheTimespan);
+
             res.status(200);
-            res.send({ message: "User has been updated.", updated: results });
+            res.send("User has been updated.");
         }
         catch (err: any) {
             res.status(500);

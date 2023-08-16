@@ -10,6 +10,7 @@ import { moderate } from '@/middleware/moderation.middleware';
 import { sessionAuth } from '@/middleware/auth.middleware';
 import ChannelDTO from '@/dto/channel.dto';
 import { TYPES } from '@/utils/types';
+import { update } from '@/resources/caching/cache';
 
 
 @controller(`/api/v1/channels`)
@@ -31,10 +32,15 @@ export default class UpdateChannelController {
             const id = parseInt(req.params.id);
             const userID = req.session.user?.id!;
             const channel = req.body as ChannelDTO;
+            const cacheTimespan = '30mins';
 
             const results = await this.usecase.execute(id, userID, channel);
+
+            // Update channel cache
+            await update('channel', results.id, results, cacheTimespan);
+
             res.status(200);
-            res.send({ message: "Channel has been updated.", updated: results });
+            res.send("Channel has been updated.");
         }
         catch (err: any) {
             res.status(500);
