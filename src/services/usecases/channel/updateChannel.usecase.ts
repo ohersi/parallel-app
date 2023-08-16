@@ -36,9 +36,11 @@ export default class UpdateChannelUsecase {
             channel.date_updated = new Date();
 
             // Update slug
-            const slugifyTitle = convertToSlug(channel.title);
-            const slug = await checkSlug(slugifyTitle, foundChannel.slug, this.channelRepository);
-            channel.slug = slug;
+            if (channel.title) {
+                const slugifyTitle = convertToSlug(channel.title);
+                const slug = await checkSlug(slugifyTitle, foundChannel.slug, this.channelRepository);
+                channel.slug = slug;
+            }
 
             const results = await this.channelRepository.update(foundChannel, channel);
 
