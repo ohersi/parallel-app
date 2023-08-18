@@ -10,7 +10,7 @@ import FollowException from "@/utils/exceptions/follow.exception";
 import { TYPES } from "@/utils/types";
 
 //** USE CASE */
-// GIVEN: user id
+// GIVEN: user slug
 // WHEN: find all channels user follows
 // THEN: return all all channels user follows
 
@@ -28,12 +28,12 @@ export default class GetAllChannelsUserFollowsUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (userID: number): Promise<Loaded<Follow, "followed_channel">[]> => {
+    public execute = async (slug: string): Promise<Loaded<Follow, "followed_channel">[]> => {
         try {
             // Find user
-            const foundUser = await this.userRepository.findByID(userID);
+            const foundUser = await this.userRepository.findBySlug(slug);
             if (!foundUser) {
-                throw new FollowException(`No user found matching that id.`);
+                throw new FollowException(`No user found matching that name ${slug}.`);
             }
             const allChannelsUserFollows = await this.followRepository.findAllChannelsUserFollows(foundUser.id);
             return allChannelsUserFollows;

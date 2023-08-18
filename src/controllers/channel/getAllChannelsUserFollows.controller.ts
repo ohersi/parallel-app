@@ -16,17 +16,17 @@ export default class GetAllChannelsUserFollowsController {
         this.usecase = getAllChannelsUserFollowsUsecase;
     }
 
-    @httpGet('/:id/following')
+    @httpGet('/:slug/following')
     public async getAllChannelsUserFollows(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
         : Promise<Response | void> {
         try {
-            const id = parseInt(req.params.id);
+            const slug = req.params.slug;
             const cacheTimespan = '15mins';
             
-            const results: any = await cache(`user:${id}:channels:following`, () => this.usecase.execute(id), cacheTimespan);
+            const results: any = await cache(`user:${slug}:channels:following`, () => this.usecase.execute(slug), cacheTimespan);
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
