@@ -34,8 +34,6 @@ export default class GetUserFeedUsecase {
         this.userRepository = userRepository;
     }
 
-//  TODO: Make sure to update redis cache for when block, user, channel is updated
-
     public execute = async (feed: ActivityData[]): Promise<ActivityData[]> => {
         try {
 

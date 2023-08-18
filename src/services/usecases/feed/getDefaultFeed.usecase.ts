@@ -16,8 +16,6 @@ import { TYPES } from "@/utils/types";
 // WHEN: find all channels & blocks in db
 // THEN: return sorted by timestamp
 
-// TODO: Get last channel and block ids for pagination
-
 interface CustomPageResults extends Partial<PageResults> {
     channel_total: number,
     block_total: number,

@@ -53,6 +53,7 @@ export default class GetChannelBySlugUsecase {
                     channel?.title,
                     channel?.description,
                     channel?.slug,
+                    channel?.follower_count,
                     channel?.date_created,
                     channel?.date_updated,
                     items,

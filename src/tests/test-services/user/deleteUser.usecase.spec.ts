@@ -54,6 +54,8 @@ describe("DeleteUserUsecase", () => {
             'firstName lastName',
             testUser.password,
             testUser.avatar_url,
+            0,
+            0,
             TYPES_ENUM.USER
         );
         const createdUser = await users.save(newUser);

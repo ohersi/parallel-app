@@ -43,6 +43,8 @@ export default class LoginUserUseCase {
                         foundUser.email,
                         undefined,
                         foundUser.avatar,
+                        foundUser.following_count,
+                        foundUser.follower_count,
                         foundUser.role,
                         foundUser.enabled,
                         foundUser.locked,

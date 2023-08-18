@@ -2,6 +2,7 @@
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
+import UserDTO from "@/dto/user.dto";
 import FriendRepository from "@/repositories/friend.repository";
 import UserRepository from "@/repositories/user.repository";
 import FriendException from "@/utils/exceptions/friend.exception";
@@ -59,12 +60,12 @@ export default class RemoveFriendUsecase {
             // Update user (not the one logged in) followers redis cache
             await updateFollowers(followUser.id, () => this.friendRepository.findAllFollowers(followUser.id))
 
-            /* TODO: Update loggedInUser's following count and followedUser's follower count
-            const newLoggedInUserCount = { following_count: loggedInUser.following_count - 1 } 
-            const newFollowedUsersCount = { follower_count: loggedInUser.follower_count - 1 } 
-             await this.userRepository.update(newLoggedInUserCount);
-             await this.userRepository.update(newFollowedUsersCount);
-             */
+            // Update loggedInUser's following count and followedUser's follower count
+            const newFollowingCount = { following_count: loggedInUser.following_count - 1 } as UserDTO;
+            const newFollowedCount = { follower_count: followUser.follower_count - 1 } as UserDTO;
+
+            await this.userRepository.update(loggedInUser, newFollowingCount);
+            await this.userRepository.update(followUser, newFollowedCount);
         }
         catch (err: any) {
             throw new FriendException(err.message);

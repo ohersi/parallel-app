@@ -36,6 +36,9 @@ export class Channel implements BaseEntity, IChannel {
     users_following = new Collection<User>(this)
 
     @Property()
+    follower_count!: number;
+
+    @Property()
     date_created!: Date;
 
     @Property()
@@ -46,6 +49,7 @@ export class Channel implements BaseEntity, IChannel {
         title: string,
         description: string,
         slug: string,
+        follower_count: number,
         date_created: Date,
         date_updated: Date,
     ) {
@@ -53,6 +57,7 @@ export class Channel implements BaseEntity, IChannel {
         this.title = title;
         this.description = description;
         this.slug = slug;
+        this.follower_count = follower_count;
         this.date_created = date_created;
         this.date_updated = date_updated;
     }

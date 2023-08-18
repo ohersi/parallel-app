@@ -28,8 +28,7 @@ export default class ConfirmUserTokenController {
                 return res.send({ error: { status: 500 }, message: "Missing token" });
             }   
             await this.usecase.execute(token.toString());
-            // TODO: Redirect to login page
-            // res.redirect('http://localhost:3000/api/v1/users/login');
+            
             res.status(200);
             res.send("User has been registered.");
         }

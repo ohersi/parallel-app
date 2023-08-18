@@ -31,6 +31,8 @@ export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) 
             `${i}email@email.com`,
             "password",
             "avatar",
+            0,
+            0,
             TYPES_ENUM.USER
         );
 
@@ -39,6 +41,7 @@ export const generateItems = async (orm: MikroORM<IDatabaseDriver<Connection>>) 
             `channel title ${i}`,
             `channel description ${i}`,
             `channel-title-${i}`,
+            0,
             new Date(),
             new Date(),
         );

@@ -66,6 +66,8 @@ export default class UpdateUserUsecase {
                 updatedUser.email,
                 undefined,
                 updatedUser.avatar,
+                updatedUser.following_count,
+                updatedUser.follower_count,
                 updatedUser.role,
                 updatedUser.enabled,
                 updatedUser.locked,

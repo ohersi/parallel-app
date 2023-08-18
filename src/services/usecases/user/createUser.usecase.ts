@@ -46,7 +46,7 @@ export default class CreateUserUseCase {
             const slugExists = await this.userRepository.findOne({ slug: slug });
             if (slugExists) {
                 const nanoid = customAlphabet('0123456789_abcdefghijklmnopqrstuvwxyz-', 14);
-                slug = slug.concat("-", nanoid()); 
+                slug = slug.concat("-", nanoid());
             }
             // Create user entity
             const newUser = new User(
@@ -57,6 +57,8 @@ export default class CreateUserUseCase {
                 body.email,
                 body.password,
                 body.avatar,
+                0,
+                0,
                 TYPES_ENUM.USER
             );
             // Add to db, persists and flush

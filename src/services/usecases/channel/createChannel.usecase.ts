@@ -55,6 +55,7 @@ export default class CreateChannelUsecase {
                 body.title,
                 body.description,
                 slug,
+                0,
                 timestamp,
                 timestamp
             );

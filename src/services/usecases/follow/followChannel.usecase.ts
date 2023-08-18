@@ -1,10 +1,10 @@
 // Packages
-import { Loaded } from "@mikro-orm/core";
 import { inject } from "inversify";
 import { provide } from "inversify-binding-decorators";
 // Imports
 import { Follow } from "@/entities/follow.entity";
-import { Channel } from "@/entities/channel.entity";
+import ChannelDTO from "@/dto/channel.dto";
+import UserDTO from "@/dto/user.dto";
 import FollowRepository from "@/repositories/follow.repository";
 import UserRepository from "@/repositories/user.repository";
 import ChannelRepository from "@/repositories/channel.repository";
@@ -90,12 +90,12 @@ export default class FollowChannelUsecase {
                 timestamp
             );
 
-            /* TODO: Update channel follower_count
-            const newChannelFollowersCount =  {
-               follower_count: foundChannel.following_count + 1 
-             }
-             await this.channelRepository.update(newLoggedInUserCount);
-             */
+            // Update channel follower count & loggedInUser's following count
+            const newChannelFollowersCount = { follower_count: foundChannel.follower_count + 1 } as ChannelDTO;
+            const newFollowingCount = { following_count: loggedInUser.following_count + 1 } as UserDTO;
+            
+            await this.channelRepository.update(foundChannel, newChannelFollowersCount);
+            await this.userRepository.update(loggedInUser, newFollowingCount);
 
             return results;
         }

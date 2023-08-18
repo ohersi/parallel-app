@@ -44,6 +44,12 @@ export class User implements BaseEntity, IUser {
     avatar!: string;
 
     @Property()
+    following_count!: number;
+
+    @Property()
+    follower_count!: number;
+
+    @Property()
     enabled: boolean = false;
 
     @Property()
@@ -60,6 +66,8 @@ export class User implements BaseEntity, IUser {
         email: string,
         password: string,
         avatar: string,
+        following_count: number,
+        follower_count: number,
         role: TYPES_ENUM,
     ) {
         this.slug = slug;
@@ -69,6 +77,8 @@ export class User implements BaseEntity, IUser {
         this.email = email;
         this.password = password;
         this.avatar = avatar;
+        following_count = following_count;
+        follower_count = follower_count;
         this.role = role;
     }
 };

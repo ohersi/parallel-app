@@ -2,11 +2,11 @@ import { Loaded } from "@mikro-orm/core";
 import { Block } from "@/entities/block.entity";
 
 export default class ChannelDTO {
-
     id?: number;
     title?: string;
     description?: string;
     slug?: string;
+    follower_count?: number;
     date_created?: Date;
     date_updated?: Date;
     blocks?: Loaded<Block, never>[] | undefined;
@@ -17,6 +17,7 @@ export default class ChannelDTO {
         title?: string,
         description?: string,
         slug?: string,
+        follower_count?: number,
         date_created?: Date,
         date_updated?: Date,
         blocks?: Loaded<Block, never>[] | undefined,
@@ -26,6 +27,7 @@ export default class ChannelDTO {
         this.title = title;
         this.description = description;
         this.slug = slug;
+        this.follower_count = follower_count;
         this.date_created = date_created;
         this.date_updated = date_updated;
         this.blocks = blocks;

@@ -82,6 +82,8 @@ describe("CreateUserUseCase", () => {
                         testUser.email,
                         testUser.password,
                         testUser.avatar_url,
+                        0,
+                        0,
                         TYPES_ENUM.USER
                     );
                     // Persist and flush to database

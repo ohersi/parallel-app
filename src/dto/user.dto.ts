@@ -8,6 +8,8 @@ export default class UserDTO {
     email?: string;
     password?: string;
     avatar_url?: string;
+    following_count?: number;
+    follower_count?: number;
     role?: string;
     enabled?: boolean;
     locked?: boolean;
@@ -22,6 +24,8 @@ export default class UserDTO {
         email?: string,
         password?:string,
         avatar_url?: string,
+        following_count?: number,
+        follower_count?: number,
         role?: string,
         enabled?: boolean,
         locked?: boolean,
@@ -35,6 +39,8 @@ export default class UserDTO {
         this.email = email;
         this.password = password;
         this.avatar_url = avatar_url;
+        this.following_count = following_count;
+        this.follower_count = follower_count;
         this.role = role;
         this.enabled = enabled;
         this.locked = locked;
