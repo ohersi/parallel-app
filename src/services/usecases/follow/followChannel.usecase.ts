@@ -65,37 +65,24 @@ export default class FollowChannelUsecase {
             // Connect user and channel in pivot table, persist and flush
             const results = await this.followRepository.save(newFollow);
 
+            // Update channel follower count & loggedInUser's following count
+            const newChannelFollowersCount = { follower_count: foundChannel.follower_count + 1 } as ChannelDTO;
+            const newFollowingCount = { following_count: loggedInUser.following_count + 1 } as UserDTO;
+
+            await this.channelRepository.update(foundChannel, newChannelFollowersCount);
+            await this.userRepository.update(loggedInUser, newFollowingCount);
+
             // Add to collection
             loggedInUser.followed_channel.add(foundChannel);
-
-            // Add user info to channel obj
-            const user = await this.userRepository.findByID(foundChannel.user);
-            let updatedChannel: any;
-            updatedChannel = foundChannel;
-            let userInfo = {
-                id: user?.id,
-                slug: user?.slug,
-                first_name: user?.first_name,
-                last_name: user?.last_name,
-                full_name: user?.full_name
-            };
-            updatedChannel.user = { ...updatedChannel.user, ...userInfo };
 
             // Redis fan out user feeds 
             await this.usecase.execute(
                 loggedInUser.id,
                 ACTIVITY.DATA.CHANNEL,
                 ACTIVITY.ACTION.FOLLOWED,
-                updatedChannel,
+                { id: foundChannel.id },
                 timestamp
             );
-
-            // Update channel follower count & loggedInUser's following count
-            const newChannelFollowersCount = { follower_count: foundChannel.follower_count + 1 } as ChannelDTO;
-            const newFollowingCount = { following_count: loggedInUser.following_count + 1 } as UserDTO;
-            
-            await this.channelRepository.update(foundChannel, newChannelFollowersCount);
-            await this.userRepository.update(loggedInUser, newFollowingCount);
 
             return results;
         }

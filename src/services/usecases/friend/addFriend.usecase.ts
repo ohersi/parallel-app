@@ -61,6 +61,14 @@ export default class AddFriendUsecase {
             // Connect following and follower in pivot table, persist and flush
             await this.friendRepository.save(newFriend);
 
+            // Update loggedInUser's following count and followedUser's follower count
+            const newFollowingCount = { following_count: loggedInUser.following_count + 1 } as UserDTO;
+            const newFollowedCount = { follower_count: followUser.follower_count + 1 } as UserDTO;
+
+            await this.userRepository.update(loggedInUser, newFollowingCount);
+
+            await this.userRepository.update(followUser, newFollowedCount);
+
             // Add to collection
             loggedInUser.friends.add(followUser);
 
@@ -72,16 +80,9 @@ export default class AddFriendUsecase {
                 loggedInUser.id,
                 ACTIVITY.DATA.USER,
                 ACTIVITY.ACTION.FOLLOWED,
-                followUser,
+                { id: followUser.id },
                 timestamp
             )
-
-            // Update loggedInUser's following count and followedUser's follower count
-            const newFollowingCount = { following_count: loggedInUser.following_count + 1 } as UserDTO;
-            const newFollowedCount = { follower_count: followUser.follower_count + 1 } as UserDTO;
-
-            await this.userRepository.update(loggedInUser, newFollowingCount);
-            await this.userRepository.update(followUser, newFollowedCount);
         }
         catch (err: any) {
             throw new FriendException(err.message);

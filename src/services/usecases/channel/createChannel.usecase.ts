@@ -67,7 +67,7 @@ export default class CreateChannelUsecase {
                 userID,
                 ACTIVITY.DATA.CHANNEL,
                 ACTIVITY.ACTION.CREATED,
-                createdChannel,
+                { id: createdChannel.id },
                 timestamp
             );
         }

@@ -25,7 +25,7 @@ export default class GetChannelFollowersController {
         : Promise<Response | void> {
         try {
             const slug = req.params.slug;
-            const cacheTimespan = '15mins';
+            const cacheTimespan = '60s';
             
             const results: any = await cache(`channel:${slug}:users:followers`, () => this.usecase.execute(slug), cacheTimespan);
             

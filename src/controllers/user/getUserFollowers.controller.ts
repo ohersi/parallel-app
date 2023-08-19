@@ -24,7 +24,7 @@ export default class GetUserFollowersController {
         : Promise<Response | void> {
         try {
             const slug = req.params.slug;
-            const cacheTimespan = '15mins';
+            const cacheTimespan = '60s';
 
             const results = await cache(`user:${slug}:followers`, () => this.usecase.execute(slug), cacheTimespan);
 
