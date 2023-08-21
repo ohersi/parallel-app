@@ -24,7 +24,7 @@ export default class GetBlockByIdController {
         : Promise<Response | void> {
         try {
             const id = parseInt(req.params.id);
-            const cacheTimespan = '15mins';
+            const cacheTimespan = '5mins';
 
             const results = await cache(`block:${id}`, () => this.usecase.execute(id), cacheTimespan);
 

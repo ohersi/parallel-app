@@ -25,7 +25,7 @@ export default class GetUserBySlugController {
         : Promise<Response | void> {
         try {
             const slug = convertToSlug(req.params.slug);
-            const cacheTimespan = '15mins';
+            const cacheTimespan = '5mins';
 
             const results: any = await cache(`user:${slug}`, () => this.usecase.execute(slug), cacheTimespan);
 
