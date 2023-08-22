@@ -29,14 +29,23 @@ export default class CreateUserController {
         try {
             const results = await this.usecase.execute(req.body);
 
-            let info = await mailer(results.token, results.email);
-            
+            if (!results.token || !results.email) {
+                res.status(404);
+                res.send({ error: { status: 500 }, message: `${results.token ? 'Missing email' : results.email? 'Missing token': 'Missing token and email.'}` });
+            }
+
+            let info = await mailer(results.token!, results.email!);
+
+            req.session.user = {
+                id: results.id!,
+                email: results.email!,
+                role: results.role!,
+                token: results.token!,
+            };
+            delete results['role'];
+
             res.status(201);
-            res.send({
-                message: "User was created, you should recieve an email with your verification link.",
-                info: info.messageId,
-                preview: nodemailer.getTestMessageUrl(info)
-            });
+            res.send(results);
         }
         catch (err: any) {
             res.status(500);

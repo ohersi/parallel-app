@@ -9,6 +9,7 @@ import { provide } from "inversify-binding-decorators";
 import { customAlphabet } from 'nanoid';
 // Imports
 import { User } from "@/entities/user.entity";
+import UserDTO from "@/dto/user.dto";
 import UserRepository from "@/repositories/user.repository";
 import UserException from "@/utils/exceptions/user.expection";
 import { hash } from "@/resources/security/encryption";
@@ -31,7 +32,7 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (body: any): Promise<{ token: string, email: string }> => {
+    public execute = async (body: any): Promise<UserDTO> => {
         try {
             const foundUserEmail = await this.userRepository.findByEmail(body.email);
             if (foundUserEmail) {
@@ -63,10 +64,26 @@ export default class CreateUserUseCase {
             );
             // Add to db, persists and flush
             const createdUser = await this.userRepository.save(newUser);
+
             // Create jwt token
             const token = createToken(createdUser.email);
 
-            return { token: token, email: createdUser.email };
+            return new UserDTO(
+                createdUser.id,
+                createdUser.slug,
+                createdUser.first_name,
+                createdUser.last_name,
+                createdUser.full_name,
+                createdUser.email,
+                undefined,
+                createdUser.avatar,
+                createdUser.following_count,
+                createdUser.follower_count,
+                createdUser.role,
+                createdUser.enabled,
+                createdUser.locked,
+                token
+            );
         }
         catch (err: any) {
             throw Error(err.message);
