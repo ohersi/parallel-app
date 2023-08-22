@@ -16,21 +16,21 @@ export default class SendUserTokenByEmail {
         : Promise<Response | void> {
         try {
             const token = req.session.user?.token;
+            const email = req.session.user?.email;
 
             if (!token) {
-                res.status(500);
-                return res.send({ error: { status: 500 }, message: "Missing token." });
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: "Missing token." });
             }
 
-            const info = await mailer(token);
+            if (!email) {
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: "Missing email." });
+            }
+
+            const info = await mailer(token, email);
+
             res.status(200);
-            res.send(
-                {
-                    message: "Sent verification email.",
-                    info: info.messageId,
-                    preview: nodemailer.getTestMessageUrl(info)
-                }
-            )
         }
         catch (err: any) {
             res.status(500);

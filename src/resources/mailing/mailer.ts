@@ -1,29 +1,38 @@
+// Packages
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+// Imports
+import '@/utils/env';
 
-export const mailer = async (token: string): Promise<SMTPTransport.SentMessageInfo> => {
-    // Testing account
-    let testAccount = await nodemailer.createTestAccount();
+export const mailer = async (token: string, email: string): Promise<SMTPTransport.SentMessageInfo> => {
 
-    // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        service: "gmail",
         auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
-        },
-    }); 
+            user: process.env.MAILER_EMAIL,
+            pass: process.env.MAILER_PASS
+        }
+    })
 
-    const url = `localhost:3000/api/v1/registration/confirm?token=${token}`
+    const url = `http://localhost:3000/api/v1/registration/confirm?token=${token}`
+    const site = `http://localhost:8080/` // TODO: Change to site in prod
 
     let message = {
-        from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        to: "bar@example.com, baz@example.com", // list of receivers
-        subject: "Hello ✔", // Subject line
+        from: process.env.MAILER_EMAIL, // sender address
+        to: email, // list of receivers
+        subject: "Complete your account registration - Parallel", // Subject line
         text: `localhost:3000/api/v1/registration/confirm?token=${token}`, // plain text body
-        html: `Please click the link to confirm your email: <a href="${url}">Confirm email!</a>`, // html body
+        html: `Thank you for creating a Parallel account.
+        <br/>
+        <br/>
+        To complete registration, click the link below: 
+        <br/>
+        <a href="${url}">Confirm email</a>
+        <br/>
+        <br/>
+        - Parallel 
+        <br/>
+        <a href="${site}">${site}</a>`, // html body
     };
 
     try {
