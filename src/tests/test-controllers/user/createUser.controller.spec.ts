@@ -60,7 +60,7 @@ describe("createUserController", () => {
                     last_name: "Tester",
                     email: "email@email.com",
                     password: "Abcxyz123!",
-                    avatar_url: "avatar"
+                    avatar: "avatar"
                 }
 
                 // WHEN
@@ -82,7 +82,7 @@ describe("createUserController", () => {
                     last_name: "",   // Last Name missing
                     email: "",  // Email missing
                     password: "Abcxyz123!",
-                    avatar_url: "avatar"
+                    avatar: "avatar"
                 }
 
                 //WHEN

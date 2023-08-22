@@ -27,7 +27,7 @@ describe("UpdateUserUsecase", () => {
         last_name: "Testerson",
         email: "new1email@email.com",
         password: "password",
-        avatar_url: "avatar"
+        avatar: "avatar"
     }
 
     beforeEach(() => {

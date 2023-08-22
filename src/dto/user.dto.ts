@@ -7,7 +7,7 @@ export default class UserDTO {
     full_name?: string;
     email?: string;
     password?: string;
-    avatar_url?: string;
+    avatar?: string;
     following_count?: number;
     follower_count?: number;
     role?: string;
@@ -23,7 +23,7 @@ export default class UserDTO {
         full_name?: string,
         email?: string,
         password?:string,
-        avatar_url?: string,
+        avatar?: string,
         following_count?: number,
         follower_count?: number,
         role?: string,
@@ -38,7 +38,7 @@ export default class UserDTO {
         this.full_name = full_name;
         this.email = email;
         this.password = password;
-        this.avatar_url = avatar_url;
+        this.avatar = avatar;
         this.following_count = following_count;
         this.follower_count = follower_count;
         this.role = role;

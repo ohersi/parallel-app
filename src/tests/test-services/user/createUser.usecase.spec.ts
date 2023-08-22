@@ -26,7 +26,7 @@ describe("CreateUserUseCase", () => {
         last_name: "Testerson",
         email: "email@email.com",
         password: "password",
-        avatar_url: "avatar"
+        avatar: "avatar"
     }
 
     beforeEach(() => {
@@ -81,7 +81,7 @@ describe("CreateUserUseCase", () => {
                         fullname,
                         testUser.email,
                         testUser.password,
-                        testUser.avatar_url,
+                        testUser.avatar,
                         0,
                         0,
                         TYPES_ENUM.USER

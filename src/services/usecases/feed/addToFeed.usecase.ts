@@ -13,7 +13,8 @@ export type ActivityData = {
     user: {
         id: number,
         full_name?: string | null,
-        slug?: string | null
+        slug?: string | null,
+        avatar?: string | null,
     }
     timestamp: Date
     data_type: string

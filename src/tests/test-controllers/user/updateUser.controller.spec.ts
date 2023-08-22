@@ -67,7 +67,7 @@ describe("UpdateUserController", () => {
                             last_name: "Tester",
                             email: "email@email.com",
                             password: "Abcxyz123!",
-                            avatar_url: "avatar"
+                            avatar: "avatar"
                         }
 
                         // WHEN
@@ -88,7 +88,7 @@ describe("UpdateUserController", () => {
                             last_name: "Tester",
                             email: "email@email.com",
                             password: "Abcxyz123!",
-                            avatar_url: "avatar"
+                            avatar: "avatar"
                         }
 
                         // WHEN
@@ -113,7 +113,7 @@ describe("UpdateUserController", () => {
                     last_name: "Tester",
                     email: "email@email.com",
                     password: "Abcxyz123!",
-                    avatar_url: "avatar"
+                    avatar: "avatar"
                 }
                 // WHEN
                 const results = await request(app).put("/api/v1/users/update").send(body);

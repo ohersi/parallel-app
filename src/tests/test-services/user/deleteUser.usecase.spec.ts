@@ -27,7 +27,7 @@ describe("DeleteUserUsecase", () => {
         last_name: "Me",
         email: "delete@me.com",
         password: "password",
-        avatar_url: "avatar"
+        avatar: "avatar"
     }
 
     beforeEach(() => {
@@ -53,7 +53,7 @@ describe("DeleteUserUsecase", () => {
             testUser.email,
             'firstName lastName',
             testUser.password,
-            testUser.avatar_url,
+            testUser.avatar,
             0,
             0,
             TYPES_ENUM.USER

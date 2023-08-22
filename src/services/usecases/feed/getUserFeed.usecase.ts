@@ -79,6 +79,7 @@ export default class GetUserFeedUsecase {
                         id: user.id,
                         full_name: user.full_name,
                         slug: user.slug,
+                        avatar: user.avatar,
                     }
 
                     // Followed another user or...
@@ -94,7 +95,8 @@ export default class GetUserFeedUsecase {
                                 slug: followedUser?.slug,
                                 first_name: followedUser?.first_name,
                                 last_name: followedUser?.last_name,
-                                full_name: followedUser?.full_name
+                                full_name: followedUser?.full_name,
+                                avatar: followedUser?.avatar,
                             };
                         }
                         else {
@@ -104,7 +106,8 @@ export default class GetUserFeedUsecase {
                                 slug: userObj?.slug,
                                 first_name: userObj?.first_name,
                                 last_name: userObj?.last_name,
-                                full_name: userObj?.full_name
+                                full_name: userObj?.full_name,
+                                avatar: userObj?.avatar,
                             }
                             // Return sanitized user info
                             item.data = userInfo;
@@ -141,7 +144,8 @@ export default class GetUserFeedUsecase {
                             slug: channelUser?.slug,
                             first_name: channelUser?.first_name,
                             last_name: channelUser?.last_name,
-                            full_name: channelUser?.full_name
+                            full_name: channelUser?.full_name,
+                            avatar: channelUser?.avatar,
                         };
                         updatedChannel.user = { ...updatedChannel.user, ...channelUserInfo };
 
@@ -160,6 +164,7 @@ export default class GetUserFeedUsecase {
                         id: user.id,
                         full_name: user.full_name,
                         slug: user.slug,
+                        avatar: user.avatar,
                     }
 
                     // CHANNEL
@@ -190,7 +195,8 @@ export default class GetUserFeedUsecase {
                         slug: channelUser?.slug,
                         first_name: channelUser?.first_name,
                         last_name: channelUser?.last_name,
-                        full_name: channelUser?.full_name
+                        full_name: channelUser?.full_name,
+                        avatar: channelUser?.avatar,
                     };
                     updatedChannel.user = { ...updatedChannel.user, ...channelUserInfo };
 
