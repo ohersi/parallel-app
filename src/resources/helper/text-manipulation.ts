@@ -62,10 +62,13 @@ export const checkSlug = async (newSlug: string, previousSlug: string, repo: any
 
 export const decodeLastID = (last_id: string) => {
 
-    let convertedID: string;
+    let convertedID: string | null;
 
     if (!last_id) {
         convertedID = new Date().toISOString();
+    }
+    else if (last_id.toLowerCase() === 'null') {
+        convertedID = null;
     }
     else {
         const decoded: string = Buffer.from(last_id, 'base64').toString('utf8');

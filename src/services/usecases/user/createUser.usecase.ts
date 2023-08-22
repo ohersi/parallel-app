@@ -31,7 +31,7 @@ export default class CreateUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (body: any): Promise<string> => {
+    public execute = async (body: any): Promise<{ token: string, email: string }> => {
         try {
             const foundUserEmail = await this.userRepository.findByEmail(body.email);
             if (foundUserEmail) {
@@ -65,7 +65,8 @@ export default class CreateUserUseCase {
             const createdUser = await this.userRepository.save(newUser);
             // Create jwt token
             const token = createToken(createdUser.email);
-            return token;
+
+            return { token: token, email: createdUser.email };
         }
         catch (err: any) {
             throw Error(err.message);

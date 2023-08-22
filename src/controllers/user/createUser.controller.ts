@@ -29,7 +29,7 @@ export default class CreateUserController {
         try {
             const results = await this.usecase.execute(req.body);
 
-            let info = await mailer(results);
+            let info = await mailer(results.token, results.email);
             
             res.status(201);
             res.send({
