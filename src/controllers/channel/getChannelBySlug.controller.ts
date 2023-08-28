@@ -29,6 +29,8 @@ export default class GetChannelBySlugController {
             const last_id = decodeLastID(req.query.last_id as string);
             const limit = parseInt(req.query.limit as string);
 
+            if (!last_id) throw new Error('Cannot convert last_id');
+
             const results = await this.usecase.execute(channelSlug, last_id, limit);
 
             if (!results) {

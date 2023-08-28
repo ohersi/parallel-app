@@ -50,11 +50,10 @@ export const start = async (port: Number) => {
 
         // Initalize CORS
         //TODO: Replace w/ approved site/s (array's require Origin header, one origin does not)
-        const allowedOrigins = "*";  
+        const allowedOrigins = process.env.WHITELIST_ORIGINS;  
         
         const options: cors.CorsOptions = {
-            // TODO: Replace origin in production
-            origin: 'http://localhost:8080',
+            origin: allowedOrigins,
             optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
             credentials: true
         };
