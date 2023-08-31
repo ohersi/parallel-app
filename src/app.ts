@@ -68,7 +68,8 @@ export const start = async (port: Number) => {
             saveUninitialized: false,
             cookie: {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === 'production' ? true : false,
+                secure: true, // true = set only https
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000 // Expires in 1hr
             }
         }))
