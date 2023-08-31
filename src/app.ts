@@ -59,6 +59,8 @@ export const start = async (port: Number) => {
         };
         app.use(cors(options));
 
+        app.set('trust proxy', 1); // Nginx reverse proxy
+
         // Check for secret key & setup session
         if (!process.env.SECRET_KEY) throw new Error("SECRET_KEY env variable is missing");
         app.use(session({
