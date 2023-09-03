@@ -1,5 +1,6 @@
 // Packages
 import { Collection, Entity, EntityRepositoryType, ManyToMany, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { v4 as uuidv4 } from 'uuid';
 // Imports
 import { User } from '@/entities/user.entity';
 import { Channel } from '@/entities/channel.entity';
@@ -14,6 +15,9 @@ export class Block implements BaseEntity, IBlock {
 
     @PrimaryKey()
     id!: number;
+
+    @Property()
+    unique_id = uuidv4();
 
     @ManyToOne(() => User, { mapToPk: true })
     user!: number;

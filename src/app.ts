@@ -49,7 +49,6 @@ export const start = async (port: Number) => {
         app.use(helmet());
 
         // Initalize CORS
-        //TODO: Replace w/ approved site/s (array's require Origin header, one origin does not)
         const allowedOrigins = process.env.WHITELIST_ORIGINS;
 
         const options: cors.CorsOptions = {
@@ -70,8 +69,8 @@ export const start = async (port: Number) => {
             saveUninitialized: false,
             cookie: {
                 httpOnly: true,
-                secure: true, // true = set only https
-                sameSite: 'none',
+                //secure: true, // true = set only https
+                //sameSite: 'none',
                 maxAge: 60 * 60 * 1000 // Expires in 1hr
             }
         }))
