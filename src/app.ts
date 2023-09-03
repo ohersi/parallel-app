@@ -69,8 +69,8 @@ export const start = async (port: Number) => {
             saveUninitialized: false,
             cookie: {
                 httpOnly: true,
-                //secure: true, // true = set only https
-                //sameSite: 'none',
+                secure: true, // true = set only https
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000 // Expires in 1hr
             }
         }))
