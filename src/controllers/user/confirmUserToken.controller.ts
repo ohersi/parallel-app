@@ -30,7 +30,7 @@ export default class ConfirmUserTokenController {
             await this.usecase.execute(token.toString());
             
             res.status(200);
-            res.send("User has been registered.");
+            res.redirect(`${process.env.WHITELIST_ORIGINS}/registered/${token}`)
         }
         catch (err: any) {
             res.status(500);

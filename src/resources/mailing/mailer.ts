@@ -14,14 +14,14 @@ export const mailer = async (token: string, email: string): Promise<SMTPTranspor
         }
     })
 
-    const url = `http://localhost:3000/api/v1/registration/confirm?token=${token}`
-    const site = `http://localhost:8080/` // TODO: Change to site in prod
+    const url = `${process.env.API_URL}/api/v1/registration/confirm?token=${token}`
+    const site = process.env.WHITELIST_ORIGINS
 
     let message = {
         from: process.env.MAILER_EMAIL, // sender address
         to: email, // list of receivers
         subject: "Complete your account registration - Parallel", // Subject line
-        text: `localhost:3000/api/v1/registration/confirm?token=${token}`, // plain text body
+        text: `${process.env.API_URL}/api/v1/registration/confirm?token=${token}`, // plain text body
         html: `Thank you for creating a Parallel account.
         <br/>
         <br/>

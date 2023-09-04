@@ -47,6 +47,9 @@ export * from '@/controllers/user/confirmUserToken.controller';
 import '@/controllers/user/sendUserTokenByEmail.controller';
 export * from '@/controllers/user/sendUserTokenByEmail.controller';
 
+import '@/controllers/user/checkUserToken.controller';
+export * from '@/controllers/user/checkUserToken.controller';
+
 // CHANNEL CONTROLLERS //
 import '@/controllers/channel/createChannel.controller';
 export * from '@/controllers/channel/createChannel.controller';
