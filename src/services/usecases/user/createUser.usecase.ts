@@ -58,8 +58,6 @@ export default class CreateUserUseCase {
                 body.email,
                 body.password,
                 body.avatar,
-                0,
-                0,
                 TYPES_ENUM.USER
             );
             // Add to db, persists and flush

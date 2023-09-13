@@ -7,7 +7,5 @@ export default interface IUser {
     email: string;
     password: string;
     avatar: string;
-    following_count: number;
-    follower_count: number;
     role: string;
 }
