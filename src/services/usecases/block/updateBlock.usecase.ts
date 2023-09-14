@@ -41,7 +41,7 @@ export default class UpdateBlockUsecase {
                 throw new BlockException('User logged in does not match the user of the block being edited.');
             }
             // Update time
-            block.date_updated = new Date();
+            foundBlock.date_updated = new Date();
 
             const results = await this.blockRepository.update(foundBlock, block);
 
@@ -64,7 +64,7 @@ export default class UpdateBlockUsecase {
             }
 
             let updatedBlock: any; 
-            updatedBlock = block;
+            updatedBlock = foundBlock;
             updatedBlock.channels = channelArr;
 
             return updatedBlock;
