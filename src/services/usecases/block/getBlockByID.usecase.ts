@@ -29,7 +29,7 @@ export default class GetBlockByIdUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (blockID: number): Promise<Loaded<Block, "channels"> | null> => {
+    public execute = async (blockID: number) => {
         try {
             let channelArr: Loaded<Channel>[] = [];
             
