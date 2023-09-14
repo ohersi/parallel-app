@@ -58,7 +58,7 @@ export const update = async (type: string, id: number, data: any, duration: stri
 
     const convertedTime = convertTime(duration);
 
-    redisClient.set(key, data, "EX", convertedTime);
+    redisClient.set(key, JSON.stringify(data), "EX", convertedTime);
 };
 
 export const updateFollowers = (userID: number, callback: Function) => {
