@@ -36,9 +36,6 @@ export default class UpdateChannelController {
 
             const results = await this.usecase.execute(id, userID, channel);
 
-            // Update channel cache
-            await update('channel', results.id, results, cacheTimespan);
-
             res.status(200);
             res.send("Channel has been updated.");
         }
