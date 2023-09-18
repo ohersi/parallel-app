@@ -208,7 +208,7 @@ export default class GetUserFeedUsecase {
                     const cachedBlock = await redisClient.get(`block:${item.data.block.id}`);
                     if (!cachedBlock) {
                         // Get Block Data
-                        const block = await this.blockRepository.findByID(item.data.block.id);
+                        const block = await this.blockRepository.findAndPopulate(item.data.block.id);
                         item.data.block = block;
                     }
                     else {

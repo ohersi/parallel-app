@@ -10,11 +10,24 @@ import BaseRepository from '@/repositories/base.repository';
 @Entity({ customRepository: () => Block })
 export default class BlockRepository extends BaseRepository<Block> implements IRepository<Block>  {
 
-    async getAllByUserID(userID: number): Promise<Loaded<Block, never>[]> {
+    async findAndPopulate(id: number): Promise<Loaded<Block, "channels.id"> | null> {
+        try {
+            const res = await this.findOne({ id: id }, { populate: ['channels.id'] });
+            return res;
+        }
+        catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    async getAllByUserID(userID: number): Promise<Loaded<Block, "channels">[]> {
         try {
             const res = await this.find(
                 { user: userID },
-                { orderBy: { date_updated: QueryOrder.DESC } }
+                {
+                    orderBy: { date_updated: QueryOrder.DESC },
+                    populate: ['channels']
+                }
             );
             return res;
         }
@@ -33,14 +46,17 @@ export default class BlockRepository extends BaseRepository<Block> implements IR
         }
     }
 
-    async searchBlocksMatchingTitle(title: string): Promise<Loaded<Block, never>[]> {
+    async searchBlocksMatchingTitle(title: string): Promise<Loaded<Block, "channels">[]> {
         try {
             const res = await this.find(
                 // Regex search
                 { title: { $re: '(?i)^.*' + title + '.*$' } },
                 // Full text search
                 // { searchableTitle: { $fulltext: title } },
-                { orderBy: { date_updated: QueryOrder.DESC } }
+                {
+                    orderBy: { date_updated: QueryOrder.DESC },
+                    populate: ['channels']
+                }
             );
             return res;
         }
@@ -58,9 +74,11 @@ export default class BlockRepository extends BaseRepository<Block> implements IR
                 .limit(limit)
                 .orderBy({ date_updated: QueryOrder.DESC });
 
-            const [blocks, count] = await qb.getResultAndCount();
+            const [res, count] = await qb.getResultAndCount();
 
-            return { blocks, count }
+            const blocks = await this.em.populate(res, ['channels']);
+
+            return { blocks, count };
         }
         catch (error: any) {
             throw new Error(error);
