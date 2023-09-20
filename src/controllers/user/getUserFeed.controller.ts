@@ -7,7 +7,7 @@ import GetUserFeedUsecase from '@/services/usecases/feed/getUserFeed.usecase';
 import { getFeed } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserFeedController {
     
     private readonly usecase: GetUserFeedUsecase;

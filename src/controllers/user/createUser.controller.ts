@@ -11,7 +11,7 @@ import { moderate } from '@/middleware/moderation.middleware';
 import { mailer } from '@/resources/mailing/mailer';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class CreateUserController {
 
     private readonly usecase: CreateUserUseCase;

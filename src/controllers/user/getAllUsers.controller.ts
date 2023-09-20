@@ -9,7 +9,7 @@ import { paginate } from '@/middleware/paginate.middlware';
 import { TYPES_ENUM } from '@/utils/types/enum';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetAllUsersController {
 
     private readonly usecase: GetAllUsersUseCase;

@@ -11,7 +11,7 @@ import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/channels`)
 export default class CreateBlockController {
 
     private readonly usecase: CreateBlockUsecase;
@@ -29,7 +29,7 @@ export default class CreateBlockController {
         try {
             const channelID = parseInt(req.params.id);
             const userID = req.session.user?.id!;
-            
+
             const results = await this.usecase.execute(req.body, userID, channelID);
 
             res.status(201);

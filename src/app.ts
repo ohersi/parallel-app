@@ -16,6 +16,7 @@ import cors from 'cors';
 // Imports
 import ErrorMiddleware from '@/middleware/error.middleware';
 import initContainer from '@/utils/ioc/di-container';
+import swaggerDocs from '@/utils/openapi/swagger';
 import { TYPES } from '@/utils/types';
 
 export const redisContainer = {} as {
@@ -35,7 +36,7 @@ export const start = async (port: Number) => {
 
     const container: Container = await initContainer();
 
-    const server: InversifyExpressServer = new InversifyExpressServer(container);
+    const server: InversifyExpressServer = new InversifyExpressServer(container, null, { rootPath: '/api/v1'});
 
     server.setConfig((app: Application) => {
 
@@ -84,6 +85,9 @@ export const start = async (port: Number) => {
             // Initalize Error Handling
             app.use(ErrorMiddleware);
         });
+
+        // OpenAPI Swagger Docs
+        swaggerDocs(app, port);
 
         // Start server on part
         if (process.env.NODE_ENV !== 'test') {

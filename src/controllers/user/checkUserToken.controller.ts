@@ -4,7 +4,7 @@ import { controller, request, response, next, httpGet } from 'inversify-express-
 // Imports
 import { verifyToken } from '@/resources/security/token';
 
-@controller(`/api/v1/registration`)
+@controller(`/registration`)
 export default class CheckUserTokenController {
 
     @httpGet('/check')

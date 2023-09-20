@@ -9,7 +9,7 @@ import { TYPES_ENUM } from '@/utils/types/enum';
 import { TYPES } from '@/utils/types';
 import { cache } from '@/resources/caching/cache';
 
-@controller(`/api/v1/blocks`)
+@controller(`/blocks`)
 export default class GetAllBlocksController {
 
     private readonly usecase: GetAllBlocksUsecase;
@@ -18,6 +18,20 @@ export default class GetAllBlocksController {
         this.usecase = getAllBlocksUsecase;
     }
 
+/**
+ * @openapi
+ * /blocks:
+ *  get:
+ *      tag:
+ *          - Blocks
+ *      summary: Get All Blocks
+ *      responses:
+ *          200:
+ *              description: Return all blocks
+ *          500:
+ *              description: Server error
+ *
+ */
     @httpGet('/', sessionAuth, roleAuth(TYPES_ENUM.ADMIN))
     public async getAllBlocks(
         @request() req: Request,

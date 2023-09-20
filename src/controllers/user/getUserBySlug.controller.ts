@@ -8,7 +8,7 @@ import { convertToSlug } from '@/resources/helper/text-manipulation';
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserBySlugController {
 
     private readonly usecase: GetUserBySlugUseCase;

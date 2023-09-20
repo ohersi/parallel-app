@@ -8,7 +8,7 @@ import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/channels`)
 export default class DeleteChannelController {
 
     private readonly usecase: DeleteChannelUsecase;

@@ -8,7 +8,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import userValidation from '@/resources/validations/user.validation';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class LoginUserController {
 
     private readonly usecase: LoginUserUseCase;

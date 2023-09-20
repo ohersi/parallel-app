@@ -7,7 +7,7 @@ import GetUserFriendsUsecase from '@/services/usecases/user/getUserFriends.useca
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserFriendsController {
 
     private readonly usecase: GetUserFriendsUsecase;

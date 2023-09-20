@@ -1,11 +1,10 @@
 // Packages
 import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpGet } from 'inversify-express-utils'
-import nodemailer from 'nodemailer';
 // Imports
 import { mailer } from '@/resources/mailing/mailer';
 
-@controller(`/api/v1/registration`)
+@controller(`/registration`)
 export default class SendUserTokenByEmail {
 
     @httpGet('/')

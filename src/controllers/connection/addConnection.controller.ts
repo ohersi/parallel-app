@@ -8,7 +8,7 @@ import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/blocks`)
+@controller(`/blocks`)
 export default class AddConnectionController {
 
     private readonly usecase: AddConnectionUsecase;

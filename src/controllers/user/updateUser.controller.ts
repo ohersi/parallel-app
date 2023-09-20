@@ -12,7 +12,7 @@ import { update } from '@/resources/caching/cache';
 import UserDTO from '@/dto/user.dto';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class UpdateUserController {
 
     private readonly usecase: UpdateUserUsecase;

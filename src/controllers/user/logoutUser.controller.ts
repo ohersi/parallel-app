@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { controller, request, response, next, httpPost } from 'inversify-express-utils';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class LogoutUserController {
 
     @httpPost('/logout')

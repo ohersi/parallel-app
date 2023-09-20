@@ -6,7 +6,7 @@ import { inject } from 'inversify'
 import GetUserFriendConnectionUsecase from '@/services/usecases/user/getUserFriendConnection.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserFriendConnectionController {
 
     private readonly usecase: GetUserFriendConnectionUsecase;

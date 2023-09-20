@@ -8,7 +8,7 @@ import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/channels`)
 export default class GetChannelFollowersController {
 
     private readonly usecase: GetChannelFollowersUsecase;

@@ -7,7 +7,7 @@ import DeleteUserUsecase from '@/services/usecases/user/deleteUser.usecase';
 import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class DeleteUserController {
 
     private readonly usecase: DeleteUserUsecase;

@@ -7,7 +7,7 @@ import GetUserFollowersUsecase from '@/services/usecases/user/getUserFollowers.u
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserFollowersController {
 
     private readonly usecase: GetUserFollowersUsecase;

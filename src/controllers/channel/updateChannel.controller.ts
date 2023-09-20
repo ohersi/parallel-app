@@ -10,10 +10,9 @@ import { moderate } from '@/middleware/moderation.middleware';
 import { sessionAuth } from '@/middleware/auth.middleware';
 import ChannelDTO from '@/dto/channel.dto';
 import { TYPES } from '@/utils/types';
-import { update } from '@/resources/caching/cache';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/channels`)
 export default class UpdateChannelController {
 
     private readonly usecase: UpdateChannelUsecase;

@@ -7,7 +7,7 @@ import UnFollowChannelUsecase from '@/services/usecases/follow/unfollowChannel.u
 import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class UnFollowChannelController {
 
     private readonly usecase: UnFollowChannelUsecase;

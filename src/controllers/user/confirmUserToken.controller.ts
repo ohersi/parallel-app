@@ -6,7 +6,7 @@ import ConfirmUserTokenUseCase from '@/services/usecases/user/confirmUserToken.u
 import { TYPES } from '@/utils/types';
 import { inject } from 'inversify';
 
-@controller(`/api/v1/registration`)
+@controller(`/registration`)
 export default class ConfirmUserTokenController {
 
     private readonly usecase: ConfirmUserTokenUseCase;

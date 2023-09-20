@@ -6,7 +6,7 @@ import { inject } from 'inversify';
 import SearchBlockByTitleUsecase from '@/services/usecases/block/searchBlockByTitle.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/search`)
+@controller(`/search`)
 export default class SearchBlockByTitleController {
 
     private readonly usecase: SearchBlockByTitleUsecase;

@@ -7,7 +7,7 @@ import GetUserByIdUseCase from '@/services/usecases/user/getUserById.usecase';
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetUserByIdController {
 
     private readonly usecase: GetUserByIdUseCase;

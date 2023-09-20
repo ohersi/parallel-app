@@ -10,7 +10,7 @@ import { decodeLastID } from '@/resources/helper/text-manipulation';
 import { paginate } from '@/middleware/paginate.middlware';
 
 
-@controller(`/api/v1/feed`)
+@controller(`/feed`)
 export default class GetDefaultFeedController {
 
     private readonly usecase: GetDefaultFeedUsecase;

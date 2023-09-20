@@ -7,7 +7,7 @@ import GetAllChannelsUserFollowsUsecase from '@/services/usecases/channel/getAll
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetAllChannelsUserFollowsController {
 
     private readonly usecase: GetAllChannelsUserFollowsUsecase;

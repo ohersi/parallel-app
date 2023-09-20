@@ -13,7 +13,7 @@ import { update } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/blocks`)
+@controller(`/blocks`)
 export default class UpdateBlockController {
 
     private readonly usecase: UpdateBlockUsecase;

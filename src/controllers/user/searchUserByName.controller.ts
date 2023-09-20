@@ -6,7 +6,7 @@ import { inject } from 'inversify';
 import SearchUserByNameUsecase from '@/services/usecases/user/searchUserByName.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/search`)
+@controller(`/search`)
 export default class SearchUserByNameController {
 
     private readonly usecase: SearchUserByNameUsecase;

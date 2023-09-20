@@ -7,7 +7,7 @@ import FollowChannelUsecase from '@/services/usecases/follow/followChannel.useca
 import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class FollowChannelController {
 
     private readonly usecase: FollowChannelUsecase;

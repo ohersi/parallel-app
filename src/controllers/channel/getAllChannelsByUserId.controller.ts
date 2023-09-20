@@ -10,7 +10,7 @@ import { sessionAuth, roleAuth } from '@/middleware/auth.middleware';
 import { cache } from '@/resources/caching/cache';
 import { paginate } from '@/middleware/paginate.middlware';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetAllChannelsByUserIdController {
 
     private readonly usecase: GetAllChannelsByUserIdUsecase;

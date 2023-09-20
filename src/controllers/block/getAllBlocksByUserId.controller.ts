@@ -7,7 +7,7 @@ import GetAllBlocksByUserIdUsecase from '@/services/usecases/block/getAllBlocksB
 import { TYPES } from '@/utils/types';
 import { cache } from '@/resources/caching/cache';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class GetAllBlocksByUserIdController {
 
     private readonly usecase: GetAllBlocksByUserIdUsecase;

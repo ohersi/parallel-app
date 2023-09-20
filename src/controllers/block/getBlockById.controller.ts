@@ -7,7 +7,7 @@ import GetBlockByIdUsecase from '@/services/usecases/block/getBlockByID.usecase'
 import { cache } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/blocks`)
+@controller(`/blocks`)
 export default class GetBlockByIdController {
 
     private readonly usecase: GetBlockByIdUsecase;
@@ -16,6 +16,31 @@ export default class GetBlockByIdController {
         this.usecase = getBlockByIdUsecase;
     }
 
+/**
+ * @openapi
+ *  /blocks/{id}:
+ *   get:
+ *      tag:
+ *          - Blocks
+ *      summary: Find block By ID
+ *      description: Returns a single block
+ *      operationId: GetBlockByID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of block to return
+ *          required: true
+ *          schema:
+ *              type: integer
+ *              format: int64
+ *      responses:
+ *          200:
+ *              description: Return block
+ *          404:
+ *              description: Block not found
+ *          500:
+ *              description: Server error
+ */
     @httpGet('/:id')
     public async getBlockByID(
         @request() req: Request,
@@ -30,7 +55,7 @@ export default class GetBlockByIdController {
 
             if (!results) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `No blocks found with that id [${id}]`});
+                return res.send({ error: { status: 404 }, message: `No blocks found with that id [${id}]` });
             }
             res.status(200);
             res.send(results)

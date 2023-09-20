@@ -7,7 +7,7 @@ import AddFriendUsecase from '@/services/usecases/friend/addFriend.usecase';
 import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
-@controller(`/api/v1/users`)
+@controller(`/users`)
 export default class AddFriendController {
 
     private readonly usecase: AddFriendUsecase;

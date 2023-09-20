@@ -9,7 +9,7 @@ import { paginate } from '@/middleware/paginate.middlware';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/api/v1/channels`)
+@controller(`/channels`)
 export default class GetChannelByIdController {
 
     private readonly usecase: GetChannelByIdUsecase;
