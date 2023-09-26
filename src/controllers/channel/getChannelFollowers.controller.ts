@@ -41,5 +41,82 @@ export default class GetChannelFollowersController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels/{slug}/followers:
+ *   get:
+ *      tags:
+ *          - Channel
+ *      summary: Find all user that user follows channel by channel slug
+ *      description: Returns all user following particular channel
+ *      operationId: getChannelFollowers
+ *      parameters:
+ *        - name: slug
+ *          in: path
+ *          description: slug of channel to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all users following channel
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                         $ref: '#/components/schemas/ChannelFollowers'
+ *                      example:  
+ *                        - user:
+ *                            id: 1
+ *                            slug: first-user
+ *                            first_name: first
+ *                            last_name: user
+ *                            full_name: First User
+ *                            email: first@email.com
+ *                            avatar: image.jpg
+ *                            following_count: 5
+ *                            follower_count: 1
+ *                            role: user
+ *                            enabled: true
+ *                            locked: false
+ *                          followed_channel: 5
+ *                          date_created: 2022-01-02T17:00:00.000Z 
+ *                        - user:
+ *                            id: 2
+ *                            slug: second-user
+ *                            first_name: second
+ *                            last_name: user
+ *                            full_name: Second User
+ *                            email: second@email.com
+ *                            avatar: image.jpg
+ *                            following_count: 2
+ *                            follower_count: 2
+ *                            role: user
+ *                            enabled: true
+ *                            locked: false
+ *                          followed_channel: 5
+ *                          date_created: 2022-01-03T17:00:00.000Z 
+ *          404:
+ *              description: No channel found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No channel was found with that slug.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

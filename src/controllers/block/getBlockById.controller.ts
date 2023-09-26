@@ -16,31 +16,6 @@ export default class GetBlockByIdController {
         this.usecase = getBlockByIdUsecase;
     }
 
-/**
- * @openapi
- *  /blocks/{id}:
- *   get:
- *      tag:
- *          - Blocks
- *      summary: Find block By ID
- *      description: Returns a single block
- *      operationId: GetBlockByID
- *      parameters:
- *        - name: id
- *          in: path
- *          description: ID of block to return
- *          required: true
- *          schema:
- *              type: integer
- *              format: int64
- *      responses:
- *          200:
- *              description: Return block
- *          404:
- *              description: Block not found
- *          500:
- *              description: Server error
- */
     @httpGet('/:id')
     public async getBlockByID(
         @request() req: Request,
@@ -55,8 +30,9 @@ export default class GetBlockByIdController {
 
             if (!results) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `No blocks found with that id [${id}]` });
-            }
+                return res.send({ error: { status: 404 }, message: `No blocks found with that id [${id}].` });
+            };
+            
             res.status(200);
             res.send(results)
         }
@@ -65,5 +41,74 @@ export default class GetBlockByIdController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /blocks/{id}:
+ *   get:
+ *      tags:
+ *          - Block
+ *      summary: Find block By ID
+ *      description: Returns a single block
+ *      operationId: getBlockByID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of block to return
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return block
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      allOf:
+ *                       - $ref: '#/components/schemas/Block'
+ *                       - type: object
+ *                         required:
+ *                            - channels
+ *                         properties:
+ *                           channels:
+ *                             type: array
+ *                             items:
+ *                              anyOf:
+ *                               - $ref: '#/components/schemas/Channel'
+ *                             example:
+ *                               - id: 2
+ *                                 user:
+ *                                    id: 1
+ *                                    slug: first-user
+ *                                    first_name: First
+ *                                    last_name: User 
+ *                                    full_name: First User
+ *                                 title: Channel 2
+ *                                 description: example description
+ *                                 slug: channel-2
+ *                                 follower_count: 6
+ *                                 date_created: 2020-02-01T17:00:00.000Z
+ *                                 date_updated: 2020-02-01T17:00:00.000Z
+ * 
+ *          404:
+ *              description: Block not found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No blocks found with that id [id].
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

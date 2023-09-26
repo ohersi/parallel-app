@@ -10,7 +10,8 @@
     "prestart": "npm run build",
     "start": "node dist/index.js",
     "predev": "npm run build",
-    "dev": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\""
+    "dev": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\"",
+    "schemas:openapi": "swagger-jsdoc -d src/utils/openapi/definition.yaml src/controllers/*/*.ts src/entities/interfaces/*.ts src/utils/exceptions/*.ts -o src/utils/openapi/openapi.json"
   },
   "keywords": [],
   "author": "",

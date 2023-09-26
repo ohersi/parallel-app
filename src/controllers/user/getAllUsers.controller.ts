@@ -42,5 +42,73 @@ export default class GetAllUsersController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users:
+ *   get:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - User
+ *      summary: Get all users
+ *      description: Returns all users
+ *      operationId: getAllUsers
+ *      responses:
+ *          200:
+ *              description: Return all users
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                        $ref: '#/components/schemas/User'
+ *                      example:
+ *                        - id: 2
+ *                          slug: second-user
+ *                          first_name: second
+ *                          last_name: last
+ *                          full_name: Second User
+ *                          email: second@email.com
+ *                          avatar: image.jpg
+ *                          following_count: 3
+ *                          follower_count: 4
+ *                          role: user
+ *                          enabled: true
+ *                          locked: false
+ *                        - id: 5
+ *                          slug: firth-user
+ *                          first_name: fifth
+ *                          last_name: last
+ *                          full_name: Fifth User
+ *                          email: fifth@email.com
+ *                          avatar: image.jpg
+ *                          following_count: 0
+ *                          follower_count: 1
+ *                          role: user
+ *                          enabled: true
+ *                          locked: false
+ *          404:
+ *              description: No users found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No users found.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

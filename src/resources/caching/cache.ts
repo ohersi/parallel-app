@@ -16,7 +16,7 @@ export const cache = async (key: string, callback: Function, duration: string) =
 
             try {
                 const results = await callback();
-                redisClient.set(key, JSON.stringify(results), "EX", convertedTime);
+                if (results != null) redisClient.set(key, JSON.stringify(results), "EX", convertedTime);
                 resolve(results);
             }
             catch (err: any) {

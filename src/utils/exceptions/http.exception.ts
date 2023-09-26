@@ -1,3 +1,21 @@
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ServerError:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: string
+ *               example: "500"
+ *         message:
+ *           type: string
+ *           example: Server error
+ *       xml: servererror
+ */
 export default class HttpException extends Error {
     public status: number;
     public message: string;

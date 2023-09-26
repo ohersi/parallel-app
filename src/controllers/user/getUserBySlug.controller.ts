@@ -29,6 +29,11 @@ export default class GetUserBySlugController {
 
             const results: any = await cache(`user:${slug}`, () => this.usecase.execute(slug), cacheTimespan);
 
+            if (!results) {
+                res.status(404);
+                return res.send({ error: { status: 404 }, message: `User with name [${slug}] was not found.`});
+            };
+
             res.status(200);
             res.send(results);
         }
@@ -37,5 +42,62 @@ export default class GetUserBySlugController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/name/{slug}:
+ *   get:
+ *      tags:
+ *          - User
+ *      summary: Find user by slug
+ *      description: Returns a single user
+ *      operationId: getUserBySlug
+ *      parameters:
+ *        - name: slug
+ *          in: path
+ *          description: slug of user to return
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return user
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       $ref: '#/components/schemas/User'
+ *                     example:
+ *                         id: 1
+ *                         slug: first-user
+ *                         first_name: first
+ *                         last_name: last
+ *                         full_name: First User
+ *                         email: first@email.com
+ *                         avatar: image.jpg
+ *                         following_count: 5
+ *                         follower_count: 1
+ *                         role: user
+ *                         enabled: true
+ *                         locked: false
+ *          404:
+ *              description: User not found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User with name [slug] was not found.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

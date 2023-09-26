@@ -25,6 +25,11 @@ export default class GetUserFriendConnectionController {
             const userID = req.session.user?.id;
             const id = parseInt(req.params.id);
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
+
             const results = await this.usecase.execute(userID!, id);
 
             if (!results) {
@@ -40,5 +45,64 @@ export default class GetUserFriendConnectionController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/connection/{id}:
+ *   get:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Follow
+ *      summary: Check if user follows user 
+ *      description: Checks whether user follows user
+ *      operationId: getUserFriendConnection
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of user to check connection
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return status object with boolean of true
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       properties:
+ *                          status:
+ *                             type: boolean
+ *                             example: true
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          404:
+ *              description: No connection, return status object with boolean of false
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              status:
+ *                                 type: boolean
+ *                                 example: false
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

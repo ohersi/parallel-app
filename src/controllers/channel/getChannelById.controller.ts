@@ -45,5 +45,77 @@ export default class GetChannelByIdController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels/{id}:
+ *   get:
+ *      tags:
+ *          - Channel
+ *      summary: Find channel By ID
+ *      description: Returns a single channel
+ *      operationId: getChannelByID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of channel to return
+ *          required: true
+ *        - in: query
+ *          name: last_id
+ *          description: Last block id for pagination
+ *          required: false
+ *        - in: query
+ *          name: limit
+ *          description: Limit number of blocks
+ *          required: false
+ *      responses:
+ *          200:
+ *              description: Return channel
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                        type: object
+ *                        properties:
+ *                           total:
+ *                              type: integer
+ *                              format: int64
+ *                              example: 0
+ *                           last_id:
+ *                               oneOf:
+ *                                 - integer
+ *                                 - string
+ *                               example: null
+ *                           data:
+ *                             allOf:
+ *                               - $ref: '#/components/schemas/Channel'
+ *                               - type: object
+ *                                 required:
+ *                                    - block
+ *                                 properties:
+ *                                   block:
+ *                                     type: array
+ *                                     example: []    
+ *          404:
+ *              description: Channel not found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No channels found with that [id].
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

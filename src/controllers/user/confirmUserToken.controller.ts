@@ -37,5 +37,39 @@ export default class ConfirmUserTokenController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /registration/confirm:
+ *   get:
+ *      tags:
+ *          - User
+ *      summary: Confirm user token
+ *      description: Confirm user token
+ *      operationId: confirmToken
+ *      parameters:
+ *        - in: query
+ *          name: token
+ *          description: Token to verify
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: User has successfully registered, redirect to completion page.
+ *              headers:
+ *                  Location:
+ *                      description: URI of success registration.
+ *                      schema:
+ *                          type: string
+ *                          format: uri  # Optional - use if the Location header is an absolute URI, starting with http(s)://
+ *                          examples:
+ *                              302ExpiredRefreshToken:
+ *                                  description: Success URI when user is registered.
+ *                                  value: 'www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172'
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

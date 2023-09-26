@@ -24,13 +24,18 @@ export default class UnFollowChannelController {
         : Promise<Response | void> {
         try {
             const unfollowID = parseInt(req.params.id);
+            const userID = req.session.user?.id!;
 
             if (!unfollowID) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing channel to unfollow." });
-            }
+            };
+
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
             
-            const userID = req.session.user?.id!;
             const results = await this.usecase.execute(userID, unfollowID);
 
             res.status(200);
@@ -41,5 +46,71 @@ export default class UnFollowChannelController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/unfollow/channel/{id}:
+ *   delete:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Follow
+ *      summary: Unfollow channel
+ *      description: Logged in user unfollows channel
+ *      operationId: unfollowChannel
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of channel to unfollow
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Channel with id [id] has been unfollowed.
+ *          404:
+ *              description: Missing channel id to unfollow
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Missing channel to unfollow.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

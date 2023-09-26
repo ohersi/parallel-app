@@ -25,9 +25,6 @@ export default class GetUserBySlugUseCase {
     public execute = async (slug: string): Promise<Loaded<User, never> | null> => {
         try {
             const user = await this.userRepository.findBySlug(slug);
-            if (!user) {
-                throw new UserException(`No user with name [${slug}] found.`)
-            };
             return user;
         }
         catch (err: any) {

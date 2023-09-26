@@ -42,5 +42,101 @@ export default class GetUserFeedController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{id}/feed:
+ *   get:
+ *      tags:
+ *          - Feed
+ *      summary: Get user feed
+ *      description: Returns an array of feed items
+ *      operationId: getUserFeed
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of user to get feed of
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return feed
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                            allOf:
+ *                               - $ref: '#/components/schemas/Feed'
+ *                               - type: object
+ *                                 required:
+ *                                   - data
+ *                                 properties: 
+ *                                  data:
+ *                                    type: object
+ *                                    properties:
+ *                                      block:
+ *                                        allOf:
+ *                                          - $ref: '#/components/schemas/Block'
+ *                                          - type: object
+ *                                            required:
+ *                                               - channels
+ *                                            properties:
+ *                                              channels:
+ *                                                type: array
+ *                                                items:
+ *                                                 anyOf:
+ *                                                  - $ref: '#/components/schemas/Channel'
+ *                                                example:
+ *                                                  - id: 2
+ *                                                    user: 5
+ *                                                    title: Channel 8
+ *                                                    description: example description
+ *                                                    slug: channel-8
+ *                                                    follower_count: 7
+ *                                                    date_created: 2020-02-01T17:00:00.000Z
+ *                                                    date_updated: 2020-02-01T17:00:00.000Z
+ *                                      channel:
+ *                                        type: object
+ *                                        item:
+ *                                          $ref: '#/components/schemas/Channel'
+ *                                        example:
+ *                                          id: 2
+ *                                          user:
+ *                                               id: 1
+ *                                               slug: first-user
+ *                                               first_name: First
+ *                                               last_name: User 
+ *                                               full_name: First User
+ *                                               avatar: image.jpg
+ *                                          title: Channel 2
+ *                                          description: example description
+ *                                          slug: channel-2
+ *                                          follower_count: 6
+ *                                          date_created: 2020-02-01T17:00:00.000Z
+ *                                          date_updated: 2020-02-01T17:00:00.000Z
+ *                                          blocks: []
+ *                                          users_following: []              
+ *          404:
+ *              description: Feed could not be generated.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Feed could not be generated.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

@@ -45,5 +45,112 @@ export default class GetDefaultFeedController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /feed:
+ *   get:
+ *      tags:
+ *          - Feed
+ *      summary: Get default feed
+ *      description: Returns an array of feed items
+ *      operationId: getDefaultFeed
+ *      parameters:
+ *        - in: query
+ *          name: channel_lastID
+ *          description: Last channel id for pagination
+ *          required: false
+ *        - in: query
+ *          name: block_lastID
+ *          description: Last block id for pagination
+ *          required: false
+ *        - in: query
+ *          name: limit
+ *          description: Limit number of results to return
+ *          required: false
+ *      responses:
+ *          200:
+ *              description: Return feed
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              total:
+ *                                   type: int
+ *                                   format: int64
+ *                                   example: 2
+ *                              channel_total:
+ *                                   type: int
+ *                                   format: int64
+ *                                   example: 1
+ *                              block_total:
+ *                                   type: int
+ *                                   format: int64
+ *                                   example: 1
+ *                              channel_lastID:
+ *                                   type: object
+ *                                   additionalProperties:
+ *                                     oneOf:
+ *                                      - type: string
+ *                                      - type: integer
+ *                                   example: null
+ *                              block_lastID:
+ *                                   type: object
+ *                                   additionalProperties:
+ *                                     oneOf:
+ *                                      - type: string
+ *                                      - type: integer
+ *                                   example: null
+ *                              data:
+ *                                  type: array
+ *                                  items:
+ *                                     allOf:
+ *                                        - $ref: '#/components/schemas/Block'
+ *                                        - type: object
+ *                                          required:
+ *                                             - channels
+ *                                          properties:
+ *                                            channels:
+ *                                              type: array
+ *                                              items:
+ *                                               anyOf:
+ *                                                - $ref: '#/components/schemas/Channel'
+ *                                              example:
+ *                                                - id: 2
+ *                                                  user:
+ *                                                     id: 1
+ *                                                     slug: first-user
+ *                                                     first_name: First
+ *                                                     last_name: User 
+ *                                                     full_name: First User
+ *                                                  title: Channel 2
+ *                                                  description: example description
+ *                                                  slug: channel-2
+ *                                                  follower_count: 6
+ *                                                  date_created: 2020-02-01T17:00:00.000Z
+ *                                                  date_updated: 2020-02-01T17:00:00.000Z  
+ *          404:
+ *              description: Feed could not be generated.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Feed could not be generated.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

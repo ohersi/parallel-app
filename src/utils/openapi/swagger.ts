@@ -9,23 +9,43 @@ const options: swaggerJSDoc.Options = {
             title: 'Parallel REST API Docs',
             version: '1.0',
             description:
-            'This is a REST API application made with Express. It retrieves data from JSONPlaceholder.',
+                'REST API for Parallel application.'
         },
         servers: [
             {
                 url: "http://localhost:3000/api/v1",
-                description: "Dev server"
+                description: "Development server"
+            },
+            {
+                url: "http://api.para-llel/api/v1",
+                description: "Production server"
             },
         ],
+        components: {
+            securitySchemes: {
+                CookieAuth: {
+                    type: 'apiKey',
+                    description: 'Cookie session',
+                    in: 'cookie',
+                    name: 'sid.cookie'
+                },
+            },
+        },
     },
-    apis: ['src/controllers/*/*.ts'],
+    apis: ['src/controllers/*/*.ts', 'src/entities/interfaces/*.ts', 'src/utils/exceptions/*.ts', 'src/services/usecases/feed/*.ts', 'src/resources/pagination/*.ts'],
+};
+
+const optionsUI = {
+    swaggerOptions: {
+        supportedSubmitMethods: []
+    }
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app: Application, port: Number) {
     // Swagger page
-    app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+    app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, optionsUI));
 
     // Docs in JSON format
     app.get('docs.json', (req: Request, res: Response) => {

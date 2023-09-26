@@ -28,9 +28,9 @@ export default class GetUserFollowersController {
 
             const results = await cache(`user:${slug}:followers`, () => this.usecase.execute(slug), cacheTimespan);
 
-            if (Array.isArray(results) && !results.length) {
+            if ((Array.isArray(results) && !results.length) || !results) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `user with id [${slug}] has no followers.` });
+                return res.send({ error: { status: 404 }, message: `User with slug [${slug}] has no followers.` });
             }
             res.status(200);
             res.send(results);
@@ -40,5 +40,52 @@ export default class GetUserFollowersController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{slug}/followers:
+ *   get:
+ *      tags:
+ *          - Follow
+ *      summary: Find all users that follows that user by slug
+ *      description: Returns all user following particular user
+ *      operationId: getChannelFollowers
+ *      parameters:
+ *        - name: slug
+ *          in: path
+ *          description: slug of user to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all users that follows them
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                       anyOf:
+ *                          - $ref: '#/components/schemas/UserFollowers'
+ *          404:
+ *              description: No user found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User with slug [slug] has no followers.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

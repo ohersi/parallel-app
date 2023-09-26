@@ -28,16 +28,66 @@ export default class CreateChannelController {
         : Promise<Response | void> {
         try {
             const userID = req.session.user?.id!;
-            
+
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.` });
+            }
+
             const results = await this.usecase.execute(req.body, userID);
 
             res.status(201);
-            res.send(results);
+            res.send({ message: "Channel has been created." });
         }
         catch (err: any) {
             res.status(500);
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels:
+ *   post:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Channel
+ *      summary: Create channel
+ *      description: Create channel
+ *      operationId: createChannel
+ *      responses:
+ *          201:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Channel has been created.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

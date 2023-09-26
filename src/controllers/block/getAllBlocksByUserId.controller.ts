@@ -35,12 +35,77 @@ export default class GetAllBlocksByUserIdController {
             else {
                 res.status(200);
                 res.send(results);
-            }
+            };
         }
         catch (err: any) {
             res.status(500);
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{id}/blocks:
+ *   get:
+ *      tags:
+ *          - Block
+ *      summary: Find all blocks By user ID
+ *      description: Returns all user blocks
+ *      operationId: getAllBlocksByUserID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of user to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all user blocks
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                        $ref: '#/components/schemas/Block'
+ *                      example:
+ *                        - id: 1
+ *                          unique_id: abc123
+ *                          user: 2
+ *                          title: Block 1
+ *                          description: example description
+ *                          source_url: source.com
+ *                          image_url: image.jpg
+ *                          date_created: 2020-01-01T17:00:00.000Z
+ *                          date_updated: 2020-01-01T17:00:00.000Z
+ *                        - id: 2
+ *                          unique_id: abc567
+ *                          user: 2
+ *                          title: Block 2
+ *                          description: example description
+ *                          source_url: source.com
+ *                          image_url: image.jpg
+ *                          date_created: 2021-05-15T17:00:00.000Z
+ *                          date_updated: 2021-05-15T17:00:00.000Z
+ *          404:
+ *              description: Blocks not found from particular user
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User with id [id] has no blocks.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

@@ -44,3 +44,77 @@ export default class SearchChannelByTitleController {
         }
     }
 }
+
+/**
+ * @openapi
+ *  /search/channels:
+ *   get:
+ *      tags:
+ *          - Channel
+ *      summary: Search channels based on query
+ *      description: Returns relevant channels
+ *      operationId: searchChannelByTitle
+ *      parameters:
+ *        - in: query
+ *          name: title
+ *          description: Keyword to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all relevant channels
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                         $ref: '#/components/schemas/Channel'
+ *                      example:
+ *                        - id: 3
+ *                          user:
+ *                               id: 1
+ *                               slug: first-user
+ *                               first_name: First
+ *                               last_name: User 
+ *                               full_name: First User
+ *                          title: Channel 3
+ *                          description: example description
+ *                          slug: channel-3
+ *                          follower_count: 0
+ *                          date_created: 2020-02-01T17:00:00.000Z
+ *                          date_updated: 2020-02-01T17:00:00.000Z
+ *                        - id: 2
+ *                          user:
+ *                               id: 1
+ *                               slug: first-user
+ *                               first_name: First
+ *                               last_name: User 
+ *                               full_name: First User
+ *                          title: Channel 2
+ *                          description: example description
+ *                          slug: channel-2
+ *                          follower_count: 6
+ *                          date_created: 2020-02-01T17:00:00.000Z
+ *                          date_updated: 2020-02-01T17:00:00.000Z
+ *          404:
+ *              description: Channels not found with particular keyword
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No channels found with that that title.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

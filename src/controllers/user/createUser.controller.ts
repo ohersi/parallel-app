@@ -31,7 +31,7 @@ export default class CreateUserController {
 
             if (!results.token || !results.email) {
                 res.status(404);
-                res.send({ error: { status: 500 }, message: `${results.token ? 'Missing email' : results.email? 'Missing token': 'Missing token and email.'}` });
+                res.send({ error: { status: 404 }, message: `${results.token ? 'Missing email' : results.email? 'Missing token': 'Missing token and email.'}` });
             }
 
             let info = await mailer(results.token!, results.email!);
@@ -52,5 +52,44 @@ export default class CreateUserController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users:
+ *   post:
+ *      tags:
+ *          - User
+ *      summary: Create user
+ *      description: Create user
+ *      operationId: createUser
+ *      responses:
+ *          201:
+ *              description: Return newly created User
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       $ref: '#/components/schemas/User'
+ *          404:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Missing token and email.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

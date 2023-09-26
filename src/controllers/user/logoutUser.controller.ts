@@ -12,11 +12,47 @@ export default class LogoutUserController {
         @next() next: NextFunction)
         : Promise<Response | void> {
 
-        req.session.destroy((err) => {
-            if (err) {
-                console.log(err);
-            };
-        })
-        return res.send({ success: true });
+        try {
+            req.session.destroy((err) => {
+                if (err) {
+                   throw new Error(err);
+                };
+            });
+
+            res.status(200);
+            return res.send({ success: true });
+        }
+        catch (err: any) {
+            res.status(500);
+            res.send({ error: { status: 500 }, message: err.message });
+        }
     }
 }
+
+/**
+ * @openapi
+ *  /users/logout:
+ *   post:
+ *      tags:
+ *          - User
+ *      summary: Logout user
+ *      description: Destroy user session
+ *      operationId: logoutUser
+ *      responses:
+ *          200:
+ *              description: Return success status boolean
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: object
+ *                      properties:
+ *                          success:
+ *                             type: boolean
+ *                             example: true
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

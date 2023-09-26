@@ -26,7 +26,7 @@ export default class CheckUserTokenController {
 
             if (verifed === false) {
                 res.status(423);
-                return res.send({ error: { status: 423 }, message: "Expired token" });
+                return res.send({ error: { status: 423 }, message: "Expired token." });
             }
 
             res.status(200);
@@ -37,5 +37,53 @@ export default class CheckUserTokenController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /registration/check:
+ *   get:
+ *      tags:
+ *          - User
+ *      summary: Validate user token
+ *      description: Validate user token
+ *      operationId: checkToken
+ *      parameters:
+ *        - in: query
+ *          name: token
+ *          description: Token to verify
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status boolean
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: boolean
+ *                                   example: true
+ *          423:
+ *              description: Expired token
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 423
+ *                              success:
+ *                                   type: string
+ *                                   example: Expired token.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

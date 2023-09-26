@@ -33,6 +33,11 @@ export default class UpdateChannelController {
             const channel = req.body as ChannelDTO;
             const cacheTimespan = '30mins';
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
+
             const results = await this.usecase.execute(id, userID, channel);
 
             res.status(200);
@@ -43,5 +48,52 @@ export default class UpdateChannelController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels/{id}/update:
+ *   put:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Channel
+ *      summary: Update Channel
+ *      description: Update channel
+ *      operationId: updateChannel
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of channel to update
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return update success message
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       type: string
+ *                       example: Channel has been updated.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

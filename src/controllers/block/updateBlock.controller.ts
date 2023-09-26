@@ -34,6 +34,11 @@ export default class UpdateBlockController {
             const block = req.body as BlockDTO;
             const cacheTimespan = '15mins';
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
+
             const results = await this.usecase.execute(blockID, userID, block);
 
             // Update block cache
@@ -48,3 +53,51 @@ export default class UpdateBlockController {
         }
     }
 }
+
+/**
+ * @openapi
+ *  /blocks/{id}/update:
+ *   put:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Block
+ *      summary: Update Block
+ *      description: Update block
+ *      operationId: updateBlock
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of block to update
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return update success message
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       type: string
+ *                       example: Block has been updated.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

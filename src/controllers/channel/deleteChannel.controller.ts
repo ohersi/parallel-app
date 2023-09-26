@@ -27,6 +27,11 @@ export default class DeleteChannelController {
             const id = parseInt(req.params.id);
             const userID = req.session.user?.id!;
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.` });
+            }
+
             await this.usecase.execute(id, userID);
 
             res.status(200);
@@ -37,5 +42,55 @@ export default class DeleteChannelController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels/{id}:
+ *   delete:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Channel
+ *      summary: Delete channel
+ *      description: Delete channel
+ *      operationId: deleteChannel
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of channel to delete
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Channel has been deleted.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

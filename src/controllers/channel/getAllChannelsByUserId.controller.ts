@@ -46,5 +46,51 @@ export default class GetAllChannelsByUserIdController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{id}/channels:
+ *   get:
+ *      tags:
+ *          - Channel
+ *      summary: Find all channels By user ID
+ *      description: Returns all user channels
+ *      operationId: getAllChannelsByUserID
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of user to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all user channels
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                         $ref: '#/components/schemas/ChannelPageResults'
+ *          404:
+ *              description: Channels not found from particular user
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User with id [id] has no channels.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

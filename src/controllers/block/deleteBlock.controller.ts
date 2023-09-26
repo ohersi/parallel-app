@@ -27,6 +27,11 @@ export default class DeleteBlockController {
             const blockID = parseInt(req.params.id);
             const userID = req.session.user?.id!;
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 404 }, message: `Unauthorized, no log in session.`});
+            }
+
             await this.usecase.execute(blockID, userID);
 
             res.status(200);
@@ -38,3 +43,54 @@ export default class DeleteBlockController {
         }
     }
 }
+
+/**
+ * @openapi
+ *  /blocks/{id}/:
+ *   delete:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Block
+ *      summary: Delete block
+ *      description: Delete block
+ *      operationId: deleteBlock
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of block to delete
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Block has been deleted.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

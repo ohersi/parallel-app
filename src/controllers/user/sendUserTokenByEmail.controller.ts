@@ -8,7 +8,7 @@ import { mailer } from '@/resources/mailing/mailer';
 export default class SendUserTokenByEmail {
 
     @httpGet('/')
-    public async confirmToken(
+    public async sendToken(
         @request() req: Request,
         @response() res: Response,
         @next() next: NextFunction)
@@ -17,24 +17,63 @@ export default class SendUserTokenByEmail {
             const token = req.session.user?.token;
             const email = req.session.user?.email;
 
-            if (!token) {
+            if (!token || !email) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: "Missing token." });
-            }
-
-            if (!email) {
-                res.status(404);
-                return res.send({ error: { status: 404 }, message: "Missing email." });
-            }
-
+                return res.send({ error: { status: 404 }, message: "Missing token or email." });
+            };
+            
             const info = await mailer(token, email);
 
             res.status(200);
+            res.send({ success: true });
         }
         catch (err: any) {
             res.status(500);
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /registration:
+ *   get:
+ *      tags:
+ *          - User
+ *      summary: Send token to user email
+ *      description: Sends token to user email
+ *      operationId: sendToken
+ *      responses:
+ *          200:
+ *              description: Return success status
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       type: object
+ *                       properties:
+ *                          success:
+ *                              type: boolean
+ *                              example: true
+ *          404:
+ *              description: User not found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   examples: Missing token or email.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

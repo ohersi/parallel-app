@@ -30,7 +30,7 @@ export default class GetUserFriendsController {
 
             if (Array.isArray(results) && !results.length) {
                 res.status(404);
-                return res.send({ error: { status: 404 }, message: `user with id [${slug}] following 0 others.`});
+                return res.send({ error: { status: 404 }, message: `User with slug [${slug}] is not following anyone.`});
             }
             res.status(200);
             res.send(results);
@@ -40,5 +40,52 @@ export default class GetUserFriendsController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{slug}/friends:
+ *   get:
+ *      tags:
+ *          - Follow
+ *      summary: Find all users friends by slug
+ *      description: Returns all users they follow
+ *      operationId: getUserFriends
+ *      parameters:
+ *        - name: slug
+ *          in: path
+ *          description: slug of user to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all users friends
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                       anyOf:
+ *                          - $ref: '#/components/schemas/UserFollowing'
+ *          404:
+ *              description: No user found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User with slug [${slug}] is not following anyone.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

@@ -25,13 +25,20 @@ export default class RemoveConnectionController {
         : Promise<Response | void> {
         try {
             const { channel } = req.query;
+            const userID = req.session.user?.id!;
+
             if (!channel) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing channel." });
-            }
+            };
+
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
+
             const blockID = parseInt(req.params.id);
             const channelID = parseInt(channel.toString());
-            const userID = req.session.user?.id!;
 
             const results = await this.usecase.execute(blockID, userID, channelID);
 
@@ -43,5 +50,75 @@ export default class RemoveConnectionController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /blocks/{id}/disconnect:
+ *   delete:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Connection
+ *      summary: Disconnect block to channel
+ *      description: Disconnect block to channel
+ *      operationId: removeConnection
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of block to connect
+ *          required: true
+ *        - in: query
+ *          name: channel
+ *          description: Keyword to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Block has been disconnected from the channel.
+ *          404:
+ *              description: Missing channel query
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Missing channel.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

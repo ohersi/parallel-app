@@ -30,6 +30,11 @@ export default class CreateBlockController {
             const channelID = parseInt(req.params.id);
             const userID = req.session.user?.id!;
 
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 404 }, message: `Unauthorized, no log in session.`});
+            }
+
             const results = await this.usecase.execute(req.body, userID, channelID);
 
             res.status(201);
@@ -40,5 +45,51 @@ export default class CreateBlockController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels/{id}/add:
+ *   post:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Block
+ *      summary: Create block
+ *      description: Create block
+ *      operationId: createBlock
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of channel to create block in
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return newly created block
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                       $ref: '#/components/schemas/Block'
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

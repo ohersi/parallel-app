@@ -40,5 +40,74 @@ export default class GetAllChannelsUserFollowsController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/{slug}/following:
+ *   get:
+ *      tags:
+ *          - Follow
+ *      summary: Find all channels that user follows by user slug
+ *      description: Returns all channels user follows
+ *      operationId: getAllChannelsUserFollows
+ *      parameters:
+ *        - name: slug
+ *          in: path
+ *          description: slug of user to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all channels user follows
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                         $ref: '#/components/schemas/ChannelsUserFollows'
+ *                      example: 
+ *                        - user: 2
+ *                          followed_channel:
+ *                              id: 2
+ *                              user: 1
+ *                              title: Channel 2
+ *                              description: example description
+ *                              slug: channel-2
+ *                              follower_count: 2
+ *                              date_created: 2020-01-01T17:00:00.000Z
+ *                              date_updated: 2020-01-01T17:00:00.000Z
+ *                          date_created: 2022-01-01T17:00:00.000Z 
+ *                        - user: 2
+ *                          followed_channel:
+ *                              id: 1
+ *                              user: 6
+ *                              title: Chann3l 6
+ *                              description: example description
+ *                              slug: channel-6
+ *                              follower_count: 10
+ *                              date_created: 2020-01-01T17:00:00.000Z
+ *                              date_updated: 2020-01-01T17:00:00.000Z
+ *                          date_created: 2022-01-02T17:00:00.000Z 
+ *          404:
+ *              description: User not following any channels
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: User not following any channels.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

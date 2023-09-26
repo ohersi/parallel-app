@@ -118,3 +118,45 @@ export default class AddToFeedUsecase {
         }
     }
 }
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *      Feed:
+ *        type: object
+ *        properties:
+ *            user:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 format: int64
+ *                 example: 1
+ *               slug:
+ *                 type: string
+ *                 example: test-user-1
+ *               first_name:
+ *                 type: string
+ *                 example: Test
+ *               last_name:
+ *                 type: string
+ *                 example: User 1
+ *               full_name:
+ *                 type: string
+ *                 example: Test User 1
+ *            timestamp:
+ *              type: string
+ *              format: date
+ *              example: 2020-01-01T17:00:00.000Z
+ *            data_type:
+ *              type: string
+ *              example: Block
+ *            action_type:
+ *              type: string
+ *              example: Connected
+ *            data:
+ *                type: object 
+ *        xml:
+ *          name: feed
+*/

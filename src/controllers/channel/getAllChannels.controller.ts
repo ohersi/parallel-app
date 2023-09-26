@@ -40,5 +40,68 @@ export default class GetAllChannelsController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /channels:
+ *   get:
+ *      tags:
+ *          - Channel
+ *      summary: Get all channels
+ *      description: Returns all channels
+ *      operationId: getAllChannels
+ *      responses:
+ *          200:
+ *              description: Return all channels
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                        $ref: '#/components/schemas/Channel'
+ *                      example:
+ *                        - id: 1
+ *                          user: 2
+ *                          title: Channel 1
+ *                          description: example description
+ *                          slug: channel-1
+ *                          follower_count: 2
+ *                          date_created: 2020-01-01T17:00:00.000Z
+ *                          date_updated: 2020-01-01T17:00:00.000Z
+ *                        - id: 2
+ *                          user:
+ *                               id: 1
+ *                               slug: first-user
+ *                               first_name: First
+ *                               last_name: User 
+ *                               full_name: First User
+ *                          title: Channel 2
+ *                          description: example description
+ *                          slug: channel-2
+ *                          follower_count: 6
+ *                          date_created: 2020-02-01T17:00:00.000Z
+ *                          date_updated: 2020-02-01T17:00:00.000Z
+ *          404:
+ *              description: Channel not found
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No channels found.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

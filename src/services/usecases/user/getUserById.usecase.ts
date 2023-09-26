@@ -21,12 +21,11 @@ export default class GetUserByIdUseCase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (id: number): Promise<UserDTO> => {
+    public execute = async (id: number): Promise<UserDTO | null> => {
         try {
             const user = await this.userRepository.findByID(id);
-            if (!user) {
-                throw new UserException(`No user with id [${id}] found.`)
-            };
+            
+            if (!user) return null;
 
             return new UserDTO(
                 user.id,
@@ -42,7 +41,7 @@ export default class GetUserByIdUseCase {
                 user.role,
                 user.enabled,
                 user.locked,
-            )
+            );
         }
         catch (err: any) {
             throw new UserException(err.message);

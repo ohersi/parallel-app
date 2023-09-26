@@ -24,13 +24,18 @@ export default class AddFriendController {
         : Promise<Response | void> {
         try {
             const followID = parseInt(req.params.id);
+            const userID = req.session.user?.id!;
 
             if (!followID) {
                 res.status(404);
                 return res.send({ error: { status: 404 }, message: "Missing user to follow." });
-            }
+            };
+
+            if (!userID) {
+                res.status(401);
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+            };
             
-            const userID = req.session.user?.id!;
             const results = await this.usecase.execute(userID, followID);
 
             res.status(200);
@@ -41,5 +46,71 @@ export default class AddFriendController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /users/follow/user/{id}:
+ *   post:
+ *      security:
+ *        - cookieAuth: []
+ *      tags:
+ *          - Follow
+ *      summary: Follow user
+ *      description: Logged in user follows other user
+ *      operationId: addFriend
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: ID of user to follow
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return success status message
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                   type: string
+ *                                   example: Following user with id [followID].
+ *          404:
+ *              description: Missing user id to follow
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: Missing user to follow.
+ *          401:
+ *              description: Not authorized to make changes
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 401
+ *                              message:
+ *                                   type: string
+ *                                   example: Unauthorized, no log in session.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */

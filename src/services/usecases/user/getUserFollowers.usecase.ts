@@ -28,12 +28,11 @@ export default class GetUserFollowersUsecase {
         this.userRepository = userRepository;
     }
 
-    public execute = async (slug: string): Promise<Loaded<Friend, "following_user">[]> => {
+    public execute = async (slug: string): Promise<Loaded<Friend, "following_user">[]| null> => {
         try {
             const user = await this.userRepository.findBySlug(slug);
-            if (!user) {
-                throw new Error(`Cannot find followers; no user with name [${slug}] found.`)
-            };
+
+            if (!user) return null;
             
             const results = await this.friendRepository.findAllFollowers(user.id);
             return results;

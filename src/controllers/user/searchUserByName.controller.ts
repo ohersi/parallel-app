@@ -42,5 +42,76 @@ export default class SearchUserByNameController {
             res.send({ error: { status: 500 }, message: err.message });
         }
     }
-
 }
+
+/**
+ * @openapi
+ *  /search/users:
+ *   get:
+ *      tags:
+ *          - User
+ *      summary: Search users based on query
+ *      description: Returns relevant users
+ *      operationId: searchUserByName
+ *      parameters:
+ *        - in: query
+ *          name: name
+ *          description: Keyword to search
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: Return all relevant users
+ *              content:
+ *                  application/json:
+ *                     schema:
+ *                      type: array
+ *                      items:
+ *                         $ref: '#/components/schemas/User'
+ *                      example:
+ *                         - id: 2
+ *                           slug: second-user
+ *                           first_name: second
+ *                           last_name: last
+ *                           full_name: Second User
+ *                           email: second@email.com
+ *                           avatar: image.jpg
+ *                           following_count: 3
+ *                           follower_count: 4
+ *                           role: user
+ *                           enabled: true
+ *                           locked: false
+ *                         - id: 5
+ *                           slug: firth-user
+ *                           first_name: fifth
+ *                           last_name: last
+ *                           full_name: Fifth User
+ *                           email: fifth@email.com
+ *                           avatar: image.jpg
+ *                           following_count: 0
+ *                           follower_count: 1
+ *                           role: user
+ *                           enabled: true
+ *                           locked: false
+ *          404:
+ *              description: User not found with particular keyword
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: object
+ *                                  properties:
+ *                                      status:
+ *                                          type: string
+ *                                          example: 404
+ *                              message:
+ *                                   type: string
+ *                                   example: No users found with that that title.
+ *          500:
+ *              description: Server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/ServerError'
+ */
