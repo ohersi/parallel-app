@@ -62,8 +62,10 @@ export default class UpdateChannelController {
  *      description: Update channel
  *      operationId: updateChannel
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to update
  *          required: true
  *      responses:

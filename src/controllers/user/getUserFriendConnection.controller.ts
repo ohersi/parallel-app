@@ -59,8 +59,10 @@ export default class GetUserFriendConnectionController {
  *      description: Checks whether user follows user
  *      operationId: getUserFriendConnection
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to check connection
  *          required: true
  *      responses:

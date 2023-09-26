@@ -11,8 +11,8 @@
  *             example: 1
  *           user:
  *              oneOf:
- *                - integer
- *                - object
+ *                - type: integer
+ *                - type: object
  *              example: 2
  *           title:
  *             type: string

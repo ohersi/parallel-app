@@ -69,7 +69,7 @@ export default class SendUserTokenByEmail {
  *                                          example: 404
  *                              message:
  *                                   type: string
- *                                   examples: Missing token or email.
+ *                                   example: Missing token or email.
  *          500:
  *              description: Server error
  *              content:

@@ -54,8 +54,10 @@ export default class GetAllBlocksByUserIdController {
  *      description: Returns all user blocks
  *      operationId: getAllBlocksByUserID
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to search
  *          required: true
  *      responses:

@@ -60,8 +60,10 @@ export default class RemoveFriendController {
  *      description: Logged in user unfollows other user
  *      operationId: removeFriend
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to unfollow
  *          required: true
  *      responses:

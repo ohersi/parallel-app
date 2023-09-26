@@ -58,6 +58,8 @@ export default class SearchBlockByTitleController {
  *      parameters:
  *        - in: query
  *          name: title
+ *          schema:
+ *            type: string
  *          description: Keyword to search
  *          required: true
  *      responses:

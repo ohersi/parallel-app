@@ -64,12 +64,16 @@ export default class RemoveConnectionController {
  *      description: Disconnect block to channel
  *      operationId: removeConnection
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of block to connect
  *          required: true
  *        - in: query
  *          name: channel
+ *          schema:
+ *            type: string
  *          description: Keyword to search
  *          required: true
  *      responses:

@@ -58,16 +58,22 @@ export default class GetChannelBySlugController {
  *      description: Returns a single channel
  *      operationId: getChannelBySlug
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of channel to return
  *          required: true
  *        - in: query
  *          name: last_id
+ *          schema:
+ *            type: string
  *          description: Last block id for pagination
  *          required: false
  *        - in: query
  *          name: limit
+ *          schema:
+ *            type: string
  *          description: Limit number of blocks
  *          required: false
  *      responses:
@@ -84,8 +90,8 @@ export default class GetChannelBySlugController {
  *                              example: 0
  *                           last_id:
  *                               oneOf:
- *                                 - integer
- *                                 - string
+ *                                 - type: integer
+ *                                 - type: string
  *                               example: null
  *                           data:
  *                             allOf:
@@ -96,7 +102,9 @@ export default class GetChannelBySlugController {
  *                                 properties:
  *                                   block:
  *                                     type: array
- *                                     example: []
+ *                                     items:
+ *                                       type: string
+ *                                     maxItems: 0
  *                                   user:
  *                                     type: object
  *                                     example:

@@ -14,7 +14,6 @@
  *         message:
  *           type: string
  *           example: Server error
- *       xml: servererror
  */
 export default class HttpException extends Error {
     public status: number;

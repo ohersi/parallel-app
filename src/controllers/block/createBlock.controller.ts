@@ -59,8 +59,10 @@ export default class CreateBlockController {
  *      description: Create block
  *      operationId: createBlock
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to create block in
  *          required: true
  *      responses:

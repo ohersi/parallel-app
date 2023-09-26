@@ -52,8 +52,10 @@ export default class GetUserFriendsController {
  *      description: Returns all users they follow
  *      operationId: getUserFriends
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of user to search
  *          required: true
  *      responses:

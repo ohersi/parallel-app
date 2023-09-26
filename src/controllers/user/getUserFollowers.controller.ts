@@ -50,10 +50,12 @@ export default class GetUserFollowersController {
  *          - Follow
  *      summary: Find all users that follows that user by slug
  *      description: Returns all user following particular user
- *      operationId: getChannelFollowers
+ *      operationId: getUserFollowers
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of user to search
  *          required: true
  *      responses:

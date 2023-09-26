@@ -51,6 +51,8 @@ export default class ConfirmUserTokenController {
  *      parameters:
  *        - in: query
  *          name: token
+ *          schema: 
+ *            type: string
  *          description: Token to verify
  *          required: true
  *      responses:
@@ -62,10 +64,10 @@ export default class ConfirmUserTokenController {
  *                      schema:
  *                          type: string
  *                          format: uri  # Optional - use if the Location header is an absolute URI, starting with http(s)://
- *                          examples:
- *                              302ExpiredRefreshToken:
- *                                  description: Success URI when user is registered.
- *                                  value: 'www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172'
+ *                      examples:
+ *                          302ExpiredRefreshToken:
+ *                              description: Success URI when user is registered.
+ *                              value: 'www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172'
  *          500:
  *              description: Server error
  *              content:

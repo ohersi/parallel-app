@@ -60,8 +60,10 @@ export default class FollowChannelController {
  *      description: Logged in user follows channel
  *      operationId: followChannel
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to follow
  *          required: true
  *      responses:

@@ -56,8 +56,10 @@ export default class DeleteBlockController {
  *      description: Delete block
  *      operationId: deleteBlock
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of block to delete
  *          required: true
  *      responses:

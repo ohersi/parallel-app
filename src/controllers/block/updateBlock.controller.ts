@@ -66,8 +66,10 @@ export default class UpdateBlockController {
  *      description: Update block
  *      operationId: updateBlock
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of block to update
  *          required: true
  *      responses:

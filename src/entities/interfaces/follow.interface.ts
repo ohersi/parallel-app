@@ -39,8 +39,8 @@ import { User } from "@/entities/user.entity";
  *       type: object
  *       properties:
  *           following_user:
- *              schema:
- *                 $ref: '#/components/schemas/User'
+ *              allOf:
+ *                - $ref: '#/components/schemas/User'
  *              example:
  *                 id: 20
  *                 slug: following-user
@@ -72,8 +72,8 @@ import { User } from "@/entities/user.entity";
  *             format: int64
  *             example: 4
  *           followed_user:
- *              schema:
- *                 $ref: '#/components/schemas/User'
+ *              allOf:
+ *                - $ref: '#/components/schemas/User'
  *              example:
  *                 id: 20
  *                 slug: followed-user

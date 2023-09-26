@@ -11,8 +11,8 @@
  *             example: 4
  *           last_id:
  *              oneOf:
- *                - integer
- *                - string
+ *                - type: integer
+ *                - type: string
  *              example: null
  *           data:
  *              type: array

@@ -58,8 +58,10 @@ export default class GetAllChannelsByUserIdController {
  *      description: Returns all user channels
  *      operationId: getAllChannelsByUserID
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to search
  *          required: true
  *      responses:

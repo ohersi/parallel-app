@@ -54,8 +54,10 @@ export default class GetUserFeedController {
  *      description: Returns an array of feed items
  *      operationId: getUserFeed
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to get feed of
  *          required: true
  *      responses:
@@ -98,7 +100,7 @@ export default class GetUserFeedController {
  *                                                    date_updated: 2020-02-01T17:00:00.000Z
  *                                      channel:
  *                                        type: object
- *                                        item:
+ *                                        items:
  *                                          $ref: '#/components/schemas/Channel'
  *                                        example:
  *                                          id: 2

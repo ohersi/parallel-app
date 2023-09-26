@@ -53,8 +53,10 @@ export default class GetBlockByIdController {
  *      description: Returns a single block
  *      operationId: getBlockByID
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of block to return
  *          required: true
  *      responses:

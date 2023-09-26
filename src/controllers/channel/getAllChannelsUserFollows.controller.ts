@@ -52,8 +52,10 @@ export default class GetAllChannelsUserFollowsController {
  *      description: Returns all channels user follows
  *      operationId: getAllChannelsUserFollows
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of user to search
  *          required: true
  *      responses:

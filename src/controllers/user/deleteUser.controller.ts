@@ -55,8 +55,10 @@ export default class DeleteUserController {
  *      description: Delete user
  *      operationId: deleteUser
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to delete
  *          required: true
  *      responses:

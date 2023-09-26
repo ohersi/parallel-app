@@ -53,8 +53,10 @@ export default class GetChannelFollowersController {
  *      description: Returns all user following particular channel
  *      operationId: getChannelFollowers
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of channel to search
  *          required: true
  *      responses:

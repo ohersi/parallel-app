@@ -51,6 +51,8 @@ export default class CheckUserTokenController {
  *      parameters:
  *        - in: query
  *          name: token
+ *          schema: 
+ *            type: string
  *          description: Token to verify
  *          required: true
  *      responses:

@@ -59,14 +59,20 @@ export default class GetDefaultFeedController {
  *      parameters:
  *        - in: query
  *          name: channel_lastID
+ *          schema:
+ *            type: string
  *          description: Last channel id for pagination
  *          required: false
  *        - in: query
  *          name: block_lastID
+ *          schema:
+ *            type: string
  *          description: Last block id for pagination
  *          required: false
  *        - in: query
  *          name: limit
+ *          schema:
+ *            type: string
  *          description: Limit number of results to return
  *          required: false
  *      responses:
@@ -78,30 +84,28 @@ export default class GetDefaultFeedController {
  *                          type: object
  *                          properties:
  *                              total:
- *                                   type: int
+ *                                   type: integer
  *                                   format: int64
  *                                   example: 2
  *                              channel_total:
- *                                   type: int
+ *                                   type: integer
  *                                   format: int64
  *                                   example: 1
  *                              block_total:
- *                                   type: int
+ *                                   type: integer
  *                                   format: int64
  *                                   example: 1
  *                              channel_lastID:
  *                                   type: object
- *                                   additionalProperties:
- *                                     oneOf:
- *                                      - type: string
- *                                      - type: integer
+ *                                   oneOf:
+ *                                     - type: string
+ *                                     - type: integer
  *                                   example: null
  *                              block_lastID:
  *                                   type: object
- *                                   additionalProperties:
- *                                     oneOf:
- *                                      - type: string
- *                                      - type: integer
+ *                                   oneOf:
+ *                                     - type: string
+ *                                     - type: integer
  *                                   example: null
  *                              data:
  *                                  type: array

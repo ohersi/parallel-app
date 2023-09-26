@@ -53,8 +53,10 @@ export default class GetUserByIdController {
  *      description: Returns a single user
  *      operationId: getUserByID
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to return
  *          required: true
  *      responses:

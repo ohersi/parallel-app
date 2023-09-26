@@ -56,6 +56,8 @@ export default class SearchUserByNameController {
  *      parameters:
  *        - in: query
  *          name: name
+ *          schema:
+ *            type: string
  *          description: Keyword to search
  *          required: true
  *      responses:

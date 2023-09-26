@@ -60,8 +60,10 @@ export default class AddFriendController {
  *      description: Logged in user follows other user
  *      operationId: addFriend
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of user to follow
  *          required: true
  *      responses:

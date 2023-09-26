@@ -18,6 +18,9 @@
  *             example: 7
  *           channels:
  *             type: array
+ *             items:
+ *               type: object
+ *             example: []
  *           title:
  *             type: string
  *             example: Test Block 1

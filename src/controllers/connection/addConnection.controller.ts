@@ -64,12 +64,16 @@ export default class AddConnectionController {
  *      description: Connect block to channel
  *      operationId: addConnection
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *           type: string
  *          description: ID of block to connect
  *          required: true
  *        - in: query
  *          name: channel
+ *          schema:
+ *            type: string
  *          description: Keyword to search
  *          required: true
  *      responses:
@@ -78,7 +82,7 @@ export default class AddConnectionController {
  *              content:
  *                  application/json:
  *                     schema:
- *                       $ref: '#/components/schemas/Block1'
+ *                       $ref: '#/components/schemas/Block'
  *          404:
  *              description: Missing channel query
  *              content:

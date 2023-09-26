@@ -69,7 +69,11 @@
             "example": 7
           },
           "channels": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": []
           },
           "title": {
             "type": "string",
@@ -112,8 +116,12 @@
           },
           "user": {
             "oneOf": [
-              "integer",
-              "object"
+              {
+                "type": "integer"
+              },
+              {
+                "type": "object"
+              }
             ],
             "example": 2
           },
@@ -195,9 +203,11 @@
         "type": "object",
         "properties": {
           "following_user": {
-            "schema": {
-              "$ref": "#/components/schemas/User"
-            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
             "example": {
               "id": 20,
               "slug": "following-user",
@@ -237,9 +247,11 @@
             "example": 4
           },
           "followed_user": {
-            "schema": {
-              "$ref": "#/components/schemas/User"
-            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ],
             "example": {
               "id": 20,
               "slug": "followed-user",
@@ -340,8 +352,98 @@
             "type": "string",
             "example": "Server error"
           }
+        }
+      },
+      "Feed": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 1
+              },
+              "slug": {
+                "type": "string",
+                "example": "test-user-1"
+              },
+              "first_name": {
+                "type": "string",
+                "example": "Test"
+              },
+              "last_name": {
+                "type": "string",
+                "example": "User 1"
+              },
+              "full_name": {
+                "type": "string",
+                "example": "Test User 1"
+              }
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date",
+            "example": "2020-01-01T17:00:00.000Z"
+          },
+          "data_type": {
+            "type": "string",
+            "example": "Block"
+          },
+          "action_type": {
+            "type": "string",
+            "example": "Connected"
+          },
+          "data": {
+            "type": "object"
+          }
         },
-        "xml": "servererror"
+        "xml": {
+          "name": "feed"
+        }
+      },
+      "ChannelPageResults": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "example": 4
+          },
+          "last_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": null
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "$ref": "#/components/schemas/Channel"
+                },
+                "blocks": {
+                  "example": []
+                },
+                "total_blocks": {
+                  "example": 0
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "channel"
+        }
       }
     }
   },
@@ -361,8 +463,11 @@
         "operationId": "createBlock",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to create block in",
             "required": true
           }
@@ -431,8 +536,11 @@
         "operationId": "deleteBlock",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of block to delete",
             "required": true
           }
@@ -616,8 +724,11 @@
         "operationId": "getAllBlocksByUserID",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to search",
             "required": true
           }
@@ -708,8 +819,11 @@
         "operationId": "getBlockByID",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of block to return",
             "required": true
           }
@@ -815,6 +929,9 @@
           {
             "in": "query",
             "name": "title",
+            "schema": {
+              "type": "string"
+            },
             "description": "Keyword to search",
             "required": true
           }
@@ -926,8 +1043,11 @@
         "operationId": "updateBlock",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of block to update",
             "required": true
           }
@@ -1151,8 +1271,11 @@
         "operationId": "deleteChannel",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to delete",
             "required": true
           }
@@ -1220,20 +1343,29 @@
         "operationId": "getChannelByID",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to return",
             "required": true
           },
           {
             "in": "query",
             "name": "last_id",
+            "schema": {
+              "type": "string"
+            },
             "description": "Last block id for pagination",
             "required": false
           },
           {
             "in": "query",
             "name": "limit",
+            "schema": {
+              "type": "string"
+            },
             "description": "Limit number of blocks",
             "required": false
           }
@@ -1253,8 +1385,12 @@
                     },
                     "last_id": {
                       "oneOf": [
-                        "integer",
-                        "string"
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
                       ],
                       "example": null
                     },
@@ -1271,7 +1407,10 @@
                           "properties": {
                             "block": {
                               "type": "array",
-                              "example": []
+                              "items": {
+                                "type": "string"
+                              },
+                              "maxItems": 0
                             }
                           }
                         }
@@ -1330,8 +1469,11 @@
         "operationId": "getAllChannelsByUserID",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to search",
             "required": true
           }
@@ -1398,8 +1540,11 @@
         "operationId": "getAllChannelsUserFollows",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of user to search",
             "required": true
           }
@@ -1496,20 +1641,29 @@
         "operationId": "getChannelBySlug",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of channel to return",
             "required": true
           },
           {
             "in": "query",
             "name": "last_id",
+            "schema": {
+              "type": "string"
+            },
             "description": "Last block id for pagination",
             "required": false
           },
           {
             "in": "query",
             "name": "limit",
+            "schema": {
+              "type": "string"
+            },
             "description": "Limit number of blocks",
             "required": false
           }
@@ -1529,8 +1683,12 @@
                     },
                     "last_id": {
                       "oneOf": [
-                        "integer",
-                        "string"
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
                       ],
                       "example": null
                     },
@@ -1547,7 +1705,10 @@
                           "properties": {
                             "block": {
                               "type": "array",
-                              "example": []
+                              "items": {
+                                "type": "string"
+                              },
+                              "maxItems": 0
                             },
                             "user": {
                               "type": "object",
@@ -1614,8 +1775,11 @@
         "operationId": "getChannelFollowers",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of channel to search",
             "required": true
           }
@@ -1722,6 +1886,9 @@
           {
             "in": "query",
             "name": "title",
+            "schema": {
+              "type": "string"
+            },
             "description": "Keyword to search",
             "required": true
           }
@@ -1827,8 +1994,11 @@
         "operationId": "updateChannel",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to update",
             "required": true
           }
@@ -1898,14 +2068,20 @@
         "operationId": "addConnection",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of block to connect",
             "required": true
           },
           {
             "in": "query",
             "name": "channel",
+            "schema": {
+              "type": "string"
+            },
             "description": "Keyword to search",
             "required": true
           }
@@ -1916,7 +2092,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Block1"
+                  "$ref": "#/components/schemas/Block"
                 }
               }
             }
@@ -1999,14 +2175,20 @@
         "operationId": "removeConnection",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of block to connect",
             "required": true
           },
           {
             "in": "query",
             "name": "channel",
+            "schema": {
+              "type": "string"
+            },
             "description": "Keyword to search",
             "required": true
           }
@@ -2103,18 +2285,27 @@
           {
             "in": "query",
             "name": "channel_lastID",
+            "schema": {
+              "type": "string"
+            },
             "description": "Last channel id for pagination",
             "required": false
           },
           {
             "in": "query",
             "name": "block_lastID",
+            "schema": {
+              "type": "string"
+            },
             "description": "Last block id for pagination",
             "required": false
           },
           {
             "in": "query",
             "name": "limit",
+            "schema": {
+              "type": "string"
+            },
             "description": "Limit number of results to return",
             "required": false
           }
@@ -2128,46 +2319,42 @@
                   "type": "object",
                   "properties": {
                     "total": {
-                      "type": "int",
+                      "type": "integer",
                       "format": "int64",
                       "example": 2
                     },
                     "channel_total": {
-                      "type": "int",
+                      "type": "integer",
                       "format": "int64",
                       "example": 1
                     },
                     "block_total": {
-                      "type": "int",
+                      "type": "integer",
                       "format": "int64",
                       "example": 1
                     },
                     "channel_lastID": {
                       "type": "object",
-                      "additionalProperties": {
-                        "oneOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "integer"
-                          }
-                        ]
-                      },
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ],
                       "example": null
                     },
                     "block_lastID": {
                       "type": "object",
-                      "additionalProperties": {
-                        "oneOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "integer"
-                          }
-                        ]
-                      },
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ],
                       "example": null
                     },
                     "data": {
@@ -2274,8 +2461,11 @@
         "operationId": "followChannel",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to follow",
             "required": true
           }
@@ -2375,8 +2565,11 @@
         "operationId": "unfollowChannel",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to unfollow",
             "required": true
           }
@@ -2476,8 +2669,11 @@
         "operationId": "addFriend",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to follow",
             "required": true
           }
@@ -2577,8 +2773,11 @@
         "operationId": "removeFriend",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to unfollow",
             "required": true
           }
@@ -2675,6 +2874,9 @@
           {
             "in": "query",
             "name": "token",
+            "schema": {
+              "type": "string"
+            },
             "description": "Token to verify",
             "required": true
           }
@@ -2746,6 +2948,9 @@
           {
             "in": "query",
             "name": "token",
+            "schema": {
+              "type": "string"
+            },
             "description": "Token to verify",
             "required": true
           }
@@ -2758,12 +2963,12 @@
                 "description": "URI of success registration.",
                 "schema": {
                   "type": "string",
-                  "format": "uri",
-                  "examples": {
-                    "302ExpiredRefreshToken": {
-                      "description": "Success URI when user is registered.",
-                      "value": "www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172"
-                    }
+                  "format": "uri"
+                },
+                "examples": {
+                  "302ExpiredRefreshToken": {
+                    "description": "Success URI when user is registered.",
+                    "value": "www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172"
                   }
                 }
               }
@@ -2947,8 +3152,11 @@
         "operationId": "deleteUser",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to delete",
             "required": true
           }
@@ -3016,8 +3224,11 @@
         "operationId": "getUserByID",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to return",
             "required": true
           }
@@ -3095,8 +3306,11 @@
         "operationId": "getUserBySlug",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of user to return",
             "required": true
           }
@@ -3174,8 +3388,11 @@
         "operationId": "getUserFeed",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to get feed of",
             "required": true
           }
@@ -3240,7 +3457,7 @@
                               },
                               "channel": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                   "$ref": "#/components/schemas/Channel"
                                 },
                                 "example": {
@@ -3326,8 +3543,11 @@
         "operationId": "getUserFollowConnection",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of channel to check connection",
             "required": true
           }
@@ -3409,11 +3629,14 @@
         ],
         "summary": "Find all users that follows that user by slug",
         "description": "Returns all user following particular user",
-        "operationId": "getChannelFollowers",
+        "operationId": "getUserFollowers",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of user to search",
             "required": true
           }
@@ -3489,8 +3712,11 @@
         "operationId": "getUserFriendConnection",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of user to check connection",
             "required": true
           }
@@ -3575,8 +3801,11 @@
         "operationId": "getUserFriends",
         "parameters": [
           {
-            "name": "slug",
             "in": "path",
+            "name": "slug",
+            "schema": {
+              "type": "string"
+            },
             "description": "slug of user to search",
             "required": true
           }
@@ -3768,6 +3997,9 @@
           {
             "in": "query",
             "name": "name",
+            "schema": {
+              "type": "string"
+            },
             "description": "Keyword to search",
             "required": true
           }
@@ -3897,7 +4129,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "examples": "Missing token or email."
+                      "example": "Missing token or email."
                     }
                   }
                 }

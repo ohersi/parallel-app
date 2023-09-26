@@ -54,8 +54,10 @@ export default class GetUserBySlugController {
  *      description: Returns a single user
  *      operationId: getUserBySlug
  *      parameters:
- *        - name: slug
- *          in: path
+ *        - in: path
+ *          name: slug
+ *          schema:
+ *            type: string
  *          description: slug of user to return
  *          required: true
  *      responses:

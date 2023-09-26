@@ -60,8 +60,10 @@ export default class UnFollowChannelController {
  *      description: Logged in user unfollows channel
  *      operationId: unfollowChannel
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to unfollow
  *          required: true
  *      responses:

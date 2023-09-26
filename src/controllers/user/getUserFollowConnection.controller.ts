@@ -59,8 +59,10 @@ export default class GetUserFollowConnectionController {
  *      description: Checks whether user follows channel
  *      operationId: getUserFollowConnection
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to check connection
  *          required: true
  *      responses:

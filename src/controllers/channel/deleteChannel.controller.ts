@@ -56,8 +56,10 @@ export default class DeleteChannelController {
  *      description: Delete channel
  *      operationId: deleteChannel
  *      parameters:
- *        - name: id
- *          in: path
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
  *          description: ID of channel to delete
  *          required: true
  *      responses:
