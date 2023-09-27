@@ -36,7 +36,7 @@ const options: swaggerJSDoc.Options = {
 
 const optionsUI = {
     swaggerOptions: {
-        // supportedSubmitMethods: []
+        supportedSubmitMethods: []
     }
 };
 
@@ -44,10 +44,10 @@ const swaggerSpec = swaggerJSDoc(options);
 
 function swaggerDocs(app: Application, port: Number) {
     // Swagger page
-    app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, optionsUI));
+    app.use('/swagger-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, optionsUI));
 
     // Docs in JSON format
-    app.get('docs.json', (req: Request, res: Response) => {
+    app.get('swagger-docs.json', (req: Request, res: Response) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(swaggerSpec);
     });

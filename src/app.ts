@@ -17,6 +17,7 @@ import cors from 'cors';
 import ErrorMiddleware from '@/middleware/error.middleware';
 import initContainer from '@/utils/ioc/di-container';
 import swaggerDocs from '@/utils/openapi/swagger';
+import generateRedoc from '@/utils/openapi/redoc';
 import { TYPES } from '@/utils/types';
 
 export const redisContainer = {} as {
@@ -36,7 +37,7 @@ export const start = async (port: Number) => {
 
     const container: Container = await initContainer();
 
-    const server: InversifyExpressServer = new InversifyExpressServer(container, null, { rootPath: '/api/v1'});
+    const server: InversifyExpressServer = new InversifyExpressServer(container, null, { rootPath: '/api/v1' });
 
     server.setConfig((app: Application) => {
 
@@ -47,7 +48,18 @@ export const start = async (port: Number) => {
         app.use(compression());
 
         // Initalize Express Security - Helment
-        app.use(helmet());
+        app.use(
+            helmet({
+                contentSecurityPolicy: {
+                    directives: {
+                        scriptSrc: ["'self'", `'nonce-4y0H5uSmcAzZcVG_SbBaKkoohL'`, `'nonce-gOWW0rYM5LsjfrRCCRlzFxHP1H'`],
+                        workerSrc: ["'self'", "blob:"],
+                        childSrc: ["blob:"],
+                    },
+                },
+                crossOriginEmbedderPolicy: false
+            })
+        );
 
         // Initalize CORS
         const allowedOrigins = process.env.WHITELIST_ORIGINS;
@@ -86,8 +98,10 @@ export const start = async (port: Number) => {
             app.use(ErrorMiddleware);
         });
 
-        // OpenAPI Swagger Docs
+
+        // OpenAPI Swagger & Redocs Docs
         swaggerDocs(app, port);
+        generateRedoc(app);
 
         // Start server on part
         if (process.env.NODE_ENV !== 'test') {
