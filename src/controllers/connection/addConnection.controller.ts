@@ -59,9 +59,9 @@ export default class AddConnectionController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Connection
+ *          - Block
  *      summary: Connect block to channel
- *      description: Connect block to channel
+ *      description: User must be logged in and have channel ownership to preform action
  *      operationId: addConnection
  *      parameters:
  *        - in: path
@@ -78,7 +78,7 @@ export default class AddConnectionController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return block
+ *              description: Return block with expanded channel property
  *              content:
  *                  application/json:
  *                     schema:

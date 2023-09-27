@@ -55,11 +55,11 @@ export default class CreateChannelController {
  *      tags:
  *          - Channel
  *      summary: Create channel
- *      description: Create channel
+ *      description: User must be logged in to preform action
  *      operationId: createChannel
  *      responses:
  *          201:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

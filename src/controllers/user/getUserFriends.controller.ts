@@ -16,7 +16,7 @@ export default class GetUserFriendsController {
         this.usecase = getUserFriendUsecase;
     }
 
-    @httpGet('/:slug/friends')
+    @httpGet('/:slug/following/users')
     public async getUserFriends(
         @request() req: Request,
         @response() res: Response,
@@ -44,12 +44,12 @@ export default class GetUserFriendsController {
 
 /**
  * @openapi
- *  /users/{slug}/friends:
+ *  /users/{slug}/following/users:
  *   get:
  *      tags:
- *          - Follow
- *      summary: Find all users friends by slug
- *      description: Returns all users they follow
+ *          - User
+ *      summary: Find all users that a user follows by slug
+ *      description: Returns all users that a particular user follows
  *      operationId: getUserFriends
  *      parameters:
  *        - in: path
@@ -60,7 +60,7 @@ export default class GetUserFriendsController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all users friends
+ *              description: Return an array of all users that the queried user follows, and timestamp
  *              content:
  *                  application/json:
  *                     schema:

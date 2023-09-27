@@ -36,7 +36,7 @@ export default class UpdateBlockController {
 
             if (!userID) {
                 res.status(401);
-                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.` });
             };
 
             const results = await this.usecase.execute(blockID, userID, block);
@@ -45,7 +45,7 @@ export default class UpdateBlockController {
             await update('block', results.id, results, cacheTimespan);
 
             res.status(200);
-            res.send("Block has been updated.");
+            res.send({ message: "Block has been updated." });
         }
         catch (err: any) {
             res.status(500);
@@ -62,8 +62,8 @@ export default class UpdateBlockController {
  *        - cookieAuth: []
  *      tags:
  *          - Block
- *      summary: Update Block
- *      description: Update block
+ *      summary: Update block
+ *      description: User must be logged in and have block ownership to preform action
  *      operationId: updateBlock
  *      parameters:
  *        - in: path
@@ -74,12 +74,15 @@ export default class UpdateBlockController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return update success message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                     schema:
- *                       type: string
- *                       example: Block has been updated.
+ *                       type: object
+ *                       properties:
+ *                           message:
+ *                                type: string
+ *                                example: Block has been updated.
  *          401:
  *              description: Not authorized to make changes
  *              content:

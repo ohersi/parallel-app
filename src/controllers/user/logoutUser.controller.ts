@@ -36,7 +36,7 @@ export default class LogoutUserController {
  *      tags:
  *          - User
  *      summary: Logout user
- *      description: Destroy user session
+ *      description: Destroys user session
  *      operationId: logoutUser
  *      responses:
  *          200:

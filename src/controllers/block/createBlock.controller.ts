@@ -11,7 +11,7 @@ import { sessionAuth } from '@/middleware/auth.middleware';
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/channels`)
+@controller(`/blocks`)
 export default class CreateBlockController {
 
     private readonly usecase: CreateBlockUsecase;
@@ -20,7 +20,7 @@ export default class CreateBlockController {
         this.usecase = createBlockUsecase;
     }
 
-    @httpPost('/:id/add', sessionAuth, validationMiddleware(blockValidation.create), moderate)
+    @httpPost('/channel/:id/add', sessionAuth, validationMiddleware(blockValidation.create), moderate)
     public async createBlock(
         @request() req: Request,
         @response() res: Response,
@@ -49,14 +49,14 @@ export default class CreateBlockController {
 
 /**
  * @openapi
- *  /channels/{id}/add:
+ *  /blocks/channel/{id}/add:
  *   post:
  *      security:
  *        - cookieAuth: []
  *      tags:
  *          - Block
  *      summary: Create block
- *      description: Create block
+ *      description: User must be logged in and have channel ownership to preform action
  *      operationId: createBlock
  *      parameters:
  *        - in: path

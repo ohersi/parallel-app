@@ -55,9 +55,9 @@ export default class AddFriendController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Follow user
- *      description: Logged in user follows other user
+ *      description: User must be logged in to preform action
  *      operationId: addFriend
  *      parameters:
  *        - in: path
@@ -68,7 +68,7 @@ export default class AddFriendController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:
@@ -76,7 +76,7 @@ export default class AddFriendController {
  *                          properties:
  *                              message:
  *                                   type: string
- *                                   example: Following user with id [followID].
+ *                                   example: Following user with id [id].
  *          404:
  *              description: Missing user id to follow
  *              content:

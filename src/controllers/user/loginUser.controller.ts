@@ -51,7 +51,6 @@ export default class LoginUserController {
  *      tags:
  *          - User
  *      summary: Login user
- *      description: Returns logged in user data
  *      operationId: loginUser
  *      responses:
  *          200:

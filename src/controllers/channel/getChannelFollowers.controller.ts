@@ -49,8 +49,8 @@ export default class GetChannelFollowersController {
  *   get:
  *      tags:
  *          - Channel
- *      summary: Find all user that user follows channel by channel slug
- *      description: Returns all user following particular channel
+ *      summary: Find all channel followers by slug
+ *      description: Returns all users following particular channel
  *      operationId: getChannelFollowers
  *      parameters:
  *        - in: path
@@ -61,7 +61,7 @@ export default class GetChannelFollowersController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all users following channel
+ *              description: Return an array of all users following channel
  *              content:
  *                  application/json:
  *                     schema:

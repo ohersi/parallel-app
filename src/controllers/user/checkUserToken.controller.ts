@@ -4,10 +4,10 @@ import { controller, request, response, next, httpGet } from 'inversify-express-
 // Imports
 import { verifyToken } from '@/resources/security/token';
 
-@controller(`/registration`)
+@controller(`/users`)
 export default class CheckUserTokenController {
 
-    @httpGet('/check')
+    @httpGet('/registration/check')
     public async checkToken(
         @request() req: Request,
         @response() res: Response,
@@ -41,7 +41,7 @@ export default class CheckUserTokenController {
 
 /**
  * @openapi
- *  /registration/check:
+ *  /users/registration/check:
  *   get:
  *      tags:
  *          - User

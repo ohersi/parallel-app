@@ -21,7 +21,7 @@ export const mailer = async (token: string, email: string): Promise<SMTPTranspor
         from: process.env.MAILER_EMAIL, // sender address
         to: email, // list of receivers
         subject: "Complete your account registration - Parallel", // Subject line
-        text: `${process.env.API_URL}/api/v1/registration/confirm?token=${token}`, // plain text body
+        text: `${process.env.API_URL}/api/v1/users/registration/confirm?token=${token}`, // plain text body
         html: `Thank you for creating a Parallel account.
         <br/>
         <br/>

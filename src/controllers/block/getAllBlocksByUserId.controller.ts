@@ -7,7 +7,7 @@ import GetAllBlocksByUserIdUsecase from '@/services/usecases/block/getAllBlocksB
 import { TYPES } from '@/utils/types';
 import { cache } from '@/resources/caching/cache';
 
-@controller(`/users`)
+@controller(`/blocks`)
 export default class GetAllBlocksByUserIdController {
 
     private readonly usecase: GetAllBlocksByUserIdUsecase;
@@ -16,7 +16,7 @@ export default class GetAllBlocksByUserIdController {
         this.usecase = getAllBlocksByUserIdUsecase;
     }
 
-    @httpGet('/:id/blocks')
+    @httpGet('/user/:id')
     public async getAllBlocksByUserID(
         @request() req: Request,
         @response() res: Response,
@@ -46,11 +46,11 @@ export default class GetAllBlocksByUserIdController {
 
 /**
  * @openapi
- *  /users/{id}/blocks:
+ *  /blocks/user/{id}:
  *   get:
  *      tags:
  *          - Block
- *      summary: Find all blocks By user ID
+ *      summary: Find all blocks by user ID
  *      description: Returns all user blocks
  *      operationId: getAllBlocksByUserID
  *      parameters:

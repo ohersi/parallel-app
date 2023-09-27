@@ -61,11 +61,10 @@ export default class CreateUserController {
  *      tags:
  *          - User
  *      summary: Create user
- *      description: Create user
  *      operationId: createUser
  *      responses:
  *          201:
- *              description: Return newly created User
+ *              description: Return newly created user
  *              content:
  *                  application/json:
  *                     schema:

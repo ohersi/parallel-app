@@ -49,7 +49,7 @@ export default class GetUserByIdController {
  *   get:
  *      tags:
  *          - User
- *      summary: Find user By ID
+ *      summary: Find user by ID
  *      description: Returns a single user
  *      operationId: getUserByID
  *      parameters:

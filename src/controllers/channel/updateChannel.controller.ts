@@ -35,13 +35,13 @@ export default class UpdateChannelController {
 
             if (!userID) {
                 res.status(401);
-                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.` });
             };
 
             const results = await this.usecase.execute(id, userID, channel);
 
             res.status(200);
-            res.send("Channel has been updated.");
+            res.send({ message: "Channel has been updated." });
         }
         catch (err: any) {
             res.status(500);
@@ -58,8 +58,8 @@ export default class UpdateChannelController {
  *        - cookieAuth: []
  *      tags:
  *          - Channel
- *      summary: Update Channel
- *      description: Update channel
+ *      summary: Update channel
+ *      description: User must be logged in and have channel ownership to preform action
  *      operationId: updateChannel
  *      parameters:
  *        - in: path
@@ -70,12 +70,15 @@ export default class UpdateChannelController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return update success message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                     schema:
- *                       type: string
- *                       example: Channel has been updated.
+ *                       type: object
+ *                       properties:
+ *                           message:
+ *                                type: string
+ *                                example: Channel has been updated.
  *          401:
  *              description: Not authorized to make changes
  *              content:

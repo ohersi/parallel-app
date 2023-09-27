@@ -1,25 +1,19 @@
 openapi: '3.0.0'
 info:
   title: 'Parallel API'
-  description: 'REST API for Parallel application.'
+  description: |
+    This is the documentation of the Parallel API. Used for the client application found [here.](https://para-llel.app)
   version: '1.0.0'
 tags:
   - name: User
-    description: User
   - name: Channel
-    description: Channel
   - name: Block
-    description: Block
-  - name: Follow
-    description: Follow
-  - name: Connection
-    description: Connection
   - name: Feed
-    description: Feed
+    description: User feed or general feed when not logged in
 servers:
   - url: "http://localhost:3000/api/v1"
     description: "Development server"
-  - url: "api.para-llel.app/api/v1"
+  - url: "https://api.para-llel.app/api/v1"
     description: "Production server"
 components:
   securitySchemes:
@@ -27,4 +21,5 @@ components:
       type: apiKey
       description: Cookie session
       in: cookie
-      name: sid.cookie  
+      name: sid.cookie
+ 

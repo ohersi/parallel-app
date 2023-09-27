@@ -54,31 +54,31 @@ export default class GetChannelBySlugController {
  *   get:
  *      tags:
  *          - Channel
- *      summary: Find channel By slug
- *      description: Returns a single channel
+ *      summary: Find channel by slug
+ *      description: Optional parameters for block pagination
  *      operationId: getChannelBySlug
  *      parameters:
  *        - in: path
  *          name: slug
  *          schema:
  *            type: string
- *          description: slug of channel to return
+ *          description: Slug of channel to return
  *          required: true
  *        - in: query
  *          name: last_id
  *          schema:
  *            type: string
- *          description: Last block id for pagination
+ *          description: ID of previous pagination
  *          required: false
  *        - in: query
  *          name: limit
  *          schema:
  *            type: string
- *          description: Limit number of blocks
+ *          description: Number of blocks to return
  *          required: false
  *      responses:
  *          200:
- *              description: Return channel
+ *              description: Return channel object with paginated selection of blocks and expanded user object, total amount of blocks found in channel, and id of previous pagination
  *              content:
  *                  application/json:
  *                     schema:

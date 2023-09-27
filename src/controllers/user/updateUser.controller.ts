@@ -34,16 +34,16 @@ export default class UpdateUserController {
 
             if (!id) {
                 res.status(401);
-                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.`});
+                return res.send({ error: { status: 401 }, message: `Unauthorized, no log in session.` });
             };
-            
+
             const results = await this.usecase.execute(user, id!);
 
             // Update user cache
             await update('user', results?.id!, results, cacheTimespan);
 
             res.status(200);
-            res.send("User has been updated.");
+            res.send({ message: "User has been updated." });
         }
         catch (err: any) {
             res.status(500);
@@ -60,17 +60,20 @@ export default class UpdateUserController {
  *        - cookieAuth: []
  *      tags:
  *          - User
- *      summary: Update User
- *      description: Update user
+ *      summary: Update user
+ *      description: User must be logged in to preform action
  *      operationId: updateUser
  *      responses:
  *          200:
- *              description: Return update success message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                     schema:
- *                       type: string
- *                       example: User has been updated.
+ *                       type: object
+ *                       properties:
+ *                           message:
+ *                                type: string
+ *                                example: User has been updated.
  *                      
  *          401:
  *              description: Not authorized to make changes

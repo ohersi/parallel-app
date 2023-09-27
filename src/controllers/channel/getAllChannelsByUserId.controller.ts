@@ -10,7 +10,7 @@ import { sessionAuth, roleAuth } from '@/middleware/auth.middleware';
 import { cache } from '@/resources/caching/cache';
 import { paginate } from '@/middleware/paginate.middlware';
 
-@controller(`/users`)
+@controller(`/channels`)
 export default class GetAllChannelsByUserIdController {
 
     private readonly usecase: GetAllChannelsByUserIdUsecase;
@@ -19,7 +19,7 @@ export default class GetAllChannelsByUserIdController {
         this.usecase = getAllChannelsByUserID;
     }
 
-    @httpGet('/:id/channels', paginate)
+    @httpGet('/user/:id', paginate)
     public async getAllChannelsByUserID(
         @request() req: Request,
         @response() res: Response,
@@ -50,11 +50,11 @@ export default class GetAllChannelsByUserIdController {
 
 /**
  * @openapi
- *  /users/{id}/channels:
+ *  /channels/user/{id}:
  *   get:
  *      tags:
  *          - Channel
- *      summary: Find all channels By user ID
+ *      summary: Find all channels by user ID
  *      description: Returns all user channels
  *      operationId: getAllChannelsByUserID
  *      parameters:

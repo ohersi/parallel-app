@@ -52,11 +52,11 @@ export default class GetAllBlocksController {
  *      tags:
  *          - Block
  *      summary: Get all blocks
- *      description: Returns all blocks
+ *      description: User must be logged in and have administrative privileges to preform action
  *      operationId: getAllBlock
  *      responses:
  *          200:
- *              description: Return all blocks
+ *              description: Return an array of all blocks
  *              content:
  *                  application/json:
  *                     schema:

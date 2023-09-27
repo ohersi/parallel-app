@@ -6,7 +6,7 @@ import ConfirmUserTokenUseCase from '@/services/usecases/user/confirmUserToken.u
 import { TYPES } from '@/utils/types';
 import { inject } from 'inversify';
 
-@controller(`/registration`)
+@controller(`/users`)
 export default class ConfirmUserTokenController {
 
     private readonly usecase: ConfirmUserTokenUseCase;
@@ -15,7 +15,7 @@ export default class ConfirmUserTokenController {
         this.usecase = confirmUserTokenUsecase;
     }
 
-    @httpGet('/confirm')
+    @httpGet('/registration/confirm')
     public async confirmToken(
         @request() req: Request,
         @response() res: Response,
@@ -23,13 +23,15 @@ export default class ConfirmUserTokenController {
         : Promise<Response | void> {
         try {
             const { token } = req.query;
+
             if (!token) {
                 res.status(500);
                 return res.send({ error: { status: 500 }, message: "Missing token" });
-            }   
+            };
+            
             await this.usecase.execute(token.toString());
             
-            res.status(200);
+            res.status(302);
             res.redirect(`${process.env.WHITELIST_ORIGINS}/registered/${token}`)
         }
         catch (err: any) {
@@ -41,7 +43,7 @@ export default class ConfirmUserTokenController {
 
 /**
  * @openapi
- *  /registration/confirm:
+ *  /users/registration/confirm:
  *   get:
  *      tags:
  *          - User
@@ -56,18 +58,13 @@ export default class ConfirmUserTokenController {
  *          description: Token to verify
  *          required: true
  *      responses:
- *          200:
- *              description: User has successfully registered, redirect to completion page.
+ *          302:
+ *              description: User has successfully registered, redirect to external registered page.
  *              headers:
  *                  Location:
- *                      description: URI of success registration.
+ *                      description: URL of success registration.
  *                      schema:
  *                          type: string
- *                          format: uri  # Optional - use if the Location header is an absolute URI, starting with http(s)://
- *                      examples:
- *                          302ExpiredRefreshToken:
- *                              description: Success URI when user is registered.
- *                              value: 'www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172'
  *          500:
  *              description: Server error
  *              content:

@@ -1,25 +1,20 @@
 openapi: 3.0.0
 info:
   title: Parallel API
-  description: REST API for Parallel application.
+  description: >
+    This is the documentation of the Parallel API. Used for the client
+    application found [here.](https://para-llel.app)
   version: 1.0.0
 tags:
   - name: User
-    description: User
   - name: Channel
-    description: Channel
   - name: Block
-    description: Block
-  - name: Follow
-    description: Follow
-  - name: Connection
-    description: Connection
   - name: Feed
-    description: Feed
+    description: User feed or general feed when not logged in
 servers:
   - url: http://localhost:3000/api/v1
     description: Development server
-  - url: api.para-llel.app/api/v1
+  - url: https://api.para-llel.app/api/v1
     description: Production server
 components:
   securitySchemes:
@@ -311,14 +306,14 @@ components:
       xml:
         name: channel
 paths:
-  "/channels/{id}/add":
+  "/blocks/channel/{id}/add":
     post:
       security:
         - cookieAuth: []
       tags:
         - Block
       summary: Create block
-      description: Create block
+      description: User must be logged in and have channel ownership to preform action
       operationId: createBlock
       parameters:
         - in: path
@@ -363,7 +358,7 @@ paths:
       tags:
         - Block
       summary: Delete block
-      description: Delete block
+      description: User must be logged in and have block ownership to preform action
       operationId: deleteBlock
       parameters:
         - in: path
@@ -374,7 +369,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -412,11 +407,12 @@ paths:
       tags:
         - Block
       summary: Get all blocks
-      description: Returns all blocks
+      description: User must be logged in and have administrative privileges to
+        preform action
       operationId: getAllBlock
       responses:
         "200":
-          description: Return all blocks
+          description: Return an array of all blocks
           content:
             application/json:
               schema:
@@ -480,11 +476,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/{id}/blocks":
+  "/blocks/user/{id}":
     get:
       tags:
         - Block
-      summary: Find all blocks By user ID
+      summary: Find all blocks by user ID
       description: Returns all user blocks
       operationId: getAllBlocksByUserID
       parameters:
@@ -548,7 +544,7 @@ paths:
     get:
       tags:
         - Block
-      summary: Find block By ID
+      summary: Find block by ID
       description: Returns a single block
       operationId: getBlockByID
       parameters:
@@ -560,7 +556,8 @@ paths:
           required: true
       responses:
         "200":
-          description: Return block
+          description: Return block object with addtional channel property that contains
+            array of all channels that particular block is connected with
           content:
             application/json:
               schema:
@@ -611,7 +608,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /search/blocks:
+  /blocks/search:
     get:
       tags:
         - Block
@@ -627,7 +624,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all relevant blocks
+          description: Return an array of expanded block objects relevant to search query
           content:
             application/json:
               schema:
@@ -686,8 +683,8 @@ paths:
         - cookieAuth: []
       tags:
         - Block
-      summary: Update Block
-      description: Update block
+      summary: Update block
+      description: User must be logged in and have block ownership to preform action
       operationId: updateBlock
       parameters:
         - in: path
@@ -698,12 +695,15 @@ paths:
           required: true
       responses:
         "200":
-          description: Return update success message
+          description: Return success message
           content:
             application/json:
               schema:
-                type: string
-                example: Block has been updated.
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block has been updated.
         "401":
           description: Not authorized to make changes
           content:
@@ -733,11 +733,11 @@ paths:
       tags:
         - Channel
       summary: Create channel
-      description: Create channel
+      description: User must be logged in to preform action
       operationId: createChannel
       responses:
         "201":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -776,7 +776,7 @@ paths:
       operationId: getAllChannels
       responses:
         "200":
-          description: Return all channels
+          description: Return an array of all channels
           content:
             application/json:
               schema:
@@ -834,7 +834,7 @@ paths:
       tags:
         - Channel
       summary: Delete channel
-      description: Delete channel
+      description: User must be logged in and have channel ownership to preform action
       operationId: deleteChannel
       parameters:
         - in: path
@@ -845,7 +845,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -879,8 +879,8 @@ paths:
     get:
       tags:
         - Channel
-      summary: Find channel By ID
-      description: Returns a single channel
+      summary: Find channel by ID
+      description: Optional parameters for block pagination
       operationId: getChannelByID
       parameters:
         - in: path
@@ -893,17 +893,18 @@ paths:
           name: last_id
           schema:
             type: string
-          description: Last block id for pagination
+          description: ID of previous pagination
           required: false
         - in: query
           name: limit
           schema:
             type: string
-          description: Limit number of blocks
+          description: Number of blocks to return
           required: false
       responses:
         "200":
-          description: Return channel
+          description: Return channel object with paginated selection of blocks, total
+            amount of blocks found in channel, and id of previous pagination
           content:
             application/json:
               schema:
@@ -952,11 +953,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/{id}/channels":
+  "/channels/user/{id}":
     get:
       tags:
         - Channel
-      summary: Find all channels By user ID
+      summary: Find all channels by user ID
       description: Returns all user channels
       operationId: getAllChannelsByUserID
       parameters:
@@ -997,11 +998,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/{slug}/following":
+  "/users/{slug}/following/channels":
     get:
       tags:
-        - Follow
-      summary: Find all channels that user follows by user slug
+        - User
+      summary: Find all channels that a user follows by slug
       description: Returns all channels user follows
       operationId: getAllChannelsUserFollows
       parameters:
@@ -1013,7 +1014,8 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all channels user follows
+          description: Return an array of all followed channels and timestamp of when that
+            channel was followed
           content:
             application/json:
               schema:
@@ -1069,31 +1071,33 @@ paths:
     get:
       tags:
         - Channel
-      summary: Find channel By slug
-      description: Returns a single channel
+      summary: Find channel by slug
+      description: Optional parameters for block pagination
       operationId: getChannelBySlug
       parameters:
         - in: path
           name: slug
           schema:
             type: string
-          description: slug of channel to return
+          description: Slug of channel to return
           required: true
         - in: query
           name: last_id
           schema:
             type: string
-          description: Last block id for pagination
+          description: ID of previous pagination
           required: false
         - in: query
           name: limit
           schema:
             type: string
-          description: Limit number of blocks
+          description: Number of blocks to return
           required: false
       responses:
         "200":
-          description: Return channel
+          description: Return channel object with paginated selection of blocks and
+            expanded user object, total amount of blocks found in channel, and
+            id of previous pagination
           content:
             application/json:
               schema:
@@ -1152,8 +1156,8 @@ paths:
     get:
       tags:
         - Channel
-      summary: Find all user that user follows channel by channel slug
-      description: Returns all user following particular channel
+      summary: Find all channel followers by slug
+      description: Returns all users following particular channel
       operationId: getChannelFollowers
       parameters:
         - in: path
@@ -1164,7 +1168,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all users following channel
+          description: Return an array of all users following channel
           content:
             application/json:
               schema:
@@ -1224,7 +1228,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /search/channels:
+  /channels/search:
     get:
       tags:
         - Channel
@@ -1240,7 +1244,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all relevant channels
+          description: Return an array of expanded channel objects relevant to search query
           content:
             application/json:
               schema:
@@ -1302,8 +1306,8 @@ paths:
         - cookieAuth: []
       tags:
         - Channel
-      summary: Update Channel
-      description: Update channel
+      summary: Update channel
+      description: User must be logged in and have channel ownership to preform action
       operationId: updateChannel
       parameters:
         - in: path
@@ -1314,12 +1318,15 @@ paths:
           required: true
       responses:
         "200":
-          description: Return update success message
+          description: Return success message
           content:
             application/json:
               schema:
-                type: string
-                example: Channel has been updated.
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Channel has been updated.
         "401":
           description: Not authorized to make changes
           content:
@@ -1347,9 +1354,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Connection
+        - Block
       summary: Connect block to channel
-      description: Connect block to channel
+      description: User must be logged in and have channel ownership to preform action
       operationId: addConnection
       parameters:
         - in: path
@@ -1366,7 +1373,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return block
+          description: Return block with expanded channel property
           content:
             application/json:
               schema:
@@ -1414,9 +1421,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Connection
+        - Block
       summary: Disconnect block to channel
-      description: Disconnect block to channel
+      description: User must be logged in and have channel ownership to preform action
       operationId: removeConnection
       parameters:
         - in: path
@@ -1433,7 +1440,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -1485,7 +1492,7 @@ paths:
       tags:
         - Feed
       summary: Get default feed
-      description: Returns an array of feed items
+      description: Optional parameters for channel and block pagination
       operationId: getDefaultFeed
       parameters:
         - in: query
@@ -1508,7 +1515,8 @@ paths:
           required: false
       responses:
         "200":
-          description: Return feed
+          description: Return an array of feed items, totals of blocks and channels
+            combined and seperate, and ids of previous pagination
           content:
             application/json:
               schema:
@@ -1593,9 +1601,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Follow channel
-      description: Logged in user follows channel
+      description: User must be logged in to preform action
       operationId: followChannel
       parameters:
         - in: path
@@ -1606,7 +1614,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -1658,9 +1666,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Unfollow channel
-      description: Logged in user unfollows channel
+      description: User must be logged in to preform action
       operationId: unfollowChannel
       parameters:
         - in: path
@@ -1671,7 +1679,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -1723,9 +1731,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Follow user
-      description: Logged in user follows other user
+      description: User must be logged in to preform action
       operationId: addFriend
       parameters:
         - in: path
@@ -1736,7 +1744,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -1744,7 +1752,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Following user with id [followID].
+                    example: Following user with id [id].
         "401":
           description: Not authorized to make changes
           content:
@@ -1788,9 +1796,9 @@ paths:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Unfollow user
-      description: Logged in user unfollows other user
+      description: User must be logged in to preform action
       operationId: removeFriend
       parameters:
         - in: path
@@ -1848,7 +1856,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /registration/check:
+  /users/registration/check:
     get:
       tags:
         - User
@@ -1895,7 +1903,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /registration/confirm:
+  /users/registration/confirm:
     get:
       tags:
         - User
@@ -1910,18 +1918,14 @@ paths:
           description: Token to verify
           required: true
       responses:
-        "200":
-          description: User has successfully registered, redirect to completion page.
+        "302":
+          description: User has successfully registered, redirect to external registered
+            page.
           headers:
             Location:
-              description: URI of success registration.
+              description: URL of success registration.
               schema:
                 type: string
-                format: uri
-              examples:
-                302ExpiredRefreshToken:
-                  description: Success URI when user is registered.
-                  value: www.<UIEndpoint>/registered/d3fe5c6959ae0ce502d6027a7693c3ebe4543f51a878d60004e133172
         "500":
           description: Server error
           content:
@@ -1933,11 +1937,10 @@ paths:
       tags:
         - User
       summary: Create user
-      description: Create user
       operationId: createUser
       responses:
         "201":
-          description: Return newly created User
+          description: Return newly created user
           content:
             application/json:
               schema:
@@ -1970,11 +1973,26 @@ paths:
       tags:
         - User
       summary: Get all users
-      description: Returns all users
+      description: User must be logged in and have administrative privileges to
+        preform action. Optional parameters for user pagination.
       operationId: getAllUsers
+      parameters:
+        - in: query
+          name: last_id
+          schema:
+            type: string
+          description: ID of previous pagination
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: Number of users to return
+          required: false
       responses:
         "200":
-          description: Return all users
+          description: Return an array of all or some users depending on limit set in
+            parameters
           content:
             application/json:
               schema:
@@ -2035,7 +2053,7 @@ paths:
       tags:
         - User
       summary: Delete user
-      description: Delete user
+      description: User must be logged in to preform action
       operationId: deleteUser
       parameters:
         - in: path
@@ -2046,7 +2064,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return success status message
+          description: Return success message
           content:
             application/json:
               schema:
@@ -2080,7 +2098,7 @@ paths:
     get:
       tags:
         - User
-      summary: Find user By ID
+      summary: Find user by ID
       description: Returns a single user
       operationId: getUserByID
       parameters:
@@ -2144,7 +2162,7 @@ paths:
           name: slug
           schema:
             type: string
-          description: slug of user to return
+          description: Slug of user to return
           required: true
       responses:
         "200":
@@ -2188,7 +2206,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/{id}/feed":
+  "/feed/user/{id}":
     get:
       tags:
         - Feed
@@ -2200,11 +2218,12 @@ paths:
           name: id
           schema:
             type: string
-          description: ID of user to get feed of
+          description: ID of user to search
           required: true
       responses:
         "200":
-          description: Return feed
+          description: Return an array of feed items, expanded user object, data and
+            action type, and timestamp
           content:
             application/json:
               schema:
@@ -2283,14 +2302,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/channels/connection/{id}":
+  "/users/channel/connection/{id}":
     get:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Check if user follows channel
-      description: Checks whether user follows channel
+      description: User must be logged in to preform action
       operationId: getUserFollowConnection
       parameters:
         - in: path
@@ -2344,9 +2363,9 @@ paths:
   "/users/{slug}/followers":
     get:
       tags:
-        - Follow
-      summary: Find all users that follows that user by slug
-      description: Returns all user following particular user
+        - User
+      summary: Find all user followers by slug
+      description: Returns all users following particular user
       operationId: getUserFollowers
       parameters:
         - in: path
@@ -2357,7 +2376,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all users that follows them
+          description: Return an array of all user followers, and timestamp
           content:
             application/json:
               schema:
@@ -2387,14 +2406,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/connection/{id}":
+  "/users/user/connection/{id}":
     get:
       security:
         - cookieAuth: []
       tags:
-        - Follow
+        - User
       summary: Check if user follows user
-      description: Checks whether user follows user
+      description: User must be logged in to preform action
       operationId: getUserFriendConnection
       parameters:
         - in: path
@@ -2445,12 +2464,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  "/users/{slug}/friends":
+  "/users/{slug}/following/users":
     get:
       tags:
-        - Follow
-      summary: Find all users friends by slug
-      description: Returns all users they follow
+        - User
+      summary: Find all users that a user follows by slug
+      description: Returns all users that a particular user follows
       operationId: getUserFriends
       parameters:
         - in: path
@@ -2461,7 +2480,8 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all users friends
+          description: Return an array of all users that the queried user follows, and
+            timestamp
           content:
             application/json:
               schema:
@@ -2496,7 +2516,6 @@ paths:
       tags:
         - User
       summary: Login user
-      description: Returns logged in user data
       operationId: loginUser
       responses:
         "200":
@@ -2545,7 +2564,7 @@ paths:
       tags:
         - User
       summary: Logout user
-      description: Destroy user session
+      description: Destroys user session
       operationId: logoutUser
       responses:
         "200":
@@ -2564,7 +2583,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /search/users:
+  /users/search:
     get:
       tags:
         - User
@@ -2580,7 +2599,7 @@ paths:
           required: true
       responses:
         "200":
-          description: Return all relevant users
+          description: Return an array of user objects relevant to search query
           content:
             application/json:
               schema:
@@ -2634,12 +2653,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ServerError"
-  /registration:
+  /users/registration:
     get:
       tags:
         - User
       summary: Send token to user email
-      description: Sends token to user email
+      description: User must be logged in to preform action
       operationId: sendToken
       responses:
         "200":
@@ -2680,17 +2699,20 @@ paths:
         - cookieAuth: []
       tags:
         - User
-      summary: Update User
-      description: Update user
+      summary: Update user
+      description: User must be logged in to preform action
       operationId: updateUser
       responses:
         "200":
-          description: Return update success message
+          description: Return success message
           content:
             application/json:
               schema:
-                type: string
-                example: User has been updated.
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User has been updated.
         "401":
           description: Not authorized to make changes
           content:

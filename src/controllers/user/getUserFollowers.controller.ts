@@ -47,9 +47,9 @@ export default class GetUserFollowersController {
  *  /users/{slug}/followers:
  *   get:
  *      tags:
- *          - Follow
- *      summary: Find all users that follows that user by slug
- *      description: Returns all user following particular user
+ *          - User
+ *      summary: Find all user followers by slug
+ *      description: Returns all users following particular user
  *      operationId: getUserFollowers
  *      parameters:
  *        - in: path
@@ -60,7 +60,7 @@ export default class GetUserFollowersController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all users that follows them
+ *              description: Return an array of all user followers, and timestamp
  *              content:
  *                  application/json:
  *                     schema:

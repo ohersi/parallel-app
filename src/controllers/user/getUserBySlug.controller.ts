@@ -58,7 +58,7 @@ export default class GetUserBySlugController {
  *          name: slug
  *          schema:
  *            type: string
- *          description: slug of user to return
+ *          description: Slug of user to return
  *          required: true
  *      responses:
  *          200:

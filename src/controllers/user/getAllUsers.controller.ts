@@ -53,11 +53,24 @@ export default class GetAllUsersController {
  *      tags:
  *          - User
  *      summary: Get all users
- *      description: Returns all users
+ *      description: User must be logged in and have administrative privileges to preform action. Optional parameters for user pagination.
  *      operationId: getAllUsers
+ *      parameters:
+ *        - in: query
+ *          name: last_id
+ *          schema:
+ *            type: string
+ *          description: ID of previous pagination
+ *          required: false
+ *        - in: query
+ *          name: limit
+ *          schema:
+ *            type: string
+ *          description: Number of users to return
+ *          required: false
  *      responses:
  *          200:
- *              description: Return all users
+ *              description: Return an array of all or some users depending on limit set in parameters
  *              content:
  *                  application/json:
  *                     schema:

@@ -15,7 +15,7 @@ export default class GetUserFriendConnectionController {
         this.usecase = getUserFriendConnectionUsecase;
     }
 
-    @httpGet('/connection/:id')
+    @httpGet('/user/connection/:id')
     public async getUserFriendConnection(
         @request() req: Request,
         @response() res: Response,
@@ -49,14 +49,14 @@ export default class GetUserFriendConnectionController {
 
 /**
  * @openapi
- *  /users/connection/{id}:
+ *  /users/user/connection/{id}:
  *   get:
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Check if user follows user 
- *      description: Checks whether user follows user
+ *      description: User must be logged in to preform action
  *      operationId: getUserFriendConnection
  *      parameters:
  *        - in: path

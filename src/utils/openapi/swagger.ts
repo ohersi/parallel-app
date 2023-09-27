@@ -6,10 +6,9 @@ const options: swaggerJSDoc.Options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Parallel REST API Docs',
+            title: 'Parallel API',
             version: '1.0',
-            description:
-                'REST API for Parallel application.'
+            description: 'This is the documentation of the Parallel API. Used for the client application found [here.](https://para-llel.app)'
         },
         servers: [
             {
@@ -17,7 +16,7 @@ const options: swaggerJSDoc.Options = {
                 description: "Development server"
             },
             {
-                url: "http://api.para-llel/api/v1",
+                url: "https://api.para-llel/api/v1",
                 description: "Production server"
             },
         ],
@@ -37,7 +36,7 @@ const options: swaggerJSDoc.Options = {
 
 const optionsUI = {
     swaggerOptions: {
-        supportedSubmitMethods: []
+        // supportedSubmitMethods: []
     }
 };
 

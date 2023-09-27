@@ -52,7 +52,7 @@ export default class DeleteUserController {
  *      tags:
  *          - User
  *      summary: Delete user
- *      description: Delete user
+ *      description: User must be logged in to preform action
  *      operationId: deleteUser
  *      parameters:
  *        - in: path
@@ -63,7 +63,7 @@ export default class DeleteUserController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

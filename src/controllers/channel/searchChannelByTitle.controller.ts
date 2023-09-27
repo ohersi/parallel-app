@@ -7,7 +7,7 @@ import SearchChannelByTitleUsecase from '@/services/usecases/channel/searchChann
 import { TYPES } from '@/utils/types';
 
 
-@controller(`/search`)
+@controller(`/channels`)
 export default class SearchChannelByTitleController {
 
     private readonly usecase: SearchChannelByTitleUsecase;
@@ -16,7 +16,7 @@ export default class SearchChannelByTitleController {
         this.usecase = searchChannelByTitleUsecase;
     }
 
-    @httpGet('/channels')
+    @httpGet('/search')
     public async searchChannelByTitle(
         @request() req: Request,
         @response() res: Response,
@@ -47,7 +47,7 @@ export default class SearchChannelByTitleController {
 
 /**
  * @openapi
- *  /search/channels:
+ *  /channels/search:
  *   get:
  *      tags:
  *          - Channel
@@ -63,7 +63,7 @@ export default class SearchChannelByTitleController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all relevant channels
+ *              description: Return an array of expanded channel objects relevant to search query
  *              content:
  *                  application/json:
  *                     schema:

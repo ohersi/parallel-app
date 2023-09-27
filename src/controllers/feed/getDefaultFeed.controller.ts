@@ -54,7 +54,7 @@ export default class GetDefaultFeedController {
  *      tags:
  *          - Feed
  *      summary: Get default feed
- *      description: Returns an array of feed items
+ *      description: Optional parameters for channel and block pagination
  *      operationId: getDefaultFeed
  *      parameters:
  *        - in: query
@@ -77,7 +77,7 @@ export default class GetDefaultFeedController {
  *          required: false
  *      responses:
  *          200:
- *              description: Return feed
+ *              description: Return an array of feed items, totals of blocks and channels combined and seperate, and ids of previous pagination
  *              content:
  *                  application/json:
  *                      schema:

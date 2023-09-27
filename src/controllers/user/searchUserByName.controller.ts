@@ -6,7 +6,7 @@ import { inject } from 'inversify';
 import SearchUserByNameUsecase from '@/services/usecases/user/searchUserByName.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/search`)
+@controller(`/users`)
 export default class SearchUserByNameController {
 
     private readonly usecase: SearchUserByNameUsecase;
@@ -15,7 +15,7 @@ export default class SearchUserByNameController {
         this.usecase = searchUserByNameUsecase;
     }
 
-    @httpGet('/users')
+    @httpGet('/search')
     public async searchUserByName(
         @request() req: Request,
         @response() res: Response,
@@ -46,7 +46,7 @@ export default class SearchUserByNameController {
 
 /**
  * @openapi
- *  /search/users:
+ *  /users/search:
  *   get:
  *      tags:
  *          - User
@@ -62,7 +62,7 @@ export default class SearchUserByNameController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all relevant users
+ *              description: Return an array of user objects relevant to search query
  *              content:
  *                  application/json:
  *                     schema:

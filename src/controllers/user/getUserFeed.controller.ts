@@ -7,7 +7,7 @@ import GetUserFeedUsecase from '@/services/usecases/feed/getUserFeed.usecase';
 import { getFeed } from '@/resources/caching/cache';
 import { TYPES } from '@/utils/types';
 
-@controller(`/users`)
+@controller(`/feed`)
 export default class GetUserFeedController {
     
     private readonly usecase: GetUserFeedUsecase;
@@ -16,7 +16,7 @@ export default class GetUserFeedController {
         this.usecase = getUserFeedUsecase;
     }
     
-    @httpGet('/:id/feed')
+    @httpGet('/user/:id')
     public async getUserFeed(
         @request() req: Request,
         @response() res: Response,
@@ -46,7 +46,7 @@ export default class GetUserFeedController {
 
 /**
  * @openapi
- *  /users/{id}/feed:
+ *  /feed/user/{id}:
  *   get:
  *      tags:
  *          - Feed
@@ -58,11 +58,11 @@ export default class GetUserFeedController {
  *          name: id
  *          schema:
  *            type: string
- *          description: ID of user to get feed of
+ *          description: ID of user to search
  *          required: true
  *      responses:
  *          200:
- *              description: Return feed
+ *              description: Return an array of feed items, expanded user object, data and action type, and timestamp
  *              content:
  *                  application/json:
  *                      schema:

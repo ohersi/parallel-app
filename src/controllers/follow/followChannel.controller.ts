@@ -55,9 +55,9 @@ export default class FollowChannelController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Follow channel
- *      description: Logged in user follows channel
+ *      description: User must be logged in to preform action
  *      operationId: followChannel
  *      parameters:
  *        - in: path
@@ -68,7 +68,7 @@ export default class FollowChannelController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

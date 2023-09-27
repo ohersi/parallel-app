@@ -53,8 +53,8 @@ export default class GetChannelByIdController {
  *   get:
  *      tags:
  *          - Channel
- *      summary: Find channel By ID
- *      description: Returns a single channel
+ *      summary: Find channel by ID
+ *      description: Optional parameters for block pagination
  *      operationId: getChannelByID
  *      parameters:
  *        - in: path
@@ -67,17 +67,17 @@ export default class GetChannelByIdController {
  *          name: last_id
  *          schema:
  *            type: string
- *          description: Last block id for pagination
+ *          description: ID of previous pagination
  *          required: false
  *        - in: query
  *          name: limit
  *          schema:
  *            type: string
- *          description: Limit number of blocks
+ *          description: Number of blocks to return
  *          required: false
  *      responses:
  *          200:
- *              description: Return channel
+ *              description: Return channel object with paginated selection of blocks, total amount of blocks found in channel, and id of previous pagination
  *              content:
  *                  application/json:
  *                     schema:

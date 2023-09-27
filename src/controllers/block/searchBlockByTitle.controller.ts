@@ -6,7 +6,7 @@ import { inject } from 'inversify';
 import SearchBlockByTitleUsecase from '@/services/usecases/block/searchBlockByTitle.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/search`)
+@controller(`/blocks`)
 export default class SearchBlockByTitleController {
 
     private readonly usecase: SearchBlockByTitleUsecase;
@@ -15,7 +15,7 @@ export default class SearchBlockByTitleController {
         this.usecase = searchBlockByTitleUsecase;
     }
 
-    @httpGet('/blocks')
+    @httpGet('/search')
     public async searchBlockByTitle(
         @request() req: Request,
         @response() res: Response,
@@ -48,7 +48,7 @@ export default class SearchBlockByTitleController {
 
 /**
  * @openapi
- *  /search/blocks:
+ *  /blocks/search:
  *   get:
  *      tags:
  *          - Block
@@ -64,7 +64,7 @@ export default class SearchBlockByTitleController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all relevant blocks
+ *              description: Return an array of expanded block objects relevant to search query
  *              content:
  *                  application/json:
  *                     schema:

@@ -59,9 +59,9 @@ export default class RemoveConnectionController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Connection
+ *          - Block
  *      summary: Disconnect block to channel
- *      description: Disconnect block to channel
+ *      description: User must be logged in and have channel ownership to preform action
  *      operationId: removeConnection
  *      parameters:
  *        - in: path
@@ -78,7 +78,7 @@ export default class RemoveConnectionController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

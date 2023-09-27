@@ -55,9 +55,9 @@ export default class RemoveFriendController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Unfollow user
- *      description: Logged in user unfollows other user
+ *      description: User must be logged in to preform action
  *      operationId: removeFriend
  *      parameters:
  *        - in: path

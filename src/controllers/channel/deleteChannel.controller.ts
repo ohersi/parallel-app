@@ -53,7 +53,7 @@ export default class DeleteChannelController {
  *      tags:
  *          - Channel
  *      summary: Delete channel
- *      description: Delete channel
+ *      description: User must be logged in and have channel ownership to preform action
  *      operationId: deleteChannel
  *      parameters:
  *        - in: path
@@ -64,7 +64,7 @@ export default class DeleteChannelController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

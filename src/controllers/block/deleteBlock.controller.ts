@@ -53,7 +53,7 @@ export default class DeleteBlockController {
  *      tags:
  *          - Block
  *      summary: Delete block
- *      description: Delete block
+ *      description: User must be logged in and have block ownership to preform action
  *      operationId: deleteBlock
  *      parameters:
  *        - in: path
@@ -64,7 +64,7 @@ export default class DeleteBlockController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

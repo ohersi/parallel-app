@@ -53,7 +53,7 @@ export default class GetAllChannelsController {
  *      operationId: getAllChannels
  *      responses:
  *          200:
- *              description: Return all channels
+ *              description: Return an array of all channels
  *              content:
  *                  application/json:
  *                     schema:

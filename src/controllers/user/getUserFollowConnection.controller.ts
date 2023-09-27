@@ -6,7 +6,7 @@ import { inject } from 'inversify'
 import GetUserFollowConnectionUsecase from '@/services/usecases/user/getUserFollowConnection.usecase';
 import { TYPES } from '@/utils/types';
 
-@controller(`/channels`)
+@controller(`/users`)
 export default class GetUserFollowConnectionController {
 
     private readonly usecase: GetUserFollowConnectionUsecase;
@@ -15,7 +15,7 @@ export default class GetUserFollowConnectionController {
         this.usecase = getUserFollowConnectionUsecase;
     }
 
-    @httpGet('/connection/:id')
+    @httpGet('/channel/connection/:id')
     public async getUserFollowConnection(
         @request() req: Request,
         @response() res: Response,
@@ -49,14 +49,14 @@ export default class GetUserFollowConnectionController {
 
 /**
  * @openapi
- *  /channels/connection/{id}:
+ *  /users/channel/connection/{id}:
  *   get:
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Check if user follows channel 
- *      description: Checks whether user follows channel
+ *      description: User must be logged in to preform action
  *      operationId: getUserFollowConnection
  *      parameters:
  *        - in: path

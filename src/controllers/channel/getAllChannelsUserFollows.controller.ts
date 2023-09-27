@@ -16,7 +16,7 @@ export default class GetAllChannelsUserFollowsController {
         this.usecase = getAllChannelsUserFollowsUsecase;
     }
 
-    @httpGet('/:slug/following')
+    @httpGet('/:slug/following/channels')
     public async getAllChannelsUserFollows(
         @request() req: Request,
         @response() res: Response,
@@ -44,11 +44,11 @@ export default class GetAllChannelsUserFollowsController {
 
 /**
  * @openapi
- *  /users/{slug}/following:
+ *  /users/{slug}/following/channels:
  *   get:
  *      tags:
- *          - Follow
- *      summary: Find all channels that user follows by user slug
+ *          - User
+ *      summary: Find all channels that a user follows by slug
  *      description: Returns all channels user follows
  *      operationId: getAllChannelsUserFollows
  *      parameters:
@@ -60,7 +60,7 @@ export default class GetAllChannelsUserFollowsController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return all channels user follows
+ *              description: Return an array of all followed channels and timestamp of when that channel was followed
  *              content:
  *                  application/json:
  *                     schema:

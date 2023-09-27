@@ -55,9 +55,9 @@ export default class UnFollowChannelController {
  *      security:
  *        - cookieAuth: []
  *      tags:
- *          - Follow
+ *          - User
  *      summary: Unfollow channel
- *      description: Logged in user unfollows channel
+ *      description: User must be logged in to preform action
  *      operationId: unfollowChannel
  *      parameters:
  *        - in: path
@@ -68,7 +68,7 @@ export default class UnFollowChannelController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return success status message
+ *              description: Return success message
  *              content:
  *                  application/json:
  *                      schema:

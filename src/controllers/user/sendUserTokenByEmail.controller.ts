@@ -4,10 +4,10 @@ import { controller, request, response, next, httpGet } from 'inversify-express-
 // Imports
 import { mailer } from '@/resources/mailing/mailer';
 
-@controller(`/registration`)
+@controller(`/users`)
 export default class SendUserTokenByEmail {
 
-    @httpGet('/')
+    @httpGet('/registration')
     public async sendToken(
         @request() req: Request,
         @response() res: Response,
@@ -36,12 +36,12 @@ export default class SendUserTokenByEmail {
 
 /**
  * @openapi
- *  /registration:
+ *  /users/registration:
  *   get:
  *      tags:
  *          - User
  *      summary: Send token to user email
- *      description: Sends token to user email
+ *      description: User must be logged in to preform action
  *      operationId: sendToken
  *      responses:
  *          200:

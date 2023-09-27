@@ -49,7 +49,7 @@ export default class GetBlockByIdController {
  *   get:
  *      tags:
  *          - Block
- *      summary: Find block By ID
+ *      summary: Find block by ID
  *      description: Returns a single block
  *      operationId: getBlockByID
  *      parameters:
@@ -61,7 +61,7 @@ export default class GetBlockByIdController {
  *          required: true
  *      responses:
  *          200:
- *              description: Return block
+ *              description: Return block object with addtional channel property that contains array of all channels that particular block is connected with
  *              content:
  *                  application/json:
  *                     schema:
